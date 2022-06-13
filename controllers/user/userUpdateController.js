@@ -27,6 +27,14 @@ let userUpdateController = {
         }
         
         if (attr === 'contributed_pages') {
+            if (req.query.page_id === undefined) {
+                const error = {
+                    code: 400,
+                    message: 'page_id not included as query parameter.'
+                }
+                return res.status(error.code).json(error);
+            }
+
             let userContributionArray = users[req.params.user_id]['contributed_pages']; 
             if (userContributionArray.includes(req.query.page_id)) {
                 const error = {
@@ -37,7 +45,7 @@ let userUpdateController = {
             }
 
             const pagesIDs = Object.keys(pages);
-            pageIDExists = pagesIDs.some(pageID => pageID === req.query.page_id);
+            const pageIDExists = pagesIDs.some(pageID => pageID === req.query.page_id);
             if (!pageIDExists) {
                 const error = {
                     code: 404,
@@ -49,7 +57,7 @@ let userUpdateController = {
             if (!twoArraysAreEqual(req.body.contributed_pages, userContributionArray)) {
                 const error = {
                     code: 400,
-                    message: 'The given initial contributed_pages does not match with the given user.'
+                    message: "The given contributed_pages parameter does not match with the user's contributed_pages attribute."
                 };
                 return res.status(error.code).json(error);
             }
