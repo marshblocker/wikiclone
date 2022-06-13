@@ -6,7 +6,7 @@ let userUpdateController = {
     updateUser: function(req, res) {
         if (users[req.params.user_id] === undefined) {
             const error = {
-                code: 400,
+                code: 404,
                 message: 'The given user does not exist!'
             };
             return res.status(error.code).json(error);

@@ -5,7 +5,7 @@ let pageDeleteController = {
     deletePage: function(req, res) {
         if (pages[req.params.page_id] === undefined) {
             const error = {
-                code: 400,
+                code: 404,
                 message: 'The given page does not exist!'
             };
             return res.status(error.code).json(error);
