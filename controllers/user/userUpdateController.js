@@ -1,5 +1,6 @@
 const utils = require('../../utils');
 let users = require('../../database/usersDatabase');
+let pages = require('../../database/pagesDatabase');
 
 let userUpdateController = {
     updateUser: function(req, res) {
@@ -25,21 +26,40 @@ let userUpdateController = {
             return res.status(validateRes.error.code).json(validateRes.error);
         }
         
-        if (attr === 'page_id') {
-            if (users[req.params.user_id]['contributed_pages'].includes(req.body.page_id)) {
+        if (attr === 'contributed_pages') {
+            let userContributionArray = users[req.params.user_id]['contributed_pages']; 
+            if (userContributionArray.includes(req.query.page_id)) {
                 const error = {
                     code: 400,
                     message: "The user's contributed_pages attribute already contain the provided page_id!"
                 };
                 return res.status(error.code).json(error);
-            } else {
-                users[req.params.user_id]['contributed_pages'].push(req.body.page_id);
             }
+
+            const pagesIDs = Object.keys(pages);
+            pageIDExists = pagesIDs.some(pageID => pageID === req.query.page_id);
+            if (!pageIDExists) {
+                const error = {
+                    code: 404,
+                    message: 'The given page_id does not refer to any existing pages.'
+                };
+                return res.status(error.code).json(error);
+            }
+
+            if (!twoArraysAreEqual(req.body.contributed_pages, userContributionArray)) {
+                const error = {
+                    code: 400,
+                    message: 'The given initial contributed_pages does not match with the given user.'
+                };
+                return res.status(error.code).json(error);
+            }
+                
+            userContributionArray.push(req.query.page_id);
+            return res.status(200).json({contributed_pages: userContributionArray});
         } else {
             users[req.params.user_id][attr] = req.body[attr];
+            return res.status(200).json(req.body);
         }
-
-        return res.status(200).json(req.body);
     }
 };
 
@@ -49,9 +69,14 @@ function getAttributeToUpdate(requestBody) {
     else if (requestBody.password) attributeToUpdate = 'password';
     else if (requestBody.email) attributeToUpdate = 'email';
     else if (requestBody.role) attributeToUpdate = 'role';
-    else if (requestBody.page_id) attributeToUpdate = 'page_id';
+    else if (requestBody.contributed_pages) attributeToUpdate = 'contributed_pages';
 
     return attributeToUpdate;
+}
+
+function twoArraysAreEqual(arr1, arr2) {
+    if (arr1.length !== arr2.length) return false;
+    return arr1.every((val, indx) => val === arr2[indx]);
 }
 
 module.exports = userUpdateController;
