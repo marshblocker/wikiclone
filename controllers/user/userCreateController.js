@@ -7,7 +7,7 @@ let userCreateController = {
     createUser: function(req, res) {
         const requiredParams = ['username', 'password', 'email', 'role'];
         const validateRes = utils.validateUserRequiredParams(requiredParams, req.body, req.method, null);
-        if (validateRes !== true) {
+        if (validateRes !== 'valid') {
             return res.status(validateRes.error.code).json(validateRes.error);
         }
         
@@ -17,8 +17,7 @@ let userCreateController = {
             password: req.body.password,
             email: req.body.email,
             role: req.body.role,
-            contributed_pages: [],
-            page_action_requests: []
+            can_edit: true,
         };
         users[user_id] = newUser;
 

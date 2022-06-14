@@ -21,63 +21,51 @@ let pageUpdateController = {
             return res.status(error.code).json(error);
         }
         
-        const validateRes = utils.validatePageRequiredParams([attr], req.body, req.method, req.params.page_id);
-        if (validateRes !== true) {
+        let validateRes = utils.validatePageRequiredParams([attr, 'user_id'], req.body, req.method, req.params.page_id);
+        if (validateRes !== 'valid') {
             return res.status(validateRes.error.code).json(validateRes.error);
         }
-        
-        if (attr === 'contributors') {
-            if (req.query.user_id === undefined) {
+
+        validateRes = utils.validateSenderUserID(req, users);
+        if (validateRes !== 'valid') {
+            return res.status(validateRes.error.code).json(validateRes.error);
+        }
+
+        if (attr === 'freeze_page' && users[req.body.user_id].role === 'user') {
+            const error = {
+                code: 403,
+                message: 'Only an admin or a superadmin can freeze a page.'
+            };
+            return res.status(error.code).json(error);
+        }
+
+        if (['title', 'content'].includes(attr)) {
+            if (!users[req.body.user_id].can_edit) {
                 const error = {
-                    code: 400,
-                    message: 'user_id not included as query parameter.'
+                    code: 403,
+                    message: 'The user is not allowed to edit a page.'
+                };
+                return res.status(error.code).json(error);
+            }
+            if (pages[req.params.page_id].freeze_page) {
+                const error = {
+                    code: 405,
+                    message: 'The page is restricted from being edited.'
                 }
                 return res.status(error.code).json(error);
             }
-
-            let pageContributorsArray = pages[req.params.page_id]['contributors']; 
-            if (pageContributorsArray.includes(req.query.user_id)) {
-                const error = {
-                    code: 400,
-                    message: "The page's contributors attribute already contain the provided user_id!"
-                };
-                return res.status(error.code).json(error);
-            }
-
-            const usersIDs = Object.keys(users);
-            const userIDExists = usersIDs.some(userID => userID === req.query.user_id);
-            if (!userIDExists) {
-                const error = {
-                    code: 404,
-                    message: 'The given user_id does not refer to any existing users.'
-                };
-                return res.status(error.code).json(error);
-            }
-
-            if (!twoArraysAreEqual(req.body.contributors, pageContributorsArray)) {
-                const error = {
-                    code: 400,
-                    message: "The given contributors parameter does not match with the user's contributors attribute."
-                };
-                return res.status(error.code).json(error);
-            }
-                
-            pageContributorsArray.push(req.body.user_id);
-            return res.status(200).json({ contributors: pageContributorsArray });
-        } else {
-            pages[req.params.page_id][attr] = req.body[attr];
-            return res.status(200).json(req.body);
         }
-
+        
+        pages[req.params.page_id][attr] = req.body[attr];
+        return res.status(200).json(req.body);
     }
 };
 
 function getAttributeToUpdate(requestBody) {
     let attributeToUpdate = '';
-    if (requestBody.title) attributeToUpdate = 'title';
-    else if (requestBody.content) attributeToUpdate = 'content';
-    else if (requestBody.version) attributeToUpdate = 'version';
-    else if (requestBody.contributors) attributeToUpdate = 'contributors';
+    if (requestBody.title !== undefined) attributeToUpdate = 'title';
+    else if (requestBody.content !== undefined) attributeToUpdate = 'content';
+    else if (requestBody.freeze_page !== undefined) attributeToUpdate = 'freeze_page';
 
     return attributeToUpdate;
 }

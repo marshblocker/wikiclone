@@ -6,7 +6,7 @@ let userReadController = {
     readUsers: function(req, res) {
         const requiredParams = [];
         const validateRes = utils.validateUserRequiredParams(requiredParams, req.body, req.method, null);
-        if (validateRes !== true) {
+        if (validateRes !== 'valid') {
             return res.status(validateRes.error.code).json(validateRes.error);
         }        
 
@@ -32,7 +32,7 @@ let userReadController = {
 
         const requiredParams = [];
         const validateRes = utils.validateUserRequiredParams(requiredParams, req.body, req.method, null);
-        if (validateRes !== true) {
+        if (validateRes !== 'valid') {
             return res.status(validateRes.error.code).json(validateRes.error);
         }
 
