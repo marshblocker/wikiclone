@@ -10,7 +10,6 @@ let utils = {
     validateUserRequiredParams: function(requiredParams, givenParams, HTTPMethod, patchReceiverID) {
         let validateRes = generalValidationStep(requiredParams, givenParams);
         if (validateRes !== 'valid') return validateRes;
-        console.log(1)
 
         const usersIDs = Object.keys(users);
 
@@ -29,7 +28,6 @@ let utils = {
                 validateRes = validationFunctions[i]();
                 if (validateRes !== 'valid') return validateRes;
             }
-            console.log(i);
         }
 
         return 'valid';
