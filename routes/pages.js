@@ -15,7 +15,7 @@ router.get('/', pageReadController.readPages);
 // the title of the page with page_id ABC.
 router.get('/:page_id', pageReadController.readPage);
 
-// Required body parameters: 'title', 'content', 'creator_id'.
+// Required body parameters: 'title', 'content', 'user_id' (of the creator).
 router.post('/', pageCreateController.createPage);
 
 // Required body parameter (ONLY one of the following): 'title', 'content', 'version','user_id'.
