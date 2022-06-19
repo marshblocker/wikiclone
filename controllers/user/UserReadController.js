@@ -194,7 +194,6 @@ class UserReadController {
                 if (outputFormat.sort_by.attr !== undefined) {
                     const attribute = outputFormat.sort_by.attr;
                     const ascending = outputFormat.sort_by.ascending;
-                    console.log(ascending);
                     if (attribute === 'can_edit') {
                         formattedUsersArray.sort((a, b) => a[attribute] - b[attribute]);
                     } else {
