@@ -33,7 +33,7 @@ class UserReadController {
 
     readAllUsers(query) {
         return new Promise((resolve, reject) => {   
-            const strict = true;
+            let strict = true;
             let outputFormat = {};
 
             const queryNames = Object.keys(query);
@@ -43,7 +43,7 @@ class UserReadController {
                 let paging = {};
 
                 // Reject the request if an unknown query name was found.
-                const validQueryNames = ['role', 'can_edit', 'sort_by', 'page', 'page_entries'];
+                const validQueryNames = ['role', 'can_edit', 'sort_by', 'page', 'page_entries', 'strict'];
                 for (let i = 0; i < queryNames.length; i++) {
                     if (!validQueryNames.includes(queryNames[i])) {
                         return reject(CustomError.InvalidQueryParameterName(queryNames[i]));
@@ -65,6 +65,14 @@ class UserReadController {
                         return reject(CustomError.InvalidCanEditFilter(query.can_edit));
                     }
                     filter.byCanEdit = (query.can_edit === 'true') ? true : false;
+                }
+
+                if (query.strict !== undefined) {
+                    // Reject the request if strict query is not boolean.
+                    if (!['true', 'false'].includes(query.strict)) {
+                        return reject(CustomError.InvalidStrictQueryParameter(query.strict));
+                    }
+                    strict = (query.strict === 'true') ? true : false;
                 }
     
                 const allowedAttributesForSorting = [
