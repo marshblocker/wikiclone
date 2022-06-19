@@ -13,7 +13,7 @@ router.get('/', (req, res) => {
 })
 
 router.get('/:page_id', (req, res) => {
-    pageController.pageReadController.readPage(req.params.page_id)
+    pageController.pageReadController.readPage(req.params.page_id, req.query)
     .then(page => res.status(200).json(page))
     .catch(error => res.status(error.code).json(error.message));
 });

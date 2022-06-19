@@ -6,8 +6,10 @@ class PageReadController {
         this.pageDAO = pageDAO
     }
 
-    readPage(page_id) {
+    readPage(page_id, query) {
         return new Promise((resolve, reject) => {
+            let desiredAttributes = [];
+
             // Reject the request if page_id is undefined, null, or empty string.
             if ([undefined, '', null].includes(page_id)) {
                 return reject(CustomError.MissingRequiredURLParamAttr('page_id'));
@@ -20,10 +22,52 @@ class PageReadController {
                 ));
             }
 
+            const queryNames = Object.keys(query);
+            if (queryNames.length > 0) {
+                const validQueryNames = ['attr'];
+                for (let i = 0; i < queryNames.length; i++) {
+                    // Reject the request if one of the query parameters is
+                    // not officially considered to be valid.
+                    if (!validQueryNames.includes(queryNames[i])) {
+                        return reject(CustomError.InvalidQueryParameterName(queryNames[i]));
+                    }
+                }
+
+                if (query.attr !== undefined) {
+                    if (query.attr.constructor.name === 'Array') {
+                        for (let i = 0; i < query.attr.length; i++) {
+                            if (!desiredAttributes.includes(query.attr[i])) {
+                                desiredAttributes.push(query.attr[i]);
+                            }
+                        }
+                    } else {
+                        desiredAttributes.push(query.attr);
+                    }
+
+                    for (let i = 0; i < desiredAttributes.length; i++) {
+                        // Reject the request if the attribute specified in the query
+                        // is not an attribute of a page.
+                        if (!constants.page.ATTRIBUTES.includes(desiredAttributes[i])) {
+                            return reject(CustomError.InvalidQueryParameterValue(desiredAttributes[i]));
+                        }
+                    }
+                }
+            }
+
             this.pageDAO.readEntity(page_id)
             .then(page => {
                 page.freeze_page = (page.freeze_page === 1) ? true : false;
-                return resolve(page);
+                if (desiredAttributes.length === 0) {
+                    return resolve(page);
+                }
+
+                let finalPage = {};
+                for (let i = 0; i < desiredAttributes.length; i++) {
+                    let attributeName = desiredAttributes[i];
+                    finalPage[attributeName] = page[attributeName];
+                }
+
+                return resolve(finalPage);
             })
             .catch(reject);
         });

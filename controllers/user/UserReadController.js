@@ -25,6 +25,15 @@ class UserReadController {
 
             const queryNames = Object.keys(query);
             if (queryNames.length > 0) {
+                const validQueryNames = ['attr', 'strict'];
+                for (let i = 0; i < queryNames.length; i++) {
+                    // Reject the request if one of the query parameters is
+                    // not officially considered to be valid.
+                    if (!validQueryNames.includes(queryNames[i])) {
+                        return reject(CustomError.InvalidQueryParameterName(queryNames[i]));
+                    }
+                }
+
                 if (query.strict !== undefined) {
                     // Reject the request if strict query is not boolean.
                     if (!['true', 'false'].includes(query.strict)) {
@@ -45,6 +54,8 @@ class UserReadController {
                     }
 
                     for (let i = 0; i < desiredAttributes.length; i++) {
+                        // Reject the request if the attribute specified in the query
+                        // is not an attribute of the user.
                         if (!constants.user.ATTRIBUTES.includes(desiredAttributes[i])) {
                             return reject(CustomError.InvalidQueryParameterValue(desiredAttributes[i]));
                         }
@@ -55,7 +66,7 @@ class UserReadController {
             .then(user => {
                 user.can_edit = (user.can_edit === 1) ? true : false;
                 if (desiredAttributes.length === 0) {
-                return resolve(user);
+                    return resolve(user);
                 }
 
                 let finalUser = {};
