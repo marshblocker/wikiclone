@@ -23,7 +23,7 @@ echo "finished create-if-not-exist database"
 echo "update database"
 node ./node_modules/db-migrate/bin/db-migrate up -e dev --config ./database/database.json -m ./database/migrations
 echo "finished update database"
- 
+
 # run node app
 echo "running node app"
 npm start

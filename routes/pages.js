@@ -1,28 +1,37 @@
 var express = require('express');
+
+const pageController = require('../controllers/page/pageController');
+
 var router = express.Router();
 
-const pageCreateController = require('../controllers/page/pageCreateController');
-const pageReadController = require('../controllers/page/pageReadController');
-const pageUpdateController = require('../controllers/page/pageUpdateController');
-const pageDeleteController = require('../controllers/page/pageDeleteController');
+router.get('/', (req, res) => {
+    pageController.pageReadController.readAllPages()
+    .then(allPages => res.status(200).json(allPages))
+    .catch(error => res.status(error.code).json(error.message));
+})
 
-// Required body parameters: none.
-router.get('/', pageReadController.readPages);
+router.get('/:page_id', (req, res) => {
+    pageController.pageReadController.readPage(req.params.page_id)
+    .then(page => res.status(200).json(page))
+    .catch(error => res.status(error.code).json(error.message));
+});
 
-// Required body parameters: none.
-// Can append 'attr' query parameter to get a specific attribute value
-// of a given user. For example, /users/ABC?attr=title, to get
-// the title of the page with page_id ABC.
-router.get('/:page_id', pageReadController.readPage);
+router.post('/', (req, res) => {
+    pageController.pageCreateController.createPage(req.body)
+    .then(page => res.status(201).json(page))
+    .catch(error => res.status(error.code).json(error.message));
+});
 
-// Required body parameters: 'title', 'content', 'user_id' (of the creator).
-router.post('/', pageCreateController.createPage);
+router.put('/:page_id', (req, res) => {
+    pageController.pageUpdateController.updatePage(req.params.page_id, req.body)
+    .then(page => res.status(200).json(page))
+    .catch(error => res.status(error.code).json(error.message));
+});
 
-// Required body parameter (ONLY one of the following): 'title', 'content', 'version','user_id'.
-// If 'user_id', the 'contributors' attribute will be appended (if not yet so) with 'user_id'.
-router.patch('/:page_id', pageUpdateController.updatePage);
-
-// Required body parameters: none.
-router.delete('/:page_id', pageDeleteController.deletePage);
+router.delete('/:page_id', (req, res) => {
+    pageController.pageDeleteController.deletePage(req.params.page_id)
+    .then(page => res.status(200).json(page))
+    .catch(error => res.status(error.code).json(error.message));
+})
 
 module.exports = router;

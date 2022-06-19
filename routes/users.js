@@ -1,28 +1,39 @@
 var express = require('express');
+
+const userController = require('../controllers/user/userController');
+
 var router = express.Router();
 
-const userCreateController = require('../controllers/user/userCreateController');
-const userReadController = require('../controllers/user/userReadController');
-const userUpdateController = require('../controllers/user/userUpdateController');
-const userDeleteController = require('../controllers/user/userDeleteController');
+router.get('/', (req, res) => {
+    // This does not necessarily return all the users. The list could be filtered
+    // based on the query parameters.
+    userController.userReadController.readAllUsers(req.query)
+    .then(user => res.status(200).json(user))
+    .catch(error => res.status(error.code).json(error.message));
+});
 
-// Required body parameters: none.
-router.get('/', userReadController.readUsers);
+router.get('/:user_id', (req, res) => {
+    userController.userReadController.readUser(req.params.user_id)
+    .then(user => res.status(200).json(user))
+    .catch(error => res.status(error.code).json(error.message));
+});
 
-// Required body parameters: none.
-// Can append 'attr' query parameter to get a specific attribute value
-// of a given user. For example, /users/ABC?attr=username, to get
-// the username of the user with user_id ABC.
-router.get('/:user_id', userReadController.readUser);
+router.post('/', (req, res) => {
+    userController.userCreateController.createUser(req.body)
+    .then(user => res.status(201).json(user))
+    .catch(error => res.status(error.code).json(error.message));
+});
 
-// Required body parameters: 'username', 'password', 'email', 'role'.
-router.post('/', userCreateController.createUser);
+router.put('/:user_id', (req, res) => {
+    userController.userUpdateController.updateUser(req.params.user_id, req.body)
+    .then(user => res.status(200).json(user))
+    .catch(error => res.status(error.code).json(error.message));
+});
 
-// Required body parameter (ONLY one of the following): 'username', 'password', 'email', 'role', 'page_id'.
-// If 'page_id', the 'contributed_pages' attribute will be appended (if not yet so) with 'page_id'.
-router.patch('/:user_id', userUpdateController.updateUser);
-
-// Required body parameters: none.
-router.delete('/:user_id', userDeleteController.deleteUser);
+router.delete('/:user_id', (req, res) => {
+    userController.userDeleteController.deleteUser(req.params.user_id)
+    .then(user => res.status(200).json(user))
+    .catch(error => res.status(error.code).json(error.message));
+})
 
 module.exports = router;

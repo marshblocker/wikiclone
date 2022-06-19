@@ -7,5 +7,6 @@
         "user": { "ENV": "DB_USER" },
         "password": { "ENV": "DB_PASSWORD" },
         "multipleStatements": true
-    }
-   }
+    },
+    "sql-file": true
+}
