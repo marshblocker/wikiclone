@@ -6,13 +6,13 @@ BEGIN
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'NullID:user_id.';
 	END IF;
 
-	IF NOT EXISTS(SELECT * FROM `users` WHERE `id` = p_id) THEN
+	IF NOT EXISTS(SELECT * FROM `users` WHERE `user_id` = p_id) THEN
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'ResourceDNE:user';
 	END IF;
 
 	IF p_strict <> 0 THEN
-		SELECT `id`, `username`, `email`, `role`, `can_edit` FROM `users` WHERE `id` = p_id;
+		SELECT `user_id`, `username`, `email`, `role`, `can_edit` FROM `users` WHERE `user_id` = p_id;
 	ELSE
-		SELECT * FROM `users` WHERE `id` = p_id;
+		SELECT * FROM `users` WHERE `user_id` = p_id;
 	END IF;
 END

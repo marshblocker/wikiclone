@@ -6,9 +6,9 @@ BEGIN
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'NullID:page_id.';
 	END IF;
 
-	IF NOT EXISTS(SELECT * FROM `pages` WHERE `id` = p_id) THEN
+	IF NOT EXISTS(SELECT * FROM `pages` WHERE `page_id` = p_id) THEN
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'ResourceDNE:page';
 	ELSE
-		SELECT * FROM `pages` WHERE `id` = p_id;
+		SELECT * FROM `pages` WHERE `page_id` = p_id;
 	END IF;
 END

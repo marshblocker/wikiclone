@@ -1,13 +1,13 @@
 USE `mydb`;
 
 CREATE TABLE `users` (
- `id` CHAR(9) NOT NULL UNIQUE,
+ `user_id` CHAR(9) NOT NULL UNIQUE,
  `username` VARCHAR(20) NOT NULL UNIQUE,
  `password` CHAR(40) NOT NULL,
  `email` VARCHAR(320) NOT NULL UNIQUE,
  `role` VARCHAR(10) NOT NULL,
  `can_edit` BOOLEAN NOT NULL,
- PRIMARY KEY (`id`)
+ PRIMARY KEY (`user_id`)
 );
 
 INSERT INTO `users`
@@ -16,11 +16,11 @@ VALUES ('WG-g52obz', 'grep', '3A31C82929DB391B0E0BD7424E0B4275E6EB1BD6', 'grep@g
        ('dNyUCv4an', 'prime', 'EA756C3AD19A39CFCC25922FF018BA8F797C88C3', 'prime@gmail.com', 'superadmin', 1);
 
 CREATE TABLE `pages` (
- `id` CHAR(9) NOT NULL UNIQUE,
+ `page_id` CHAR(9) NOT NULL UNIQUE,
  `title` VARCHAR(32) NOT NULL UNIQUE,
  `content` TEXT NOT NULL,
  `freeze_page` BOOLEAN NOT NULL,
- PRIMARY KEY (`id`)
+ PRIMARY KEY (`page_id`)
 );
 
 INSERT INTO `pages`

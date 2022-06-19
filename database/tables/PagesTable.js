@@ -13,19 +13,19 @@ class PagesTable extends TableABC {
         return new Promise((resolve, reject) => {
             const { title, content, freeze_page } = attributes;
             console.log(freeze_page);
-            const id = shortid.generate();
+            const page_id = shortid.generate();
             knex.raw(
                 'CALL create_page(?, ?, ?, ?)',
-                [id, title, content, freeze_page]
+                [page_id, title, content, freeze_page]
             )
             .then(resolve)
             .catch(reject);
         });
     }
 
-    readEntry(id) {
+    readEntry(page_id) {
         return new Promise((resolve, reject) => {
-            knex.raw('CALL read_page(?)', [id])
+            knex.raw('CALL read_page(?)', [page_id])
             .then(resolve)
             .catch(reject);
         });
@@ -39,21 +39,21 @@ class PagesTable extends TableABC {
         });
     }
 
-    updateEntry(id, newAttributes) {
+    updateEntry(page_id, newAttributes) {
         return new Promise((resolve, reject) => {
             const { title, content, freeze_page } = newAttributes;
             knex.raw(
                 'CALL update_page(?, ?, ?, ?)',
-                [id, title, content, freeze_page]
+                [page_id, title, content, freeze_page]
             )
             .then(resolve)
             .catch(reject);
         });
     }
 
-    deleteEntry(id) {
+    deleteEntry(page_id) {
         return new Promise((resolve, reject) => {
-            knex.raw('CALL delete_page(?)', [id])
+            knex.raw('CALL delete_page(?)', [page_id])
             .then(resolve)
             .catch(reject);
         });

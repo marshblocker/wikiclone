@@ -8,7 +8,7 @@ router.get('/', (req, res) => {
     // This does not necessarily return all the users. The list could be filtered
     // based on the query parameters.
     userController.userReadController.readAllUsers(req.query)
-    .then(user => res.status(200).json(user))
+    .then(users => res.status(200).json(users))
     .catch(error => res.status(error.code).json(error.message));
 });
 

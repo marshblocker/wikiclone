@@ -21,25 +21,25 @@ BEGIN
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'NullID:user_id';
 	END IF;
     
-    IF NOT EXISTS(SELECT * FROM `users` WHERE `id` = p_id) THEN
+    IF NOT EXISTS(SELECT * FROM `users` WHERE `user_id` = p_id) THEN
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'ResourceDNE:user';
 	END IF;
     
 	IF p_username IS NOT NULL THEN
-		UPDATE `users` SET `username` = p_username WHERE `id` = p_id;
+		UPDATE `users` SET `username` = p_username WHERE `user_id` = p_id;
 	END IF;
     IF p_password IS NOT NULL THEN
 		SET v_strict = 0;
-		UPDATE `users` SET `password` = p_password WHERE `id` = p_id;
+		UPDATE `users` SET `password` = p_password WHERE `user_id` = p_id;
 	END IF;
     IF p_email IS NOT NULL THEN
-		UPDATE `users` SET `email` = p_email WHERE `id` = p_id;
+		UPDATE `users` SET `email` = p_email WHERE `user_id` = p_id;
 	END IF;
     IF p_role IS NOT NULL THEN
-		UPDATE `users` SET `role` = p_role WHERE `id` = p_id;
+		UPDATE `users` SET `role` = p_role WHERE `user_id` = p_id;
 	END IF;
     IF p_canEdit IS NOT NULL THEN
-		UPDATE `users` SET `can_edit` = p_canEdit WHERE `id` = p_id;
+		UPDATE `users` SET `can_edit` = p_canEdit WHERE `user_id` = p_id;
 	END IF;
     CALL read_user(p_id);
     COMMIT;

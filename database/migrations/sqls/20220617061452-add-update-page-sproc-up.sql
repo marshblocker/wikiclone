@@ -17,18 +17,18 @@ BEGIN
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'NullID:page_id.';
 	END IF;
     
-    IF NOT EXISTS(SELECT * FROM `pages` WHERE `id` = p_id) THEN
+    IF NOT EXISTS(SELECT * FROM `pages` WHERE `page_id` = p_id) THEN
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'ResourceDNE:page';
 	END IF;
     
     IF p_title IS NOT NULL THEN
-		UPDATE `pages` SET `title` = p_title WHERE `id` = p_id;
+		UPDATE `pages` SET `title` = p_title WHERE `page_id` = p_id;
 	END IF;
     IF p_content IS NOT NULL THEN
-		UPDATE `pages` SET `content` = p_content WHERE `id` = p_id;
+		UPDATE `pages` SET `content` = p_content WHERE `page_id` = p_id;
 	END IF;
     IF p_freeze_page IS NOT NULL THEN
-		UPDATE `pages` SET `freeze_page` = p_freeze_page WHERE `id` = p_id;
+		UPDATE `pages` SET `freeze_page` = p_freeze_page WHERE `page_id` = p_id;
 	END IF;
     CALL read_page(p_id);
     COMMIT;
