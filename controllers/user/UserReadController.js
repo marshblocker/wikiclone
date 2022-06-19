@@ -6,8 +6,11 @@ class UserReadController {
         this.userDAO = userDAO;
     }
 
-    readUser(user_id) {
+    readUser(user_id, query) {
         return new Promise((resolve, reject) => {
+            let strict = true;
+            let desiredAttributes = [];
+
             // Reject the request if user_id is undefined, null, or empty string.
             if ([undefined, '', null].includes(user_id)) {
                 return reject(CustomError.MissingRequiredURLParamAttr('user_id'));
@@ -20,11 +23,52 @@ class UserReadController {
                 ));
             }
 
-            const strict = true;
+            const queryNames = Object.keys(query);
+            if (queryNames.length > 0) {
+                if (query.strict !== undefined) {
+                    // Reject the request if strict query is not boolean.
+                    if (!['true', 'false'].includes(query.strict)) {
+                        return reject(CustomError.InvalidStrictQueryParameter(query.strict));
+                    }
+                    strict = (query.strict === 'true') ? true : false;
+                }
+                
+                if (query.attr !== undefined) {
+                    if (query.attr.constructor.name === 'Array') {
+                        for (let i = 0; i < query.attr.length; i++) {
+                            if (!desiredAttributes.includes(query.attr[i])) {
+                                desiredAttributes.push(query.attr[i]);
+                            }
+                        }
+                    } else {
+                        desiredAttributes.push(query.attr);
+                    }
+
+                    for (let i = 0; i < desiredAttributes.length; i++) {
+                        if (!constants.user.ATTRIBUTES.includes(desiredAttributes[i])) {
+                            return reject(CustomError.InvalidQueryParameterValue(desiredAttributes[i]));
+                        }
+                    }
+                }
+            }
             this.userDAO.readEntity(user_id, strict)
             .then(user => {
                 user.can_edit = (user.can_edit === 1) ? true : false;
+                if (desiredAttributes.length === 0) {
                 return resolve(user);
+                }
+
+                let finalUser = {};
+                for (let i = 0; i < desiredAttributes.length; i++) {
+                    if (!strict && desiredAttributes[i] === 'password') {
+                        finalUser['password'] = user['password'];
+                    } else {
+                        let attributeName = desiredAttributes[i];
+                        finalUser[attributeName] = user[attributeName];
+                    }
+                }
+
+                return resolve(finalUser);
             })
             .catch(reject);
         });

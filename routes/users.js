@@ -13,7 +13,7 @@ router.get('/', (req, res) => {
 });
 
 router.get('/:user_id', (req, res) => {
-    userController.userReadController.readUser(req.params.user_id)
+    userController.userReadController.readUser(req.params.user_id, req.query)
     .then(user => res.status(200).json(user))
     .catch(error => res.status(error.code).json(error.message));
 });

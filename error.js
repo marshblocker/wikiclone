@@ -19,6 +19,7 @@ class CustomError {
     InvalidAttributeValue = (attributeName) => new SpecificReturnedError(400, `400 Bad Request: Invalid ${attributeName} parameter value.`);
     InvalidAttributeType = (attributeName) => new SpecificReturnedError(400, `400 Bad Request: Invalid ${attributeName} parameter type.`);
     InvalidQueryParameterName = (queryName) => new SpecificReturnedError(400, `400 Bad Request: Invalid query parameter name: ${queryName}.`);
+    InvalidQueryParameterValue = (givenValue) => new SpecificReturnedError(400, `400 Bad Request: Invalid query parameter value: ${givenValue}.`);
     InvalidRoleFilter = (givenRole) => new SpecificReturnedError(400, `400 Bad Request: Invalid role filter value ('role=${givenRole}'). Allowed values: 'user', 'admin', 'superadmin'.`);
     InvalidCanEditFilter = (givenCanEdit) => new SpecificReturnedError(400, `400 Bad Request: Invalid can_edit filter value ('can_edit=${givenCanEdit}'). Allowed values: true, false.`);
     InvalidStrictQueryParameter = (givenStrict) => new SpecificReturnedError(400, `400 Bad Request: Invalid strict query parameter value ('strict=${givenStrict}'). Allowed values: true, false.`);
@@ -40,6 +41,7 @@ class CustomError {
     AttrExceedsMaxLength = (attributeSpecifics) => new SpecificReturnedError(400, `400 Bad Request: The given ${attributeSpecifics.attributeName} exceeds its max length (${attributeSpecifics.maxLength}).`);
     PasswordNotFixedLength = () => new ReturnedError(400, `400 Bad Request: The length of the given password is not equal to ${constants.user.PASSWORD_FIXED_LENGTH}.`);
     IDNotFixedLength = (attributeSpecifics) => new SpecificReturnedError(400, `400 Bad Request: The length of the provided ${attributeSpecifics.resourceName} id is not equal to ${attributeSpecifics.fixed_length}.`);
+    DuplicateQueryParameter = (givenQueryParameter) => new SpecificReturnedError(400, `400 Bad Request: The ${givenQueryParameter} query parameter was already used.`);
 
     // Code 403: Client has no access to the requested resource or action to a resource.
     ForbidCreatePage = () => new ReturnedError(403, '403 Forbidden: The user is not allowed to create a new page.');
