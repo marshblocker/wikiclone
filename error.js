@@ -18,7 +18,13 @@ class CustomError {
     // Code 400: Client made a mistake in its request form.
     InvalidAttributeValue = (attributeName) => new SpecificReturnedError(400, `400 Bad Request: Invalid ${attributeName} parameter value.`);
     InvalidAttributeType = (attributeName) => new SpecificReturnedError(400, `400 Bad Request: Invalid ${attributeName} parameter type.`);
-    InvalidFilter = (attributeName) => new SpecificReturnedError(400, `400 Bad Request: Invalid query filter ('attr=${attributeName}') value. Allowed values: 'role', 'can_edit'.`);
+    InvalidQueryParameterName = (queryName) => new SpecificReturnedError(400, `400 Bad Request: Invalid query parameter name: ${queryName}.`);
+    InvalidRoleFilter = (givenRole) => new SpecificReturnedError(400, `400 Bad Request: Invalid role filter value ('role=${givenRole}'). Allowed values: 'user', 'admin', 'superadmin'.`);
+    InvalidCanEditFilter = (givenCanEdit) => new SpecificReturnedError(400, `400 Bad Request: Invalid can_edit filter value ('can_edit=${givenCanEdit}'). Allowed values: true, false.`);
+    InvalidSortBy = (givenSortBy) => new SpecificReturnedError(400, `400 Bad Request: Invalid sort_by value ('sort_by=${givenSortBy}'). Do not forget to prepend plus ('+') or minus ('-') sign before the attribute to be sorted to indicate the sorting order (e.g. 'sort_by=+user_id' means sort the users by their user_id in ascending order). Allowed attributes to sort the entries by: 'user_id', 'username', 'email', 'role', 'can_edit' (for user resource).`);
+    InvalidPaging = () => new ReturnedError(400, `400 Bad Request: Invalid page or page_entries query parameters values. Make sure they are positive (non-zero) integer numbers.`);
+    MissingPagingParameter = () => new ReturnedError(400, '400 Bad Request: Both page and page_entries parameter must be specified to perform paging.');
+    ReachedPageLimit = () => new ReturnedError(400, `400 Bad Request: Reached page limit.`);
     AttributeNotDefined = (attributeName) => new SpecificReturnedError(400, `400 Bad Request: ${attributeName} attribute was not defined.`);
     InvalidUserRoleValue = () => new ReturnedError(400, "400 Bad Request: Invalid role parameter value. Allowed values: 'user', 'admin', 'superadmin'.");
     InvalidChangeUserRoleValue = () => new ReturnedError(400, "400 Bad Request: Invalid role parameter value. Allowed values: 'user', 'admin'.");
