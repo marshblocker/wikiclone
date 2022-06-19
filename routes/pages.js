@@ -5,7 +5,9 @@ const pageController = require('../controllers/page/pageController');
 var router = express.Router();
 
 router.get('/', (req, res) => {
-    pageController.pageReadController.readAllPages()
+    // This does not necessarily return all the pages. The list could be filtered
+    // based on the query parameters.
+    pageController.pageReadController.readAllPages(req.query)
     .then(allPages => res.status(200).json(allPages))
     .catch(error => res.status(error.code).json(error.message));
 })

@@ -20,7 +20,6 @@ class UserReadController {
                 ));
             }
 
-            // TODO: determine how strict variable will be initialized.
             const strict = true;
             this.userDAO.readEntity(user_id, strict)
             .then(user => {

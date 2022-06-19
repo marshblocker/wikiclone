@@ -29,12 +29,118 @@ class PageReadController {
         });
     }
 
-    readAllPages() {
-        return new Promise((resolve, reject) => {
+    readAllPages(query) {
+        return new Promise((resolve, reject) => {   
+            let outputFormat = {};
+
+            const queryNames = Object.keys(query);
+            if (queryNames.length > 0) {
+                let filter = {};
+                let sort_by = {};
+                let paging = {};
+
+                // Reject the request if an unknown query name was found.
+                const validQueryNames = ['freeze_page', 'sort_by', 'page', 'page_entries'];
+                for (let i = 0; i < queryNames.length; i++) {
+                    if (!validQueryNames.includes(queryNames[i])) {
+                        return reject(CustomError.InvalidQueryParameterName(queryNames[i]));
+                    }
+                }
+    
+                if (query.freeze_page !== undefined) {
+                    // Reject the request if freeze_page query is not boolean.
+                    if (!['true', 'false'].includes(query.freeze_page)) {
+                        return reject(CustomError.InvalidCanEditFilter(query.freeze_page));
+                    }
+                    filter.byFreezePage = (query.freeze_page === 'true') ? true : false;
+                }
+    
+                const allowedAttributesForSorting = ['page_id', 'title', 'freeze_page'];
+    
+                if (query.sort_by !== undefined) {
+                    sort_by = {
+                        attr: query.sort_by.slice(1),
+                        ascending: query.sort_by.startsWith('-') ? false : true
+                    }
+                    
+                    // Reject the request if a paramater not suitable for sorting
+                    // was given in the sort_by query parameter.
+                    if (!allowedAttributesForSorting.includes(sort_by.attr)) {
+                        return reject(CustomError.InvalidSortBy(sort_by.attr));
+                    }
+                }
+    
+                // Reject the request if strictly one of page and page_entries parameter
+                // is undefined.
+                if (Number(query.page !== undefined) + Number(query.page_entries !== undefined) == 1) {
+                    return reject(CustomError.MissingPagingParameter());
+                }
+    
+                if (query.page !== undefined && query.page_entries !== undefined) {
+                    paging.page_entries = +query.page_entries;
+                    paging.page = +query.page;
+                    
+                    // Reject the request if the page or page entries query parameter
+                    // were not positive (non-zero) integer.
+                    if (isNaN(paging.page) || isNaN(paging.page_entries) || paging.page <= 0 || 
+                            paging.page_entries <= 0 || paging.page % 1 !== 0 || paging.page_entries % 1 !== 0) {
+                        return reject(CustomError.InvalidPaging());
+                    }
+                }
+    
+                outputFormat = {"filter": filter, "sort_by": sort_by, "paging": paging};
+            }
+
             this.pageDAO.readAllEntities()
             .then(allPages => {
-                allPages.forEach(page => page.freeze_page = (page.freeze_page === 1) ? true : false);
-                return resolve(allPages);
+                allPages.forEach(user => user.freeze_page = (user.freeze_page === 1) ? true : false);
+                
+                // Return the result immediately if the result does not need to be
+                // formatted since no query parameters were specified.
+                if (queryNames.length === 0) {
+                    return resolve(allPages);
+                }
+
+                let formattedPagesArray = allPages;
+                
+                if (outputFormat.filter.byFreezePage !== undefined) {
+                    formattedPagesArray = allPages.filter(
+                        page => page.freeze_page === outputFormat.filter.byFreezePage
+                    );
+                }
+                        
+                if (outputFormat.sort_by.attr !== undefined) {
+                    const attribute = outputFormat.sort_by.attr;
+                    const ascending = outputFormat.sort_by.ascending;
+                    if (attribute === 'freeze_page') {
+                        formattedPagesArray.sort((a, b) => a[attribute] - b[attribute]);
+                    } else {
+                        formattedPagesArray.sort(function(a, b) {
+                            return ('' + a[attribute]).localeCompare(b[attribute]);
+                        })
+                    }
+                    if (!ascending) {
+                        formattedPagesArray.reverse();
+                    }
+                }
+                
+                const formattedPagesTotalAmount = formattedPagesArray.length;
+                if (outputFormat.paging.page !== undefined && formattedPagesTotalAmount !== 0) {
+                    const page = outputFormat.paging.page - 1;
+                    const page_entries = outputFormat.paging.page_entries;
+                    const startIndex = page*page_entries;
+
+                    // Reject the request if the combination of page and page_entries
+                    // parameter will exceed the page limit.
+                    if (startIndex >= formattedPagesTotalAmount) {
+                        return reject(CustomError.ReachedPageLimit());
+                    }
+                    
+                    formattedPagesArray.splice(0, startIndex);
+                    formattedPagesArray.splice(page_entries);
+                }
+
+                return resolve(formattedPagesArray);
             })
             .catch(reject);
         })
