@@ -6,7 +6,13 @@ class UserReadController {
         this.userDAO = userDAO;
     }
 
-    readUser(user_id, query) {
+    readUser(req, res) {
+        this._readUser(req.params.user_id, req.query)
+            .then(user => res.status(200).json(user))
+            .catch(error => res.status(error.code).json(error.message));
+    }
+
+    _readUser(user_id, query) {
         return new Promise((resolve, reject) => {
             let strict = true;
             let desiredAttributes = [];
@@ -85,7 +91,13 @@ class UserReadController {
         });
     }
 
-    readAllUsers(query) {
+    readAllUsers(req, res) {
+        this._readAllUsers(req.query)
+            .then(users => res.status(200).json(users))
+            .catch(error => res.status(error.code).json(error.message));
+    }
+
+    _readAllUsers(query) {
         return new Promise((resolve, reject) => {   
             let strict = true;
             let outputFormat = {};

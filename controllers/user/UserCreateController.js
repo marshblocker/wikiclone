@@ -6,7 +6,13 @@ class UserCreateController {
         this.userDAO = userDAO;
     }
 
-    createUser(newUserAttributes) {
+    createUser(req, res) {
+        this._createUser(req.body)
+            .then(user => res.status(201).json(user))
+            .catch(error => res.status(error.code).json(error.message));
+    }
+
+    _createUser(newUserAttributes) {
         return new Promise((resolve, reject) => {
             const userIDIndex = constants.user.ATTRIBUTES.indexOf('user_id');
             const requiredAttributeNames = constants.user.ATTRIBUTES.slice();

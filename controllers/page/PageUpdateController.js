@@ -6,7 +6,13 @@ class PageUpdateController {
         this.pageDAO = pageDAO;
     }
 
-    updatePage(page_id, updatedPageAttributes) {
+    updatePage(req, res) {
+        this._updatePage(req.params.page_id, req.body)
+            .then(page => res.status(200).json(page))
+            .catch(error => res.status(error.code).json(error.message));
+    }
+
+    _updatePage(page_id, updatedPageAttributes) {
         return new Promise((resolve, reject) => {
             // Reject the request if page_id is undefined, null, or empty string.
             if ([undefined, '', null].includes(page_id)) {

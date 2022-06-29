@@ -6,7 +6,13 @@ class PageReadController {
         this.pageDAO = pageDAO
     }
 
-    readPage(page_id, query) {
+    readPage(req, res) {
+        this._readPage(req.params.page_id, req.query)
+            .then(page => res.status(200).json(page))
+            .catch(error => res.status(error.code).json(error.message));
+    }
+
+    _readPage(page_id, query) {
         return new Promise((resolve, reject) => {
             let desiredAttributes = [];
 
@@ -73,7 +79,13 @@ class PageReadController {
         });
     }
 
-    readAllPages(query) {
+    readAllPages(req, res) {
+        this._readAllPages(req.query)
+            .then(allPages => res.status(200).json(allPages))
+            .catch(error => res.status(error.code).json(error.message));
+    }
+
+    _readAllPages(query) {
         return new Promise((resolve, reject) => {   
             let outputFormat = {};
 

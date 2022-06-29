@@ -6,7 +6,13 @@ class UserDeleteController {
         this.userDAO = userDAO;
     }
 
-    deleteUser(user_id) {
+    deleteUser(req, res) {
+        this._deleteUser(req.params.user_id)
+            .then(user => res.status(200).json(user))
+            .catch(error => res.status(error.code).json(error.message));
+    }
+
+    _deleteUser(user_id) {
         return new Promise((resolve, reject) => {
             // Reject the request if user_id is undefined, null, or empty string.
             if ([undefined, '', null].includes(user_id)) {

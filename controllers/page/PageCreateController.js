@@ -6,7 +6,13 @@ class PageCreateController {
         this.pageDAO = pageDAO;
     }
 
-    createPage(newPageAttributes) {
+    createPage(req, res) {
+        this._createPage(req.body)
+            .then(page => res.status(201).json(page))
+            .catch(error => res.status(error.code).json(error.message));
+    }
+
+    _createPage(newPageAttributes) {
         return new Promise((resolve, reject) => {
             const pageIDIndex = constants.page.ATTRIBUTES.indexOf('page_id');
             const requiredAttributeNames = constants.page.ATTRIBUTES.slice();

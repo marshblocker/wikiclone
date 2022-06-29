@@ -6,7 +6,13 @@ class UserUpdateController {
         this.userDAO = userDAO;
     }
 
-    updateUser(user_id, updatedUserAttributes) {
+    updateUser(req, res) {
+        this._updateUser(req.params.user_id, req.body)
+            .then(user => res.status(200).json(user))
+            .catch(error => res.status(error.code).json(error.message));
+    }
+
+    _updateUser(user_id, updatedUserAttributes) {
         return new Promise((resolve, reject) => {
             // Reject the request if user_id is undefined, null, or empty string.
             if ([undefined, '', null].includes(user_id)) {

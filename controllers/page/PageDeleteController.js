@@ -6,7 +6,13 @@ class PageDeleteController {
         this.pageDAO = pageDAO;
     }
 
-    deletePage(page_id) {
+    deletePage(req, res) {
+        this._deletePage(req.params.page_id)
+            .then(page => res.status(200).json(page))
+            .catch(error => res.status(error.code).json(error.message));
+    }
+
+    _deletePage(page_id) {
         return new Promise((resolve, reject) => {
             // Reject the request if page_id is undefined, null, or empty string.
             if ([undefined, '', null].includes(page_id)) {
