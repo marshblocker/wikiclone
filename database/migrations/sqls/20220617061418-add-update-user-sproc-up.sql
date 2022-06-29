@@ -41,6 +41,6 @@ BEGIN
     IF p_canEdit IS NOT NULL THEN
 		UPDATE `users` SET `can_edit` = p_canEdit WHERE `user_id` = p_id;
 	END IF;
-    CALL read_user(p_id);
+    CALL read_user(p_id, v_strict);
     COMMIT;
 END
