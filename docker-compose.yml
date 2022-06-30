@@ -1,25 +1,31 @@
 version: "3"
- 
+
 services:
-   express_app:
-     build: ./
-     ports:
-         - 3000:3000
-     volumes:
-         - ./:/app
-     environment:
-         - DB_NAME=mydb
-         - DB_HOST=db_server
-         - DB_PORT=3306
-         - DB_USER=root
-         - DB_PASSWORD=password
-     depends_on:
-         - db_server
-     command: "bash start.sh db_server:3306"
-   db_server:
-       image: mysql:5.7
-       ports:
-           - "3306:3306"
-       environment:
-           - MYSQL_ROOT_PASSWORD=password
-           - MYSQL_DATABASE=mydb
+  express_app:
+    build: ./back-end
+    ports:
+      - 3000:3000
+    volumes:
+      - ./back-end/:/app
+    environment:
+      - DB_NAME=mydb
+      - DB_HOST=db_server
+      - DB_PORT=3306
+      - DB_USER=root
+      - DB_PASSWORD=password
+    depends_on:
+      - db_server
+    command: bash start.sh db_server:3306
+  db_server:
+    image: mysql:5.7
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=mydb
+  angular-app:
+    build: ./front-end
+    ports:
+      - "4200:4200"
+    volumes:
+      - ./front-end/:/ng-app
