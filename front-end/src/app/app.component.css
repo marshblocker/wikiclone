@@ -1,0 +1,19 @@
+.page 
+{
+    display: flex;
+    flex-flow: row nowrap;
+    /* border: 1px solid #000000; */
+}
+
+.sandwiched-main-content
+{
+    flex-grow: 1;
+}
+
+@media screen and (min-width: 425px)
+{
+    .sandwiched-main-content > div 
+    {
+        padding-right: 1em;
+    }
+}

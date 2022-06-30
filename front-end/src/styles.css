@@ -1,1 +1,82 @@
-/* You can add global styles to this file, and also import other style files */
+/* General rules */
+
+html 
+{
+    font-family: sans-serif;
+    background-color: #f6f6f6;
+}
+
+img 
+{
+    max-width: 80%;
+}
+
+a 
+{
+    color: #0645ad;
+}
+
+a:visited 
+{
+    color: #0b0080;
+}
+
+.vertical-links-ul
+{
+    display: flex;
+    flex-flow: column nowrap;
+    margin: 0;
+    padding: 0;
+}
+
+.horizontal-links-ul
+{
+    display: flex;
+    flex-flow: row nowrap;
+    margin: 0;
+    padding: 0;
+}
+
+.horizontal-links-li
+{
+    padding-left: 0.3em;
+    padding-right: 0.3em;
+}
+
+.no-bullet-li 
+{
+    list-style: none;
+}
+
+.small-anchor 
+{
+    font-size: 0.75em;
+}
+
+.search
+{
+    display: flex;
+    justify-content: flex-end;
+    width: 20em;
+    margin-left: 0.5em;
+}
+
+.search-bar
+{
+    flex-grow: 1;
+}
+
+.search-button
+{
+    position: absolute;
+}
+
+.flex-left-side
+{
+    justify-content: flex-start;
+}
+
+.flex-right-side
+{
+    justify-content: flex-end;
+}

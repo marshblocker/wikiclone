@@ -1,0 +1,77 @@
+/* Mobile-specific rules */
+
+.nav-bar-small-screen
+{
+    display: flex;
+    flex-flow: row nowrap;
+    padding-bottom: 0.5em;
+}
+
+.nav-bar-small-screen > div
+{
+    display: flex;
+    flex-flow: row nowrap;
+    flex-grow: 1;
+}
+
+.nav-bar-small-screen .flex-left-side .show-menu-btn
+{
+    width: 2em;
+    max-width: 2em;
+    margin-right: 1em;
+}
+
+.nav-bar-small-screen .flex-left-side .wiki-text-logo
+{
+    width: 7em;
+    max-width: 7em;
+}
+
+.nav-bar-small-screen .flex-right-side .search
+{
+    width: 10em;
+}
+
+.nav-bar-large-screen
+{
+    display: none;
+}
+
+/* Desktop-specific rules */
+
+@media screen and (min-width: 425px)
+{
+    .user-control-bar ul
+    {
+        justify-content: flex-end;
+        padding-bottom: 10px;
+    }
+
+    .page-control-bar
+    {
+        display: flex;
+        flex-flow: row nowrap;
+    }
+
+    .page-control-bar > div
+    {
+        display: flex;
+        flex-flow: row nowrap;
+        flex-grow: 1;
+    }
+
+    .page-control-right-side
+    {
+        justify-content: flex-end;
+    }
+
+    .nav-bar-small-screen
+    {
+        display: none;
+    }
+
+    .nav-bar-large-screen
+    {
+        display: block;
+    }
+}
