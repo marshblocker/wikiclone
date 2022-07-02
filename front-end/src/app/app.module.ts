@@ -7,6 +7,7 @@ import { ArticleBodyComponent } from './components/article-body/article-body.com
 import { FooterComponent } from './components/footer/footer.component';
 import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 import { SideBarComponent } from './components/side-bar/side-bar.component';
+import { NewPageComponent } from './components/new-page/new-page.component';
 
 @NgModule({
   declarations: [
@@ -14,7 +15,8 @@ import { SideBarComponent } from './components/side-bar/side-bar.component';
     ArticleBodyComponent,
     FooterComponent,
     NavBarComponent,
-    SideBarComponent
+    SideBarComponent,
+    NewPageComponent
   ],
   imports: [
     BrowserModule,
