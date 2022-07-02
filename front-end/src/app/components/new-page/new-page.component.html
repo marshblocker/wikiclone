@@ -1,0 +1,40 @@
+<h3 class="input-header">Article Title (Required)</h3>
+<div class="input-section">
+  <input type="text" name="new-page-title" id="new-page-title" (input)="getTitle($event)" />
+  <small class="guide-text">  
+    This will be the term used to search for this article.
+  </small>
+</div>
+
+<h3 class="input-header">Article Image URL (Optional)</h3>
+<div class="input-section">
+  <input type="text" name="new-page-image" id="new-page-image" (input)="getImageUrl($event)" />
+  <small class="guide-text">
+    This will be the image associated with the article. Note that uploading
+    image from your machine is not currently supported -- you can only paste the
+    url of an image from the web in the input box (with consideration to
+    copyright laws, of course).
+  </small>
+</div>
+
+<h3 class="input-header">Article Lead (Required)</h3>
+<div class="input-section">
+  <div id="new-page-lead-editor"></div>
+  <small class="guide-text"> Bla bla bla </small>
+</div>
+
+<h3 class="input-header">Article Body (Optional)</h3>
+<div class="input-section">
+  <div id="new-page-body-editor"></div>
+  <small class="guide-text"> Bla bla bla </small>
+</div>
+
+<button id="update-article-preview-btn" (click)="updatePagePreview()"> Update Article Preview </button>
+
+<hr>
+
+<h3> Article Preview </h3>
+<div id="article-preview" [innerHTML]="newPagePreviewSafeHTML"></div>
+
+<button id="update-article-btn" (click)="updatePage()"> Update Article </button>
+
