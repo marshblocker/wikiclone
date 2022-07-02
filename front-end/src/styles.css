@@ -6,6 +6,12 @@ html
     background-color: #f6f6f6;
 }
 
+h1, h2, h3, h4
+{
+    font-family: 'Linux Libertine','Georgia','Times', serif;
+    font-weight: normal;
+}
+
 img 
 {
     max-width: 80%;
