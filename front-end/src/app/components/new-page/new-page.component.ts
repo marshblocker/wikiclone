@@ -13,7 +13,7 @@ import { PageHTML } from '../../classes/page-html.class';
 })
 export class NewPageComponent implements OnInit {
   newPageTitle!: string;
-  newPageImageUrl?: string;
+  newPageImageUrl!: string;
 
   newPagePreviewHTML!: PageHTML;
   newPagePreviewSafeHTML!: SafeHtml;
@@ -23,6 +23,8 @@ export class NewPageComponent implements OnInit {
   constructor(private sanitizer: DomSanitizer) {}
 
   ngOnInit(): void {
+    this.newPageTitle = (<HTMLInputElement>document.getElementById('new-page-title')).value;
+    this.newPageImageUrl = (<HTMLInputElement>document.getElementById('new-page-image-url')).value;
   }
 
   updatePage() {}
