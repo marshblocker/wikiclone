@@ -1,0 +1,35 @@
+#page-lead-editor,
+#page-body-editor
+{
+    width: 50%;
+    font-family: monospace, monospace;
+    font-size: 13px;
+    background-color: #ffffff;
+    border: 1px solid rgb(118, 118, 118);
+}
+
+
+.input-section
+{
+    display: flex;
+}
+
+.guide-text
+{
+    width: 50%;
+    margin-left: 2em;
+    font-style: italic;
+}
+
+#update-article-preview-btn,
+#submit-article-btn
+{
+    margin-top: 1em;
+}
+
+#article-preview
+{
+    min-height: 10em;
+    background-color: #ffffff;
+    border: 1px solid #a7d7f9;
+}

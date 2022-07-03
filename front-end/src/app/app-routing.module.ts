@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { ExistingPageEditorComponent } from './components/existing-page-editor/existing-page-editor.component';
 import { HomeComponent } from './components/home/home.component';
 import { NewPageEditorComponent } from './components/new-page-editor/new-page-editor.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
@@ -18,6 +19,12 @@ const routes: Routes = [
     component: PageNotFoundComponent,
     title: '404 Page Not Found',
     data: { pageType: '404' },
+  },
+  {
+    path: 'wiki/:page_id/edit',
+    component: ExistingPageEditorComponent,
+    title: 'Edit Article',
+    data: { pageType: 'Article' }
   },
   {
     path: 'wiki/new',
