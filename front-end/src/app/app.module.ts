@@ -1,28 +1,38 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { ArticleBodyComponent } from './components/article-body/article-body.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 import { SideBarComponent } from './components/side-bar/side-bar.component';
-import { NewPageComponent } from './components/new-page/new-page.component';
+import { NewPageEditorComponent } from './components/new-page-editor/new-page-editor.component';
+import { PageViewComponent } from './components/page-view/page-view.component';
+
+import { PageService } from './services/page.service';
+import { HomeComponent } from './components/home/home.component';
+import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
+import { RandomPageComponent } from './components/random-page/random-page.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    ArticleBodyComponent,
     FooterComponent,
     NavBarComponent,
     SideBarComponent,
-    NewPageComponent
+    NewPageEditorComponent,
+    PageViewComponent,
+    HomeComponent,
+    PageNotFoundComponent,
+    RandomPageComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClientModule
   ],
-  providers: [],
+  providers: [PageService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
