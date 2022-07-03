@@ -21,9 +21,9 @@ router.get('/:page_id', (req, res) => pageController.pageReadController.readPage
 */
 router.post('/',async (req, res) => await pageController.pageCreateController.createPage(req, res));
 
-router.patch('/page_id/content', (req, res) => {
+router.patch('/:page_id/content', (req, res) => {
     pageController.pageUpdateController.updateContent(req, res);
-})
+});
 router.patch('/:page_id/freeze_page', (req, res) => {
     pageController.pageUpdateController.updateFreezePage(req, res);
 });
