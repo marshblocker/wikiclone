@@ -4,15 +4,29 @@ const pageController = require('../controllers/page/pageController');
 
 var router = express.Router();
 
-// This does not necessarily return all the pages. The list could be filtered
-// based on the query parameters.
 router.get('/', (req, res) => pageController.pageReadController.readAllPages(req, res));
-
 router.get('/:page_id', (req, res) => pageController.pageReadController.readPage(req, res));
 
-router.post('/', (req, res) => pageController.pageCreateController.createPage(req, res));
+/*
+    Post request body structure:
+        {
+            "page_id": ...,
+            "content": {
+                "title": ...,
+                "image_url": ...,
+                "lead": ...,
+                "body": ...
+            }
+        }
+*/
+router.post('/',async (req, res) => await pageController.pageCreateController.createPage(req, res));
 
-router.put('/:page_id', (req, res) => pageController.pageUpdateController.updatePage(req, res));
+router.patch('/page_id/content', (req, res) => {
+    pageController.pageUpdateController.updateContent(req, res);
+})
+router.patch('/:page_id/freeze_page', (req, res) => {
+    pageController.pageUpdateController.updateFreezePage(req, res);
+});
 
 router.delete('/:page_id', (req, res) => pageController.pageDeleteController.deletePage(req, res));
 

@@ -29,9 +29,9 @@ class EntityDAO {
         });
     }
 
-    updateEntity(id, newAttributes) {
+    updateEntity(id, updatedAttributes) {
         return new Promise((resolve, reject) => {
-            this.table.updateEntry(id, newAttributes) 
+            this.table.updateEntry(id, updatedAttributes) 
             .then(updatedEntity => resolve(updatedEntity[0][0][0]))
             .catch(error => reject(this.handleDBError(error)));
         });

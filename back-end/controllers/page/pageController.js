@@ -1,4 +1,3 @@
-const PagesTable = require('../../database/tables/PagesTable');
 const PageDAO = require('../../DAO/PageDAO');
 const PageReadController = require('../../controllers/page/PageReadController');
 const PageCreateController = require('./PageCreateController');
@@ -15,8 +14,7 @@ class PageController {
     }
 }
 
-let pagesTable = new PagesTable(null);
-let pageDAO = new PageDAO(pagesTable);
+let pageDAO = new PageDAO();
 
 let pageReadController = new PageReadController(pageDAO);
 let pageCreateController = new PageCreateController(pageDAO);

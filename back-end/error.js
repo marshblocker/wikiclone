@@ -33,7 +33,7 @@ class CustomError {
     MissingRequiredURLQueryAttr = (attributeName) => new SpecificReturnedError(400, `400 Bad Request: Missing required URL query attribute: ${attributeName}.`);
     TooManyParameters = () => new ReturnedError(400, '400 Bad Request: Too many parameters provided.');
     TooFewParameters = () => new ReturnedError(400, '400 Bad Request: Too few parameters provided.');
-    AttributeNotDefined = (attributeName) => new SpecificReturnedError(400, `400 Bad Request: ${attributeName} attribute was not defined.`);
+    AttributeNotDefined = (attributeName) => new SpecificReturnedError(400, `400 Bad Request: ${attributeName} attribute was not defined in the request body.`);
     AttrDoesNotExist = (attributeName) => new SpecificReturnedError(400, `400 Bad Request: ${attributeName} is not an existing attribute name of the resource.`);
     AttrExceedsMaxLength = (attributeSpecifics) => new SpecificReturnedError(400, `400 Bad Request: The given ${attributeSpecifics.attributeName} exceeds its max length (${attributeSpecifics.maxLength}).`);
     ReachedPageLimit = () => new ReturnedError(400, `400 Bad Request: Reached page limit.`);
