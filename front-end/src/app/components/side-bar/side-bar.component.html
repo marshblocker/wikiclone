@@ -1,13 +1,36 @@
 <div class="side-bar">
-  <img src="../../assets/wiki-logo.png" alt="Wikipedia Logo" />
+  <a routerLink="/" routerLink="active" ariaCurrentWhenActive="page">
+    <img src="../../assets/wiki-logo.png" alt="Wikipedia Logo" />
+  </a>
   <ul class="vertical-links-ul">
     <li class="no-bullet-li">
-      <a class="small-anchor" href="#">Main page</a>
+      <a
+        class="small-anchor"
+        routerLink="/"
+        routerLinkActive="active"
+        ariaCurrentWhenActive="page"
+        >Main page</a
+      >
     </li>
     <li class="no-bullet-li">
-      <a class="small-anchor" href="#">Random article</a>
+      <a
+        class="small-anchor"
+        routerLink="/wiki/random"
+        routerLinkActive="active"
+        ariaCurrentWhenActive="page"
+        >Random article</a
+      >
     </li>
     <li class="no-bullet-li">
+      <a
+        class="small-anchor"
+        routerLink="/wiki/new"
+        routerLinkActive="active"
+        ariaCurrentWhenActive="page"
+        >Create New Article</a
+      >
+    </li>
+    <!-- <li class="no-bullet-li">
       <a class="small-anchor" href="#">About Wikipedia</a>
     </li>
     <li class="no-bullet-li">
@@ -15,6 +38,6 @@
     </li>
     <li class="no-bullet-li">
       <a class="small-anchor" href="#">Donate</a>
-    </li>
+    </li> -->
   </ul>
 </div>
