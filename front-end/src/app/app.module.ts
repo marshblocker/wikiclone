@@ -14,6 +14,7 @@ import { PageService } from './services/page.service';
 import { HomeComponent } from './components/home/home.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { RandomPageComponent } from './components/random-page/random-page.component';
+import { RegisterComponent } from './components/register/register.component';
 import { LoginComponent } from './components/login/login.component';
 
 @NgModule({
@@ -26,7 +27,9 @@ import { LoginComponent } from './components/login/login.component';
     PageViewComponent,
     HomeComponent,
     PageNotFoundComponent,
-    RandomPageComponent
+    RandomPageComponent,
+    RegisterComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
