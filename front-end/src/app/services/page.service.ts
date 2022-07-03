@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { PageContent, Page } from '../interfaces/page.interface';
-import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -46,14 +45,28 @@ export class PageService {
   public submitNewPage(content: PageContent): Promise<string> {
     return new Promise((resolve, reject) => {
       const url = 'http://localhost:3000/pages';
-      (this.http.post<Page>(url, { 'content': content }, 
-        {observe: 'response', responseType: 'json'}) as Observable<HttpResponse<Page>>)
-        .subscribe((newPageResponse: HttpResponse<Page>) => {
+      this.http.post<Page>(url, { 'content': content }, 
+        {observe: 'response', responseType: 'json'}
+      ).subscribe((newPageResponse: HttpResponse<Page>) => {
           if (newPageResponse.body === null) {
             return reject('New page is null!');
           }
           return resolve(newPageResponse.body.page_id);
         });
     })
+  }
+
+  public updatePage(pageId: string, content: PageContent): Promise<null> {
+    return new Promise((resolve, reject) => {
+      const url = 'http://localhost:3000/pages/' + pageId + '/content';
+      this.http.patch<Page>(url, { 'content': content },
+        {observe: 'response', responseType: 'json'}
+      ).subscribe((updatedPageResponse: HttpResponse<Page>) => {
+        if (updatedPageResponse.body === null) {
+          return reject('Updated page is null!');
+        }
+        return resolve(null);
+      })
+    });
   }
 }
