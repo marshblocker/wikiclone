@@ -1,4 +1,4 @@
-import { OutputBlockData, OutputData } from "@editorjs/editorjs";
+import { OutputBlockData } from "@editorjs/editorjs";
 
 export type HTMLString = string;
 
@@ -8,14 +8,18 @@ export class PageHTML {
     pageLeadHTML: HTMLString;
     pageBodyHTML?: HTMLString;
 
-    constructor(pageTitle: string, pageLead: OutputData, pageImageUrl?: string, pageBody?: OutputData) {
+    constructor(pageTitle: string, 
+                pageImageUrl: string,
+                pageLeadData: OutputBlockData<string, any>[], 
+                pageBodyData: OutputBlockData<string, any>[]
+                ) {
         this.pageTitleHTML = `<h1> ${pageTitle} </h1>\n`;
-        this.pageImageHTML = (pageImageUrl === undefined) ? 
+        this.pageImageHTML = (pageImageUrl === '') ? 
             '' : `<img src="${pageImageUrl}">`;
 
-        this.pageLeadHTML = this.convertOutputDataToHTML(pageLead);
-        this.pageBodyHTML = (pageBody === undefined) ? 
-            '' : this.convertOutputDataToHTML(pageBody);
+        this.pageLeadHTML = this.convertOutputDataToHTML(pageLeadData);
+        this.pageBodyHTML = (pageBodyData.length === 0) ? 
+            '' : this.convertOutputDataToHTML(pageBodyData);
     }
 
     public getHTMLRepresentation(): HTMLString {
@@ -27,9 +31,9 @@ export class PageHTML {
         `;
     }
 
-    private convertOutputDataToHTML(data: OutputData): HTMLString {
+    private convertOutputDataToHTML(data: OutputBlockData<string, any>[]): HTMLString {
         let html = '';
-        data.blocks.forEach((block: OutputBlockData<string, any>) => {
+        data.forEach((block: OutputBlockData<string, any>) => {
             switch (block.type) {
                 case 'paragraph':
                     html += `<p> ${block.data.text} </p>\n`;
