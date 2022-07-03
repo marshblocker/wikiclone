@@ -15,7 +15,7 @@ export class PageHTML {
                 ) {
         this.pageTitleHTML = `<h1> ${pageTitle} </h1>\n`;
         this.pageImageHTML = (pageImageUrl === '') ? 
-            '' : `<img src="${pageImageUrl}">`;
+            '' : `<img src="${pageImageUrl}" alt="Image source: ${pageImageUrl}">`;
 
         this.pageLeadHTML = this.convertOutputDataToHTML(pageLeadData);
         this.pageBodyHTML = (pageBodyData.length === 0) ? 
