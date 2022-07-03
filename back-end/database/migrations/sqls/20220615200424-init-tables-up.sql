@@ -20,14 +20,16 @@ VALUES ('WG-g52obz', 'grep', '3A31C82929DB391B0E0BD7424E0B4275E6EB1BD6', 'grep@g
 CREATE TABLE `pages` (
  `page_id` CHAR(9) NOT NULL UNIQUE,
  `title` VARCHAR(32) NOT NULL UNIQUE,
- `content` TEXT NOT NULL,
+ `image_url` VARCHAR(2048),
+ `lead` TEXT NOT NULL,
+ `body` TEXT NOT NULL,
  `freeze_page` BOOLEAN NOT NULL,
  PRIMARY KEY (`page_id`)
 );
 
-INSERT INTO `pages`
-VALUES ('bAtxxvMLY', 'Philippines', 'Country in South-East Asia.', 0),
-       ('K5ktjgIEi', 'Gun', 'To shoot stuff.', '0'),
-       ('iW0M66d6V', 'Star', 'Made of gas.', '1'),
-       ('Mhjsq3Col', 'Boomerang', 'It returns!', '1'),
-       ('ndOI20J82', 'Zebra', 'A black-striped animal.', '1');
+-- INSERT INTO `pages`
+-- VALUES ('bAtxxvMLY', 'Philippines', 'Country in South-East Asia.', 0),
+--        ('K5ktjgIEi', 'Gun', 'To shoot stuff.', '0'),
+--        ('iW0M66d6V', 'Star', 'Made of gas.', '1'),
+--        ('Mhjsq3Col', 'Boomerang', 'It returns!', '1'),
+--        ('ndOI20J82', 'Zebra', 'A black-striped animal.', '1');
