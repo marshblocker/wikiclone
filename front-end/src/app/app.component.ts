@@ -1,3 +1,4 @@
+import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router, RoutesRecognized } from '@angular/router';
 
@@ -9,8 +10,9 @@ import { Router, RoutesRecognized } from '@angular/router';
 export class AppComponent implements OnInit {
   title = 'front-end';
   pageType = 'Article'; // This is passed to the navBar.
+  currentRoute!: string;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private location: Location) {}
 
   ngOnInit(): void {
     this.router.events.subscribe(event => {
@@ -22,6 +24,11 @@ export class AppComponent implements OnInit {
           return;
         }
         this.pageType = data['pageType'];
+      }
+      if(this.location.path() != ''){
+        this.currentRoute = this.location.path();
+      } else {
+        this.currentRoute = '/';
       }
     })
   }

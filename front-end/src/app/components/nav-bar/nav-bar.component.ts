@@ -7,6 +7,7 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class NavBarComponent implements OnInit {
   @Input() pageType = 'Article';
+  @Input() currentRoute!: string;
 
   constructor() { }
 
