@@ -54,16 +54,12 @@ export class ExistingPageEditorComponent implements OnInit {
     };
 
     this.pageService.updatePage(this.pageId as string, content)
-      .then(() => {
-        this.router.navigateByUrl('/wiki/' + this.pageId)
-          .then(navigated => {
-            if (!navigated) {
-              console.log('Failed to go to the updated page.');
-            }
-          })
-          .catch(console.log);
-      })
+      .then(() => { this._goBackToPageView() })
       .catch(console.log);
+  }
+
+  cancelUpdate() {
+    this._goBackToPageView();
   }
 
   async updatePagePreview() {
@@ -90,6 +86,16 @@ export class ExistingPageEditorComponent implements OnInit {
 
   getImageUrl(inputEvent: Event) {
     this.pageImageUrl = (<HTMLInputElement>inputEvent.target).value as string;
+  }
+
+  _goBackToPageView() {
+    this.router.navigateByUrl('/wiki/' + this.pageId)
+          .then(navigated => {
+            if (!navigated) {
+              console.log('Failed to go to the updated page.');
+            }
+          })
+          .catch(console.log);
   }
 
 }
