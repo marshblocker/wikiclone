@@ -1,8 +1,8 @@
 <div class="page">
   <app-side-bar></app-side-bar>
   <div class="sandwiched-main-content">
-      <app-nav-bar></app-nav-bar>
-      <app-article-body></app-article-body>
+      <app-nav-bar [pageType]="pageType"></app-nav-bar>
+      <router-outlet></router-outlet>
       <app-footer></app-footer>
   </div>
 </div>
