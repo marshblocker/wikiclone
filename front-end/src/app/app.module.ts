@@ -16,6 +16,7 @@ import { PageNotFoundComponent } from './components/page-not-found/page-not-foun
 import { RandomPageComponent } from './components/random-page/random-page.component';
 import { RegisterComponent } from './components/register/register.component';
 import { LoginComponent } from './components/login/login.component';
+import { ExistingPageEditorComponent } from './components/existing-page-editor/existing-page-editor.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { LoginComponent } from './components/login/login.component';
     PageNotFoundComponent,
     RandomPageComponent,
     RegisterComponent,
-    LoginComponent
+    LoginComponent,
+    ExistingPageEditorComponent
   ],
   imports: [
     BrowserModule,
