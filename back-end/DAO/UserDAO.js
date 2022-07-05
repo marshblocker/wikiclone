@@ -1,20 +1,163 @@
-const EntityDAO = require('./EntityDAO');
+const knex = require('../database/knex');
+const CustomError = require('../error');
 
-class UserDAO extends EntityDAO {
-    readEntity(id, strict) {
-        return new Promise((resolve, reject) => {
-            this.table.readEntry(id, strict)
-            .then(user => resolve(user[0][0][0]))
-            .catch(error => reject(this.handleDBError(error)));
-        });
+class UserDAO {
+    async readUserInfo(userId) {
+        try {
+            return await knex.raw(
+                'CALL read_user_info(?)', [userId]
+            );
+        } catch (error) {
+            throw this._handleDBError(error);
+        }
     }
 
-    readAllEntities(strict) {
-        return new Promise((resolve, reject) => {
-            this.table.readAllEntries(strict)
-            .then(allUsers => resolve(allUsers[0][0]))
-            .catch(error => reject(this.handleDBError(error)));
-        });
+    async readAllUsersInfo() {
+        try {
+            return await knex.raw(
+                'CALL read_all_users_info()'
+            );
+        } catch (error) {
+            throw this._handleDBError(error);
+        }
+    }
+
+    async readUserPasswordHash(userId) {
+        try {
+            return await knex.raw(
+                'CALL read_user_password_hash(?)', 
+                [userId]
+            );
+        } catch (error) {
+            throw this._handleDBError(error);
+        }
+    }
+
+    async createUser(userId, info) {
+        try {
+            const { username, passwordHash, email } = info;
+            return await knex.raw(
+                'CALL create_user(?, ?, ?, ?, ?, ?)',
+                [userId, username, passwordHash, email, 'user', 1]
+            );
+        } catch (error) {
+            throw this._handleDBError(error);
+        }
+    }
+
+    async updateUserName(userId, username) {
+        try {
+            return await knex.raw(
+                'CALL update_username(?, ?)',
+                [userId, username]
+            );
+        } catch (error) {
+            throw this._handleDBError(error);
+        }
+    }
+
+    async updatePasswordHash(userId, hash) {
+        try {
+            return await knex.raw(
+                'CALL update_password_hash(?, ?)',
+                [userId, hash]
+            );
+        } catch (error) {
+            throw this._handleDBError(error);
+        }
+    }
+
+    async updateEmail(userId, email) {
+        try {
+            return await knex.raw(
+                'CALL update_email(?, ?)',
+                [userId, email]
+            );
+        } catch (error) {
+            throw this._handleDBError(error);
+        }
+    }
+
+    async updateRole(userId, role) {
+        try {
+            return await knex.raw(
+                'CALL update_role(?, ?)',
+                [userId, role]
+            );
+        } catch (error) {
+            throw this._handleDBError(error);
+        }
+    }
+
+    async updateCanEdit(userId, canEdit) {
+        try {
+            return await knex.raw(
+                'CALL update_can_edit(?, ?)',
+                [userId, canEdit]
+            );
+        } catch (error) {
+            throw this._handleDBError(error);
+        }
+    }
+
+    async deleteUser(userId) {
+        try {
+            const info = await knex.raw(
+                'CALL read_user_info(?)', [userId]
+            );
+            await knex.raw(
+                'CALL delete_user(?)', [userId]
+            );
+            return info;
+        } catch (error) {
+            throw this._handleDBError(error);
+        }
+    }
+
+    // readEntity(id, strict) {
+    //     return new Promise((resolve, reject) => {
+    //         this.table.readEntry(id, strict)
+    //         .then(user => resolve(user[0][0][0]))
+    //         .catch(error => reject(this.handleDBError(error)));
+    //     });
+    // }
+
+    // readAllEntities(strict) {
+    //     return new Promise((resolve, reject) => {
+    //         this.table.readAllEntries(strict)
+    //         .then(allUsers => resolve(allUsers[0][0]))
+    //         .catch(error => reject(this.handleDBError(error)));
+    //     });
+    // }
+
+    _handleDBError(error) {
+        if (error.sqlMessage == null || error.errno == null) {
+            return error;
+        }
+        
+        // The sqlMessage was created by me.
+        if (error.sqlMessage.includes(':')) {
+            const [errorType, specific] = error.sqlMessage.split(':');
+            if (errorType === 'ResourceDNE') {
+                throw CustomError.ResourceDoesNotExist(specific);
+            }
+            
+            if (errorType === 'NullID') {
+                return CustomError.MissingRequiredURLParamAttr(specific);
+            }
+        }
+
+        if (error.errno === 1062) {
+            const attributeName = getNameOfDupAttribute(error.sqlMessage)
+            return CustomError.DuplicateAttributeValue(attributeName);
+
+            function getNameOfDupAttribute(errorMessage) {
+                const removedQuotes = errorMessage.split("'");
+                return removedQuotes[removedQuotes.length - 2];
+            }
+        }
+
+        return CustomError.UnhandledError(error);
     }
 }
 

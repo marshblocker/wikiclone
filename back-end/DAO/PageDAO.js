@@ -2,7 +2,6 @@
 //       the page_id exists in the database.
 
 const knex = require('../database/knex');
-
 const CustomError = require('../error');
 
 class PageDAO {
@@ -63,20 +62,28 @@ class PageDAO {
 
     async deletePage(pageId) {
         try {
-            return await knex.raw(
-                'CALL delete_page', [pageId]
+            const deletedPage = await knex.raw(
+                'CALL read_page(?)', [pageId]
             );
+            await knex.raw(
+                'CALL delete_page(?)', [pageId]
+            );
+            return deletedPage;
         } catch (error) {
             throw this._handleDBError(error);
         }
     }
 
     _handleDBError(error) {
+        if (error.sqlMessage == null || error.errno == null) {
+            return error;
+        }
+
         // The sqlMessage was created by me.
         if (error.sqlMessage.includes(':')) {
             const [errorType, specific] = error.sqlMessage.split(':');
             if (errorType === 'ResourceDNE') {
-                throw CustomError.ResourceDoesNotExist(specific);
+                return CustomError.ResourceDoesNotExist(specific);
             }
             
             if (errorType === 'NullID') {

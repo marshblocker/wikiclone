@@ -31,7 +31,15 @@ class PageReadController {
             };
             return res.status(200).json(page);
         } catch (error) {
-            return res.status(error.code).json(error.message);
+            if (error.code) {
+                return res.status(error.code).json({ 
+                    custom_code: error.custom_code, 
+                    message: error.message 
+                });
+            } else {
+                console.log(error);
+                return res.status(500).json(error);
+            }
         }
     }
 
@@ -131,7 +139,15 @@ class PageReadController {
             }
             return res.status(200).json(pages);
         } catch (error) {
-            return res.status(error.code).json(error.message);
+            if (error.code) {
+                return res.status(error.code).json({ 
+                    custom_code: error.custom_code, 
+                    message: error.message 
+                });
+            } else {
+                console.log(error);
+                return res.status(500).json(error);
+            }
         }
     }
 

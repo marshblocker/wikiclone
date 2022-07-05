@@ -12,12 +12,16 @@ class PageCreateController {
 
     async createPage(req, res) {
         try {
+            // if (!req.parsedToken || !req.parsedToken.canEdit) {
+            //     throw CustomError.ForbidCreatePage();
+            // }
+
             const pageId = shortid.generate();
             const content = req.body['content'];
             if (!pageId) {
                 throw CustomError.MissingRequiredURLParamAttr('page_id');
             }
-            utils.checkContent(content);
+            utils.checkPageContent(content);
 
             // To comply with JS naming convention.
             content.imageUrl = content.image_url;
@@ -40,8 +44,15 @@ class PageCreateController {
             };
             return res.status(200).json(newPage);
         } catch (error) {
-            console.log(error);
-            return res.status(error.code).json(error.message);
+            if (error.code) {
+                return res.status(error.code).json({ 
+                    custom_code: error.custom_code, 
+                    message: error.message 
+                });
+            } else {
+                console.log(error);
+                return res.status(500).json(error);
+            }
         }
     }
 

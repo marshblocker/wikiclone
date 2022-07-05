@@ -8,11 +8,7 @@ BEGIN
     IF NOT EXISTS(SELECT * FROM `pages` WHERE `page_id` = p_page_id) THEN
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'ResourceDNE:page';
 	ELSE
-		SELECT * 
-		FROM `pages` 
-		WHERE `page_id` = p_page_id;
-
 		DELETE FROM `pages` 
-		WHERE `page_id` = p_id;
+		WHERE `page_id` = p_page_id;
 	END IF;
 END

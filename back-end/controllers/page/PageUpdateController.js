@@ -1,5 +1,9 @@
 const CustomError = require('../../error');
 const utils = require('../../utils');
+const PageDAO = require('../../DAO/PageDAO');
+const PageReadController = require('./PageReadController');
+
+const pageReadController = new PageReadController(new PageDAO());
 
 class PageUpdateController {
     constructor(pageDAO) {
@@ -8,12 +12,22 @@ class PageUpdateController {
 
     async updateContent(req, res) {
         try {
+            // if (!req.parsedToken || !req.parsedToken.canEdit) {
+            //     throw CustomError.ForbidEditPage();
+            // }
             const pageId = req.params['page_id'];
+            let freezePage = (await pageReadController._readPage(pageId));
+            freezePage = freezePage[0][0][0]['freeze_page'];
+            console.log(freezePage);
+            if (freezePage) {
+                throw CustomError.ForbidEditPage();
+            }
+
             let content = req.body['content'];
             if (!pageId) {
                 throw CustomError.MissingRequiredURLParamAttr('page_id');
             }
-            utils.checkContent(content);
+            utils.checkPageContent(content);
 
             // To comply with JS naming convention.
             content.imageUrl = content.image_url;
@@ -35,7 +49,15 @@ class PageUpdateController {
             };
             return res.status(200).json(updatedPage);
         } catch (error) {
-            return res.status(error.code).json(error.message);
+            if (error.code) {
+                return res.status(error.code).json({ 
+                    custom_code: error.custom_code, 
+                    message: error.message 
+                });
+            } else {
+                console.log(error);
+                return res.status(500).json(error);
+            }
         }
     }
 
@@ -49,6 +71,10 @@ class PageUpdateController {
 
     async updateFreezePage(req, res) {
         try {
+            // if (!req.parsedToken || req.parsedToken.role === 'user' || !req.parsedToken.canEdit) {
+            //     throw CustomError.ForbidFreezePage();
+            // }
+
             const pageId = req.params['page_id'];
             const freezePage = req.body['freeze_page'];
             if (!pageId) {
@@ -64,7 +90,15 @@ class PageUpdateController {
             };
             return res.status(200).json(updatedFreezePage);
         } catch (error) {
-            return res.status(error.code).json(error.message);
+            if (error.code) {
+                return res.status(error.code).json({ 
+                    custom_code: error.custom_code, 
+                    message: error.message 
+                });
+            } else {
+                console.log(error);
+                return res.status(500).json(error);
+            }
         }
     }
 

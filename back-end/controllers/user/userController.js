@@ -1,4 +1,3 @@
-const UsersTable = require('../../database/tables/UsersTable');
 const UserDAO = require('../../DAO/UserDAO');
 const UserReadController = require('./UserReadController');
 const UserCreateController = require('./UserCreateController');
@@ -15,8 +14,7 @@ class UserController {
     }
 }
 
-let usersTable = new UsersTable(null);
-let userDAO = new UserDAO(usersTable);
+let userDAO = new UserDAO();
 
 let userReadController = new UserReadController(userDAO);
 let userCreateController = new UserCreateController(userDAO);

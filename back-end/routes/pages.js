@@ -1,11 +1,25 @@
 var express = require('express');
 
-const pageController = require('../controllers/page/pageController');
+const PageDAO = require('../DAO/PageDAO');
+const PageCreateController = require('../controllers/page/PageCreateController');
+const PageReadController = require('../controllers/page/PageReadController');
+const PageUpdateController = require('../controllers/page/PageUpdateController');
+const PageDeleteController = require('../controllers/page/PageDeleteController');
+
+const pageDAO = new PageDAO();
+const pageCreateController = new PageCreateController(pageDAO);
+const pageReadController = new PageReadController(pageDAO);
+const pageUpdateController = new PageUpdateController(pageDAO);
+const pageDeleteController = new PageDeleteController(pageDAO);
+
+// const utils = require('../utils');
 
 var router = express.Router();
 
-router.get('/', (req, res) => pageController.pageReadController.readAllPages(req, res));
-router.get('/:page_id', (req, res) => pageController.pageReadController.readPage(req, res));
+// router.use(utils.parseToken);
+
+router.get('/', (req, res) => pageReadController.readAllPages(req, res));
+router.get('/:page_id', (req, res) => pageReadController.readPage(req, res));
 
 /*
     Post request body structure:
@@ -19,15 +33,15 @@ router.get('/:page_id', (req, res) => pageController.pageReadController.readPage
             }
         }
 */
-router.post('/',async (req, res) => await pageController.pageCreateController.createPage(req, res));
+router.post('/',async (req, res) => await pageCreateController.createPage(req, res));
 
 router.patch('/:page_id/content', (req, res) => {
-    pageController.pageUpdateController.updateContent(req, res);
+    pageUpdateController.updateContent(req, res);
 });
 router.patch('/:page_id/freeze_page', (req, res) => {
-    pageController.pageUpdateController.updateFreezePage(req, res);
+    pageUpdateController.updateFreezePage(req, res);
 });
 
-router.delete('/:page_id', (req, res) => pageController.pageDeleteController.deletePage(req, res));
+router.delete('/:page_id', (req, res) => pageDeleteController.deletePage(req, res));
 
 module.exports = router;

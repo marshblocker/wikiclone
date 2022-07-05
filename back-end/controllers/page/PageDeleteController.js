@@ -7,6 +7,10 @@ class PageDeleteController {
 
     async deletePage(req, res) {
         try {
+            // if (!req.parsedToken || req.parsedToken.role === 'user' || !req.parsedToken.canEdit) {
+            //     throw CustomError.ForbidDeletePage();
+            // }
+
             const pageId = req.params['page_id'];
             if (!pageId) {
                 throw CustomError.MissingRequiredURLParamAttr('page_id');
@@ -29,7 +33,15 @@ class PageDeleteController {
             };
             return res.status(200).json(deletedPage);
         } catch (error) {
-            return res.status(error.code).json(error.message);
+            if (error.code) {
+                return res.status(error.code).json({ 
+                    custom_code: error.custom_code, 
+                    message: error.message 
+                });
+            } else {
+                console.log(error);
+                return res.status(500).json(error);
+            }
         }
     }
 
