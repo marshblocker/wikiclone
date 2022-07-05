@@ -18,7 +18,8 @@ CREATE TABLE `pages` (
  `lead` TEXT NOT NULL,
  `body` TEXT NOT NULL,
  `freeze_page` BOOLEAN NOT NULL,
- PRIMARY KEY (`page_id`)
+ PRIMARY KEY (`page_id`),
+ INDEX filter_index(`title`)
 );
 
 CREATE TABLE `page_edits` (
