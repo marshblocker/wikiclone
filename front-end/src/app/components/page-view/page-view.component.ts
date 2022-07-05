@@ -1,3 +1,4 @@
+import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer, SafeHtml, Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -19,7 +20,8 @@ export class PageViewComponent implements OnInit {
               private router: Router, 
               private pageService: PageService, 
               private sanitizer: DomSanitizer,
-              private titleService: Title) { }
+              private titleService: Title,
+              private location: Location) { }
 
   ngOnInit(): void {
     this._renderPageView()
@@ -45,6 +47,8 @@ export class PageViewComponent implements OnInit {
           .then((pageContent: PageContent) => {
             // Convert pageContent to its HTML format.
             this.pageTitle = pageContent.title;
+            this.location.go('/wiki/' + this.pageTitle);
+
             const pageImageUrl = pageContent.image_url;
             const pageLeadData: OutputBlockData<string, any>[] = 
               (JSON.parse(pageContent.lead) as OutputData).blocks;
