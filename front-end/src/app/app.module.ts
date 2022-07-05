@@ -17,6 +17,12 @@ import { RandomPageComponent } from './components/random-page/random-page.compon
 import { RegisterComponent } from './components/register/register.component';
 import { LoginComponent } from './components/login/login.component';
 import { ExistingPageEditorComponent } from './components/existing-page-editor/existing-page-editor.component';
+import { ProcessRegisterComponent } from './components/process-register/process-register.component';
+import { UserService } from './services/user.service';
+import { ProcessLoginComponent } from './components/process-login/process-login.component';
+import { TokenService } from './services/token.service';
+import { UserProfileComponent } from './components/user-profile/user-profile.component';
+import { TokenExpiredComponent } from './components/token-expired/token-expired.component';
 
 @NgModule({
   declarations: [
@@ -31,14 +37,18 @@ import { ExistingPageEditorComponent } from './components/existing-page-editor/e
     RandomPageComponent,
     RegisterComponent,
     LoginComponent,
-    ExistingPageEditorComponent
+    ExistingPageEditorComponent,
+    ProcessRegisterComponent,
+    ProcessLoginComponent,
+    UserProfileComponent,
+    TokenExpiredComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule
   ],
-  providers: [PageService],
+  providers: [PageService, UserService, TokenService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

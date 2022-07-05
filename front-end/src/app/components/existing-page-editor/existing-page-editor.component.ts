@@ -4,8 +4,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { OutputData } from '@editorjs/editorjs';
 import { PageEditor } from 'src/app/classes/page-editor.class';
 import { PageHTML } from 'src/app/classes/page-html.class';
-import { PageContent } from 'src/app/interfaces/page.interface';
+import { Page, PageContent } from 'src/app/interfaces/page.interface';
 import { PageService } from 'src/app/services/page.service';
+import { TokenService } from 'src/app/services/token.service';
 
 @Component({
   selector: 'app-existing-page-editor',
@@ -18,8 +19,18 @@ export class ExistingPageEditorComponent implements OnInit {
   pageTitle!: string;
   pageImageUrl!: string;
   pagePreviewSafeHTML!: SafeHtml;
+  
+  pageDeleted = false;
 
-  constructor(private route: ActivatedRoute, private router: Router, private pageService: PageService, private sanitizer: DomSanitizer) {
+  constructor(private route: ActivatedRoute, 
+              private router: Router, 
+              private pageService: PageService, 
+              private sanitizer: DomSanitizer,
+              private tokenService: TokenService) {
+    if (!this.tokenService.tokenInCookie()) {
+      this.router.navigateByUrl('/token_expired');
+      return;
+    }
     this.route.paramMap.subscribe(params => {
       this.pageId = params.get('page_id');
       if (this.pageId === null) {
@@ -43,6 +54,10 @@ export class ExistingPageEditorComponent implements OnInit {
   }
 
   async updatePage() {
+    const proceed = window.confirm('Update article?');
+    if (!proceed) {
+      return;
+    }
     await this.pageEditor.updatePageEditorDataContainers();
     const leadData: string = JSON.stringify(this.pageEditor.pageLeadEditorData);
     const bodyData: string = JSON.stringify(this.pageEditor.pageBodyEditorData);
@@ -54,12 +69,30 @@ export class ExistingPageEditorComponent implements OnInit {
     };
 
     this.pageService.updatePage(this.pageId as string, content)
-      .then(() => { this._goBackToPageView() })
+      .then(() => { this._goBackToPageView(); })
       .catch(console.log);
   }
 
   cancelUpdate() {
+    const proceed = window.confirm('Cancel edit?');
+    if (!proceed) {
+      return;
+    }
     this._goBackToPageView();
+  }
+
+  async deletePage() {
+    const proceed = window.confirm('Do you really want to delete this page?');
+    if (!proceed) {
+      return;
+    }
+    this.pageService.deletePage(this.pageId as string)
+      .then((deletedPage: Page) => {
+        console.log(deletedPage);
+        this.pageDeleted = true;
+        this.router.navigateByUrl('/');
+      })
+      .catch(console.log);
   }
 
   async updatePagePreview() {
@@ -90,12 +123,13 @@ export class ExistingPageEditorComponent implements OnInit {
 
   _goBackToPageView() {
     this.router.navigateByUrl('/wiki/' + this.pageId)
-          .then(navigated => {
-            if (!navigated) {
-              console.log('Failed to go to the updated page.');
-            }
-          })
-          .catch(console.log);
+      .then(navigated => {
+        if (!navigated) {
+          console.log('Failed to go to the updated page.');
+        }
+        console.log('yo');
+      })
+      .catch(console.log);
   }
 
 }

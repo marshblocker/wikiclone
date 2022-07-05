@@ -32,13 +32,13 @@
 <h3 class="input-header">Article Lead (Required)</h3>
 <div class="input-section">
   <div id="new-page-lead-editor"></div>
-  <small class="guide-text"> Bla bla bla </small>
+  <small class="guide-text"></small>
 </div>
 
 <h3 class="input-header">Article Body (Optional)</h3>
 <div class="input-section">
   <div id="new-page-body-editor"></div>
-  <small class="guide-text"> Bla bla bla </small>
+  <small class="guide-text"></small>
 </div>
 
 <button id="update-article-preview-btn" (click)="updatePagePreview()">
@@ -53,6 +53,6 @@
 <button id="submit-article-btn" (click)="submitNewPage()">
   Submit Article
 </button>
-<a routerLink="/">
+<a (click)="cancelSubmission()">
   <button>Cancel Submission</button>
 </a>

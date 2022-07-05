@@ -1,1 +1,41 @@
-<p>register works!</p>
+<form action="/user/register/process">
+  <div class="container">
+    <h1>Sign Up</h1>
+    <p>Please fill in this form to create an account.</p>
+    <hr />
+
+    <label for="username">Username</label>
+    <input
+      type="text"
+      placeholder="Enter Username (No whitespace in between, maximum length of 20)"
+      name="username"
+      maxlength="20"
+      required
+    />
+
+    <label for="email">Email</label>
+    <input
+      type="text"
+      placeholder="Enter Email"
+      name="email"
+      maxlength="320"
+      required
+    />
+
+    <label for="password">Password</label>
+    <input type="password" placeholder="Enter Password" name="password" required />
+
+    <label for="psw-repeat">Repeat Password</label>
+    <input
+      type="password"
+      placeholder="Repeat Password"
+      name="psw-repeat"
+      required
+    />
+
+    <div class="clearfix">
+      <button type="submit" class="signupbtn">Sign Up</button>
+      <button routerLink="/" type="button" class="cancelbtn">Cancel</button>
+    </div>
+  </div>
+</form>

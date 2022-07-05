@@ -1,6 +1,9 @@
 import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { Router, RoutesRecognized } from '@angular/router';
+import { NavigationEnd, Router, RoutesRecognized } from '@angular/router';
+import { UserPublic } from './interfaces/user.interface';
+import { TokenService } from './services/token.service';
+import { UserService } from './services/user.service';
 
 @Component({
   selector: 'app-root',
@@ -11,25 +14,64 @@ export class AppComponent implements OnInit {
   title = 'front-end';
   pageType = 'Article'; // This is passed to the navBar.
   currentRoute!: string;
+  currentUserInfo: UserPublic | null = null;
+  loggedIn = false;
+  viewingArticle = false;
 
-  constructor(private router: Router, private location: Location) {}
+  constructor(private router: Router, private location: Location, private userService: UserService, private tokenService: TokenService) {}
 
   ngOnInit(): void {
     this.router.events.subscribe(event => {
       // From https://stackoverflow.com/a/46305085/17927002
       if (event instanceof RoutesRecognized) {
-        let data = event.state.root.firstChild?.data;
-        if (data === undefined) {
+        let routeCustomData = event.state.root.firstChild?.data;
+        if (routeCustomData === undefined) {
           console.log('Error: Undefined custom data!');
           return;
         }
-        this.pageType = data['pageType'];
+        this.pageType = routeCustomData['pageType'];
       }
-      if(this.location.path() != ''){
-        this.currentRoute = this.location.path();
-      } else {
-        this.currentRoute = '/';
+
+      if (event instanceof NavigationEnd) {
+        if (this.location.path() != ''){
+          this.currentRoute = this.location.path();
+        } else {
+          this.currentRoute = '/';
+        }
+
+        if (this.tokenService.tokenInCookie() && !this.loggedIn) {
+          this.logIn();
+        }
+        if (this.currentRoute === '?logout=true') {
+          this.logOut();
+          this.router.navigateByUrl('/');
+        }
+        if (this.currentRoute === '/token_expired') {
+          this.currentUserInfo = null;
+          this.loggedIn = false;
+        }
+        this.viewingArticle = this.isViewingArticle();
       }
     })
+  }
+
+  logOut() {
+    this.currentUserInfo = null;
+    this.loggedIn = false;
+    this.tokenService.deleteTokenInCookie();
+  }
+
+  logIn() {
+    this.userService.readCurrentUser()
+      .then((currentUserInfo: UserPublic) => {
+        this.currentUserInfo = currentUserInfo;
+        this.loggedIn = true;
+      })
+      .catch(console.log);
+  }
+
+  isViewingArticle(): boolean {
+    return this.currentRoute.startsWith('/wiki/') &&
+           !(this.currentRoute.split('/wiki/')[1].includes('/'));
   }
 }

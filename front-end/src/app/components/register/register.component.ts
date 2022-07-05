@@ -9,6 +9,7 @@ export class RegisterComponent implements OnInit {
 
   constructor() { }
 
+  // TODO: Validate registration info.
   ngOnInit(): void {
   }
 

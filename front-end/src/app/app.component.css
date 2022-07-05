@@ -10,6 +10,14 @@
     flex-grow: 1;
 }
 
+.main-body
+{
+    min-height: 400px;
+    background-color: white;
+    border: 1px solid #a7d7f9;
+    padding-left: 2em;
+}
+
 @media screen and (min-width: 425px)
 {
     .sandwiched-main-content > div 

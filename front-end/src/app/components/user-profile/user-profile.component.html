@@ -1,0 +1,123 @@
+<div *ngIf="userInfo">
+  <h1>{{ userInfo.username }}'s Profile</h1>
+  <div class="multi-col">
+    <div id="col1" class="col">
+      <div style="margin-bottom: 1em">
+        <h2>User Information</h2>
+        <small
+          ><em
+            >Note: You need to sign in again if you update your user
+            information.</em
+          ></small
+        >
+      </div>
+      <table id="user-info-table">
+        <tr>
+          <td><strong>Username</strong></td>
+          <td>{{ userInfo.username }}</td>
+          <td>
+            <button (click)="startUpdateUsername()" *ngIf="!isUpdatingUserInfo">
+              Change username
+            </button>
+          </td>
+        </tr>
+        <tr>
+          <td><strong>Password</strong></td>
+          <td><em>Cannot be shown here.</em></td>
+          <td>
+            <button (click)="startUpdatePassword()" *ngIf="!isUpdatingUserInfo">
+              Change password
+            </button>
+          </td>
+        </tr>
+        <tr>
+          <td><strong>Email</strong></td>
+          <td>{{ userInfo.email }}</td>
+          <td>
+            <button (click)="startUpdateEmail()" *ngIf="!isUpdatingUserInfo">
+              Change email
+            </button>
+          </td>
+        </tr>
+        <tr>
+          <td><strong>Role</strong></td>
+          <td>
+            {{ userInfo.role.charAt(0).toUpperCase() + userInfo.role.slice(1) }}
+          </td>
+        </tr>
+        <tr>
+          <td><strong>Allowed to Edit</strong></td>
+          <td>{{ userInfo.can_edit === true ? "Yes" : "No" }}</td>
+        </tr>
+      </table>
+
+      <div class="update-user-info" *ngIf="isUpdatingUserInfo">
+        <div id="update-username" *ngIf="isUpdatingUsername">
+          <label for="new-username">New username: </label>
+          <input
+            type="text"
+            name="new-username"
+            id="new-username"
+            maxlength="20"
+          />
+          <button type="submit" (click)="updateUsername()">
+            Change username
+          </button>
+          <button type="submit" (click)="cancelUpdate()">Cancel</button>
+        </div>
+
+        <div id="update-password" *ngIf="isUpdatingPassword">
+          <table>
+            <tr>
+              <td><label for="new-password">New password: </label></td>
+              <td>
+                <input
+                  type="password"
+                  name="new-password"
+                  id="new-password"
+                  (focus)="removePasswordWarning()"
+                />
+              </td>
+              <td *ngIf="!passwordsMatch">
+                <small
+                  ><em
+                    >The provided passwords does not match with each other.</em
+                  ></small
+                >
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <label for="rewrite-new-password">Rewrite new password: </label>
+              </td>
+              <td>
+                <input
+                  type="password"
+                  name="rewrite-new-password"
+                  id="rewrite-new-password"
+                  (focus)="removePasswordWarning()"
+                />
+              </td>
+            </tr>
+          </table>
+          <button type="submit" (click)="updatePassword()">
+            Change password
+          </button>
+          <button type="submit" (click)="cancelUpdate()">Cancel</button>
+        </div>
+
+        <div id="update-email" *ngIf="isUpdatingEmail">
+          <label for="new-email">New email: </label>
+          <input type="text" name="new-email" id="new-email" maxlength="320" />
+          <button type="submit" (click)="updateEmail()">Change email</button>
+          <button type="submit" (click)="cancelUpdate()">Cancel</button>
+        </div>
+      </div>
+
+      <button (click)="deleteAccount()" style="color: red;">Delete Account</button>
+    </div>
+    <div class="col">
+      <h2>Page Contributions</h2>
+    </div>
+  </div>
+</div>

@@ -10,7 +10,7 @@
     </div>
 
     <div class="flex-right-side">
-      <div id="small-screen-search" class="search">
+      <!-- <div id="small-screen-search" class="search">
         <input
           class="search-bar"
           type="search"
@@ -19,18 +19,46 @@
           placeholder="Search Wikipedia"
         />
         <input class="search-button" type="submit" value="Go" />
-      </div>
+      </div> -->
     </div>
   </div>
 
   <div class="nav-bar-large-screen">
     <div class="user-control-bar">
       <ul class="horizontal-links-ul">
-        <li class="no-bullet-li horizontal-links-li">
-          <a href="#" class="small-anchor">Create account</a>
+        <li *ngIf="!loggedIn" class="no-bullet-li horizontal-links-li">
+          <a
+            routerLink="/user/register"
+            ariaCurrentWhenActive="page"
+            class="small-anchor"
+            >Create account</a
+          >
         </li>
-        <li class="no-bullet-li horizontal-links-li">
-          <a href="#" class="small-anchor">Log in</a>
+        <li *ngIf="!loggedIn" class="no-bullet-li horizontal-links-li">
+          <a
+            routerLink="/user/login"
+            ariaCurrentWhenActive="page"
+            class="small-anchor"
+            >Sign in</a
+          >
+        </li>
+        <li *ngIf="loggedIn" class="no-bullet-li horizontal-links-li">
+          <a
+            routerLink="/user/{{currentUser}}/profile"
+            ariaCurrentWhenActive="page"
+            class="small-anchor"
+            title="View/Edit your User Profile."
+            >{{currentUser}}</a
+          >
+        </li>
+        <li *ngIf="loggedIn" class="no-bullet-li horizontal-links-li">
+          <a
+            routerLink="/"
+            ariaCurrentWhenActive="page"
+            (click)="logOut()"
+            class="small-anchor"
+            >Sign out</a
+          >
         </li>
       </ul>
     </div>
@@ -39,7 +67,7 @@
       <div class="page-control-left-side">
         <ul class="horizontal-links-ul">
           <li class="no-bullet-li horizontal-links-li">
-            <a class="small-anchor">{{pageType}}</a>
+            <span class="small-anchor">{{ pageType }}</span>
           </li>
           <!-- <li class="no-bullet-li horizontal-links-li"> TO BE IMPLEMENTED
             <a href="#" class="small-anchor">Talk</a>
@@ -48,19 +76,24 @@
       </div>
 
       <div class="page-control-right-side">
-        <ul class="horizontal-links-ul">
-          <li class="no-bullet-li horizontal-links-li">
+        <ul *ngIf="viewingArticle" class="horizontal-links-ul">
+          <!-- <li class="no-bullet-li horizontal-links-li">
             <a href="#" class="small-anchor">Read</a>
-          </li>
-          <li class="no-bullet-li horizontal-links-li">
-            <a href="{{currentRoute}}/edit" class="small-anchor">Edit</a>
+          </li> -->
+          <li *ngIf="loggedIn" class="no-bullet-li horizontal-links-li">
+            <a
+              routerLink="{{ currentRoute }}/edit"
+              ariaCurrentWhenActive="page"
+              class="small-anchor"
+              >Edit Article</a
+            >
           </li>
           <!-- <li class="no-bullet-li horizontal-links-li"> TO BE IMPLEMENTED
             <a href="#" class="small-anchor">View History</a>
           </li> -->
         </ul>
 
-        <div class="search">
+        <!-- <div class="search"> TO BE IMPLEMENTED
           <input
             class="search-bar"
             type="search"
@@ -69,7 +102,7 @@
             placeholder="Search Wikipedia"
           />
           <input class="search-button" type="submit" value="Go" />
-        </div>
+        </div> -->
       </div>
     </div>
   </div>

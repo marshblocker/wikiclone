@@ -9,6 +9,7 @@ import { OutputData } from '@editorjs/editorjs';
 import { PageEditor } from 'src/app/classes/page-editor.class';
 import { PageContent } from 'src/app/interfaces/page.interface';
 import { PageService } from 'src/app/services/page.service';
+import { TokenService } from 'src/app/services/token.service';
 import { PageHTML } from '../../classes/page-html.class';
 
 @Component({
@@ -24,14 +25,25 @@ export class NewPageEditorComponent implements OnInit {
 
   pageEditor = new PageEditor('new-page-lead-editor', 'new-page-body-editor');
 
-  constructor(private pageService: PageService, private sanitizer: DomSanitizer, private router: Router) {}
+  constructor(private pageService: PageService, 
+              private sanitizer: DomSanitizer, 
+              private router: Router,
+              private tokenService: TokenService) {}
 
   ngOnInit(): void {
+    if (!this.tokenService.tokenInCookie()) {
+      this.router.navigateByUrl('/token_expired');
+      return;
+    }
     this.newPageTitle = (<HTMLInputElement>document.getElementById('new-page-title')).value;
     this.newPageImageUrl = (<HTMLInputElement>document.getElementById('new-page-image-url')).value;
   }
 
   async submitNewPage() {
+    const proceed = window.confirm('Post new article?');
+    if (!proceed) {
+      return;
+    }
     await this.pageEditor.updatePageEditorDataContainers();
     const leadData: string = JSON.stringify(this.pageEditor.pageLeadEditorData);
     const bodyData: string = JSON.stringify(this.pageEditor.pageBodyEditorData);
@@ -71,6 +83,14 @@ export class NewPageEditorComponent implements OnInit {
     } catch (error) {
       console.log(error);
     }
+  }
+
+  cancelSubmission() {
+    const proceed = window.confirm('Are you sure you want to cancel your new article?');
+    if (!proceed) {
+      return;
+    }
+    this.router.navigateByUrl('/');
   }
 
   getTitle(inputEvent: Event) {

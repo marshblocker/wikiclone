@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'app-nav-bar',
@@ -8,10 +8,18 @@ import { Component, Input, OnInit } from '@angular/core';
 export class NavBarComponent implements OnInit {
   @Input() pageType = 'Article';
   @Input() currentRoute!: string;
+  @Input() currentUser?: string;
+  @Input() loggedIn = false;
+  @Input() viewingArticle = false;
+  @Output() onLogout = new EventEmitter();
 
   constructor() { }
 
   ngOnInit(): void {
+  }
+
+  logOut() {
+    this.onLogout.emit();
   }
 
 }

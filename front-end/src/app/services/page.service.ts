@@ -13,9 +13,8 @@ export class PageService {
     return new Promise((resolve, reject) => {
       const url = 'http://localhost:3000/pages/' + pageId;
       this.http.get<Page>(
-        url, { observe: 'response', responseType: 'json' }
+        url, { headers: { 'Authorization': document.cookie }, observe: 'response', responseType: 'json' }
       ).subscribe((pageResponse: HttpResponse<Page>) => {
-        console.log(pageResponse);
         if (pageResponse.body === null) {
           return reject('Page is null!');
         }
@@ -28,7 +27,7 @@ export class PageService {
     return new Promise((resolve, reject) => {
       const url = 'http://localhost:3000/pages';
       this.http.get<Page[]>(
-        url, { observe: 'response', responseType: 'json' }
+        url, { headers: { 'Authorization': document.cookie }, observe: 'response', responseType: 'json' }
       ).subscribe((allPagesResponse: HttpResponse<Page[]>) => {
         let allPageId: string[] = [];
         if (allPagesResponse.body === null) {
@@ -46,7 +45,7 @@ export class PageService {
     return new Promise((resolve, reject) => {
       const url = 'http://localhost:3000/pages';
       this.http.post<Page>(url, { 'content': content }, 
-        {observe: 'response', responseType: 'json'}
+        { headers: { 'Authorization': document.cookie }, observe: 'response', responseType: 'json'}
       ).subscribe((newPageResponse: HttpResponse<Page>) => {
           if (newPageResponse.body === null) {
             return reject('New page is null!');
@@ -60,12 +59,26 @@ export class PageService {
     return new Promise((resolve, reject) => {
       const url = 'http://localhost:3000/pages/' + pageId + '/content';
       this.http.patch<Page>(url, { 'content': content },
-        {observe: 'response', responseType: 'json'}
+        { headers: { 'Authorization': document.cookie }, observe: 'response', responseType: 'json'}
       ).subscribe((updatedPageResponse: HttpResponse<Page>) => {
         if (updatedPageResponse.body === null) {
           return reject('Updated page is null!');
         }
         return resolve(null);
+      })
+    });
+  }
+
+  public deletePage(pageId: string): Promise<Page> {
+    return new Promise((resolve, reject) => {
+      const url = 'http://localhost:3000/pages/' + pageId;
+      this.http.delete<Page>(url,
+        { headers: { 'Authorization': document.cookie }, observe: 'response', responseType: 'json'}
+      ).subscribe((deletedPageResponse: HttpResponse<Page>) => {
+        if (deletedPageResponse.body === null) {
+          return reject('Updated page is null!');
+        }
+        return resolve(deletedPageResponse.body);
       })
     });
   }

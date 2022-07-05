@@ -22,15 +22,22 @@
 }
 
 #update-article-preview-btn,
-#submit-article-btn
+#update-article-btn,
+#cancel-update-btn
 {
     margin-top: 1em;
+    margin-bottom: 1em;
     margin-right: 1em
+}
+
+#delete-article-btn
+{
+    color: red;
 }
 
 #article-preview
 {
     min-height: 10em;
     background-color: #ffffff;
-    border: 1px solid #a7d7f9;
+    padding: 1em;
 }

@@ -1,0 +1,17 @@
+<div *ngIf="successfulRegistration">
+  <h2>Your account has been successfully registered.</h2>
+  <button
+    routerLink="/user/login"
+    ariaCurrentWhenActive="page"
+    type="button"
+  >
+    Log In
+  </button>
+  <button
+    routerLink="/"
+    ariaCurrentWhenActive="page"
+    type="button"
+  >
+    Go to Main Page
+  </button>
+</div>
