@@ -12,6 +12,7 @@ CREATE TABLE `users` (
 
 CREATE TABLE `pages` (
  `page_id` CHAR(9) NOT NULL UNIQUE,
+ `page_version` INT NOT NULL,
  `title` VARCHAR(32) NOT NULL UNIQUE,
  `image_url` VARCHAR(2048),
  `lead` TEXT NOT NULL,
