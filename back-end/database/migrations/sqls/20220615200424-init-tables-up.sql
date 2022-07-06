@@ -11,17 +11,21 @@ CREATE TABLE `users` (
 );
 
 CREATE TABLE `pages` (
+ -- Meta-content 
  `page_id` CHAR(9) NOT NULL UNIQUE,
  `page_version` INT NOT NULL,
  `timestamp` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
  `username` VARCHAR(20) NOT NULL UNIQUE,
+ `user_id` CHAR(9) NOT NULL UNIQUE,
+ `freeze_page` BOOLEAN NOT NULL,
+
+ -- Content  
  `title` VARCHAR(32) NOT NULL UNIQUE,
  `image_url` VARCHAR(2048),
  `lead` VARCHAR(65000) NOT NULL,
  `body` VARCHAR(65000) NOT NULL,
- `freeze_page` BOOLEAN NOT NULL,
+
  PRIMARY KEY (`page_id`),
- INDEX filter_index(`title`)
 );
 
 CREATE TABLE `page_edits` (
