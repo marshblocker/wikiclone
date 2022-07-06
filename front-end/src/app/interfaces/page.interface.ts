@@ -1,7 +1,11 @@
 export interface Page {
     page_id: string;
-    content: PageContent;
+    page_version: number;
+    timestamp: string;
+    username: string;
+    user_id: string;
     freeze_page: boolean;
+    content: PageContent;
 }
 
 export interface PageContent {
