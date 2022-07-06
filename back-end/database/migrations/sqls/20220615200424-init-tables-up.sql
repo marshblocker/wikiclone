@@ -15,8 +15,8 @@ CREATE TABLE `pages` (
  `page_version` INT NOT NULL,
  `title` VARCHAR(32) NOT NULL UNIQUE,
  `image_url` VARCHAR(2048),
- `lead` TEXT NOT NULL,
- `body` TEXT NOT NULL,
+ `lead` VARCHAR(65000) NOT NULL,
+ `body` VARCHAR(65000) NOT NULL,
  `freeze_page` BOOLEAN NOT NULL,
  PRIMARY KEY (`page_id`),
  INDEX filter_index(`title`)
@@ -32,7 +32,7 @@ CREATE TABLE `page_edits` (
  `page_id` CHAR(9) NOT NULL UNIQUE,
  `title` VARCHAR(32) NOT NULL UNIQUE,
  `image_url` VARCHAR(2048),
- `lead` TEXT NOT NULL,
- `body` TEXT NOT NULL,
+ `lead` VARCHAR(65000) NOT NULL,
+ `body` VARCHAR(65000) NOT NULL,
  PRIMARY KEY (`page_edit_id`)
 );
