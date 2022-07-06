@@ -2,18 +2,18 @@
 
 CREATE PROCEDURE `create_page_edit`
 (
-    p_page_edit_id CHAR(9),
-    p_page_version INT,
-    p_timestamp DATETIME,
-    p_edit_summary VARCHAR(500),
-    p_user_id CHAR(9),
-    p_username VARCHAR(20),
-    p_role VARCHAR(10),
-    p_page_id CHAR(9),
-    p_title VARCHAR(32),
-    p_image_url VARCHAR(2048),
-    p_lead TEXT,
-    p_body TEXT
+    IN p_page_edit_id CHAR(9),
+    IN p_page_version INT,
+    IN p_timestamp DATETIME,
+    IN p_edit_summary VARCHAR(500),
+    IN p_user_id CHAR(9),
+    IN p_username VARCHAR(20),
+    IN p_role VARCHAR(10),
+    IN p_page_id CHAR(9),
+    IN p_title VARCHAR(32),
+    IN p_image_url VARCHAR(2048),
+    IN p_lead TEXT,
+    IN p_body TEXT
 )
 BEGIN
     DECLARE EXIT HANDLER FOR SQLEXCEPTION, SQLWARNING
@@ -63,7 +63,7 @@ END;
 
 CREATE PROCEDURE `read_page_edit`
 (
-    p_page_edit_id CHAR(9)
+    IN p_page_edit_id CHAR(9)
 )
 BEGIN
     IF NOT EXISTS(SELECT * FROM `page_edits` WHERE `page_edit_id` = p_page_edit_id) THEN
@@ -82,8 +82,8 @@ END;
 
 CREATE PROCEDURE `update_edit_summary`
 (
-    p_page_edit_id CHAR(9),
-    p_edit_summary VARCHAR(500)
+    IN p_page_edit_id CHAR(9),
+    IN p_edit_summary VARCHAR(500)
 )
 BEGIN
     DECLARE EXIT HANDLER FOR SQLEXCEPTION, SQLWARNING
@@ -106,8 +106,8 @@ END;
 
 CREATE PROCEDURE `update_username_in_page_edits`
 (
-    p_user_id CHAR(9),
-    p_username VARCHAR(20)
+    IN p_user_id CHAR(9),
+    IN p_username VARCHAR(20)
 )
 BEGIN
     DECLARE EXIT HANDLER FOR SQLEXCEPTION, SQLWARNING
@@ -128,8 +128,8 @@ END;
 
 CREATE PROCEDURE `update_role_in_page_edits`
 (
-    p_user_id CHAR(9),
-    p_role VARCHAR(10)
+    IN p_user_id CHAR(9),
+    IN p_role VARCHAR(10)
 )
 BEGIN
     DECLARE EXIT HANDLER FOR SQLEXCEPTION, SQLWARNING
@@ -150,7 +150,7 @@ END;
 
 CREATE PROCEDURE `delete_page_edit`
 (
-    p_page_edit_id CHAR(9)
+    IN p_page_edit_id CHAR(9)
 )
 BEGIN
     IF NOT EXISTS(SELECT * FROM `page_edits` WHERE `page_edit_id` = p_page_edit_id) THEN
