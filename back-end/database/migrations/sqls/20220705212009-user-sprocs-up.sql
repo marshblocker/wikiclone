@@ -53,7 +53,8 @@ BEGIN
     SELECT `user_id`, `username`, `email`, `role`, `can_edit` FROM `users`;
 END;
 
-CREATE PROCEDURE `update_username`(
+CREATE PROCEDURE `update_username`
+(
 	IN p_user_id CHAR(9), 
     IN p_username VARCHAR(20)
 )
@@ -71,7 +72,8 @@ BEGIN
     COMMIT;
 END;
 
-CREATE PROCEDURE `update_password_hash`(
+CREATE PROCEDURE `update_password_hash`
+(
 	IN p_user_id CHAR(9), 
     IN p_password_hash CHAR(60)
 )
@@ -89,7 +91,8 @@ BEGIN
     COMMIT;
 END;
 
-CREATE PROCEDURE `update_email`(
+CREATE PROCEDURE `update_email`
+(
 	IN p_user_id CHAR(9), 
     IN p_email VARCHAR(320)
 )
@@ -107,7 +110,8 @@ BEGIN
     COMMIT;
 END;
 
-CREATE PROCEDURE `update_role`(
+CREATE PROCEDURE `update_role`
+(
 	IN p_user_id CHAR(9), 
     IN p_role VARCHAR(10)
 )
@@ -125,7 +129,8 @@ BEGIN
     COMMIT;
 END;
 
-CREATE PROCEDURE `update_can_edit`(
+CREATE PROCEDURE `update_can_edit`
+(
 	IN p_user_id CHAR(9), 
     IN p_can_edit BOOLEAN
 )
