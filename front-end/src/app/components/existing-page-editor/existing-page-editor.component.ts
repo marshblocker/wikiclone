@@ -69,7 +69,10 @@ export class ExistingPageEditorComponent implements OnInit {
     };
 
     this.pageService.updatePage(this.pageId as string, content)
-      .then(() => { this._goBackToPageView(); })
+      .then((updatedPageContent) => { 
+        console.log(updatedPageContent);
+        this._goBackToPageView(); 
+      })
       .catch(console.log);
   }
 

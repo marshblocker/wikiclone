@@ -69,7 +69,7 @@ export class PageService {
     })
   }
 
-  public updatePage(pageId: string, content: PageContent): Promise<null> {
+  public updatePage(pageId: string, content: PageContent): Promise<PageContent> {
     return new Promise((resolve, reject) => {
       const url = 'http://localhost:3000/pages/' + pageId + '/content';
       this.http.patch<Page>(
@@ -83,7 +83,7 @@ export class PageService {
         if (updatedPageResponse.body === null) {
           return reject('Updated page is null!');
         }
-        return resolve(null);
+        return resolve(updatedPageResponse.body.content);
       })
     });
   }
