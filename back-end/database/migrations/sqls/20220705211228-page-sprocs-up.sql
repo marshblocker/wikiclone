@@ -5,6 +5,7 @@ CREATE PROCEDURE `create_page`
 	IN p_page_id CHAR(9),
     IN p_title VARCHAR(32),
     IN p_username VARCHAR(20),
+    IN p_user_id CHAR(9),
     IN p_image_url VARCHAR(2048),
     IN p_lead VARCHAR(65000),
     IN p_body VARCHAR(65000) 
@@ -22,22 +23,24 @@ BEGIN
         `page_id`, 
         `page_version`, 
         `username`, 
+        `user_id`,
+        `freeze_page`,
         `title`, 
         `image_url`, 
         `lead`, 
-        `body`, 
-        `freeze_page`
+        `body` 
     )
     VALUES 
     (
         p_page_id, 
         1,
         p_username,
+        p_user_id,
+        0,
         p_title, 
         p_image_url, 
         p_lead, 
-        p_body, 
-        0
+        p_body 
     );
 
     COMMIT;
@@ -64,8 +67,11 @@ BEGIN
 	SELECT * FROM `pages`;
 END;
 
-CREATE PROCEDURE `update_content`(
+CREATE PROCEDURE `update_content`
+(
 	IN p_page_id CHAR(9),
+    IN p_username VARCHAR(20),
+    IN p_user_id CHAR(9),
     IN p_title VARCHAR(32),
     IN p_image_url VARCHAR(2048),
     IN p_lead VARCHAR(65000),
@@ -80,7 +86,9 @@ BEGIN
     START TRANSACTION;
 
     UPDATE `pages` 
-    SET 
+    SET
+        `username` = p_username,
+        `user_id` = p_user_id,
         `title` = p_title,
         `image_url` = p_image_url,
         `lead` = p_lead,
@@ -96,7 +104,9 @@ BEGIN
 END;
 
 CREATE PROCEDURE `update_freeze_page`(
-	IN p_page_id CHAR(9), 
+	IN p_page_id CHAR(9),
+    IN p_username VARCHAR(20),
+    IN p_user_id CHAR(9),
     IN p_freeze_page BOOLEAN
 )
 BEGIN
@@ -109,6 +119,8 @@ BEGIN
 
     UPDATE `pages` 
     SET 
+        `username` = p_username,
+        `user_id` = p_user_id,
         `freeze_page` = p_freeze_page,
         `page_version` = `page_version` + 1
     WHERE `page_id` = p_page_id;

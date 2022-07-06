@@ -12,12 +12,13 @@ class PageCreateController {
 
     async createPage(req, res) {
         try {
-            // if (!req.parsedToken || !req.parsedToken.canEdit) {
-            //     throw CustomError.ForbidCreatePage();
-            // }
+            if (!req.parsedToken || !req.parsedToken.canEdit) {
+                throw CustomError.ForbidCreatePage();
+            }
 
             const pageId = shortid.generate();
-            const username = req.body['username'];
+            const username = req.parsedToken.username;
+            const userId = req.parsedToken.userId;
             const content = req.body['content'];
             if (!pageId) {
                 throw CustomError.MissingRequiredURLParamAttr('page_id');
@@ -29,23 +30,13 @@ class PageCreateController {
             content.imageUrl = content.image_url;
             delete content.image_url;
 
-            const result = await this._createPage(pageId, username, content);
+            const result = await this._createPage(pageId, username, userId, content);
             let newPage = result[0][0][0];
             newPage['freeze_page'] = (newPage['freeze_page'] === 1) ? true : false;
 
-            // This is the expected response format.
-            newPage.content = {
-                title: newPage.title,
-                image_url: newPage.image_url,
-                lead: newPage.lead,
-                body: newPage.body
-            };
-            delete newPage.title;
-            delete newPage.image_url;
-            delete newPage.lead;
-            delete newPage.body;
+            const formattedNewPage = utils.formatPageContent(newPage);
 
-            return res.status(200).json(newPage);
+            return res.status(200).json(formattedNewPage);
         } catch (error) {
             if (error.code) {
                 return res.status(error.code).json({ 
@@ -59,9 +50,9 @@ class PageCreateController {
         }
     }
 
-    async _createPage(pageId, username, content) {
+    async _createPage(pageId, username, userId, content) {
         try {
-            return await this.pageDAO.createPage(pageId, username, content);
+            return await this.pageDAO.createPage(pageId, username, userId,  content);
         } catch (error) {
             throw error;
         }

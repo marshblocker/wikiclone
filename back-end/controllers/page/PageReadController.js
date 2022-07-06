@@ -1,6 +1,7 @@
 // TODO: Implement request query parameters.
 
 const CustomError = require('../../error');
+const utils = require('../../utils');
 
 class PageReadController {
     constructor(pageDAO) {
@@ -18,19 +19,9 @@ class PageReadController {
             let page = result[0][0][0];
             page['freeze_page'] = (page['freeze_page'] === 1) ? true : false;
 
-            // This is the expected response format.
-            page.content = {
-                title: page.title,
-                image_url: page.image_url,
-                lead: page.lead,
-                body: page.body
-            };
-            delete page.title;
-            delete page.image_url;
-            delete page.lead;
-            delete page.body;
+            const formattedPage = utils.formatPageContent(page);
 
-            return res.status(200).json(page);
+            return res.status(200).json(formattedPage);
         } catch (error) {
             if (error.code) {
                 return res.status(error.code).json({ 

@@ -5,12 +5,12 @@ const knex = require('../database/knex');
 const CustomError = require('../error');
 
 class PageDAO {
-    async createPage(pageId, username, content) {
+    async createPage(pageId, username, userId, content) {
         try {
             const { title, imageUrl, lead, body } = content;
             return await knex.raw(
                 'CALL create_page(?, ?, ?, ?, ?)',
-                [pageId, title, username, imageUrl, lead, body]
+                [pageId, title, username, userId, imageUrl, lead, body]
             );
         } catch (error) {
             throw this._handleDBError(error);
@@ -37,23 +37,23 @@ class PageDAO {
         }
     }
 
-    async updateFreezePage(pageId, freezePage) {
+    async updateContent(pageId, username, userId, content) {
         try {
+            const { title, imageUrl, lead, body } = content;
             return await knex.raw(
-                'CALL update_freeze_page(?, ?)',
-                [pageId, freezePage]
+                'CALL update_content(?, ?, ?, ?, ?)',
+                [username, userId, pageId, title, imageUrl, lead, body]
             );
         } catch (error) {
             throw this._handleDBError(error);
         }
     }
 
-    async updateContent(pageId, content) {
+    async updateFreezePage(pageId, username, userId, freezePage) {
         try {
-            const { title, imageUrl, lead, body } = content;
             return await knex.raw(
-                'CALL update_content(?, ?, ?, ?, ?)',
-                [pageId, title, imageUrl, lead, body]
+                'CALL update_freeze_page(?, ?)',
+                [pageId, username, userId, freezePage]
             );
         } catch (error) {
             throw this._handleDBError(error);

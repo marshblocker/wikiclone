@@ -21,12 +21,9 @@ class LoginController {
                     break;
                 }
             }
-            console.log('Yo');
             const passwordHash = (await this.userReadController
                 ._readUserPasswordHash(userInfo['user_id']))[0][0][0]['password_hash'];
 
-            console.log(passwordHash);
-            
             const correctPassword = await bcrypt.compare(credentials['password'], passwordHash);
             if (!correctPassword) {
                 throw CustomError.WrongPassword();

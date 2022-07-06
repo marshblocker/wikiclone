@@ -1,4 +1,5 @@
 const CustomError = require('../../error');
+const utils = require('../../utils');
 
 class PageDeleteController {
     constructor(pageDAO) {
@@ -7,9 +8,9 @@ class PageDeleteController {
 
     async deletePage(req, res) {
         try {
-            // if (!req.parsedToken || req.parsedToken.role === 'user' || !req.parsedToken.canEdit) {
-            //     throw CustomError.ForbidDeletePage();
-            // }
+            if (!req.parsedToken || req.parsedToken.role === 'user' || !req.parsedToken.canEdit) {
+                throw CustomError.ForbidDeletePage();
+            }
 
             const pageId = req.params['page_id'];
             if (!pageId) {
@@ -19,20 +20,10 @@ class PageDeleteController {
             const result = await this._deletePage(pageId);
             let deletedPage = result[0][0][0];
             deletedPage['freeze_page'] = (deletedPage['freeze_page'] === 1) ? true : false;
-            
-            // This is the expected response format.
-            deletedPage.content = {
-                title: deletedPage.title,
-                image_url: deletedPage.image_url,
-                lead: deletedPage.lead,
-                body: deletedPage.body
-            };
-            delete deletedPage.title;
-            delete deletedPage.image_url;
-            delete deletedPage.lead;
-            delete deletedPage.body;
 
-            return res.status(200).json(deletedPage);
+            const formattedDeletedPage = utils.formatPageContent(deletedPage)
+            
+            return res.status(200).json(formattedDeletedPage);
         } catch (error) {
             if (error.code) {
                 return res.status(error.code).json({ 

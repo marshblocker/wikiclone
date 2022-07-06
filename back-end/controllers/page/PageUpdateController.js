@@ -12,10 +12,12 @@ class PageUpdateController {
 
     async updateContent(req, res) {
         try {
-            // if (!req.parsedToken || !req.parsedToken.canEdit) {
-            //     throw CustomError.ForbidEditPage();
-            // }
+            if (!req.parsedToken || !req.parsedToken.canEdit) {
+                throw CustomError.ForbidEditPage();
+            }
             const pageId = req.params['page_id'];
+            const username = req.parsedToken.username;
+            const userId = req.parsedToken.userId;
             let freezePage = (await pageReadController._readPage(pageId));
             freezePage = freezePage[0][0][0]['freeze_page'];
             console.log(freezePage);
@@ -33,7 +35,7 @@ class PageUpdateController {
             content.imageUrl = content.image_url;
             delete content.image_url;
 
-            const result = await this._updateContent(pageId, content);
+            const result = await this._updateContent(pageId, username, userId, content);
             let updatedPageContent = result[0][0][0];
 
             return res.status(200).json(updatedPageContent);
@@ -50,9 +52,9 @@ class PageUpdateController {
         }
     }
 
-    async _updateContent(pageId, content) {
+    async _updateContent(pageId, username, userId, content) {
         try {
-            return await this.pageDAO.updateContent(pageId, content);
+            return await this.pageDAO.updateContent(pageId, username, userId, content);
         } catch (error) {
             throw error;
         }
@@ -60,11 +62,13 @@ class PageUpdateController {
 
     async updateFreezePage(req, res) {
         try {
-            // if (!req.parsedToken || req.parsedToken.role === 'user' || !req.parsedToken.canEdit) {
-            //     throw CustomError.ForbidFreezePage();
-            // }
+            if (!req.parsedToken || req.parsedToken.role === 'user' || !req.parsedToken.canEdit) {
+                throw CustomError.ForbidFreezePage();
+            }
 
             const pageId = req.params['page_id'];
+            const username = req.parsedToken.username;
+            const userId = req.parsedToken.userId;
             const freezePage = req.body['freeze_page'];
             if (!pageId) {
                 throw CustomError.MissingRequiredURLParamAttr('page_id');
@@ -73,7 +77,7 @@ class PageUpdateController {
                 throw CustomError.AttributeNotDefined('freeze_page');
             }
     
-            const result = await this._updateFreezePage(pageId, freezePage);
+            const result = await this._updateFreezePage(pageId, username, userId, freezePage);
             let updatedFreezePage = { 
                 "freeze_page": ((result[0][0][0]['freeze_page'] === 1) ? true : false) 
             };
@@ -91,9 +95,9 @@ class PageUpdateController {
         }
     }
 
-    async _updateFreezePage(pageId, freezePage) {
+    async _updateFreezePage(pageId, username, userId, freezePage) {
         try {
-            return await this.pageDAO.updateFreezePage(pageId, freezePage);
+            return await this.pageDAO.updateFreezePage(pageId, username, userId, freezePage);
         } catch (error) {
             throw error;
         }

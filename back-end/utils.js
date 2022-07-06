@@ -55,6 +55,21 @@ const utils = {
         return hash;
     },
 
+    formatPageContent(page) {
+        page.content = {
+            title: page.title,
+            image_url: page.image_url,
+            lead: page.lead,
+            body: page.body
+        };
+        delete page.title;
+        delete page.image_url;
+        delete page.lead;
+        delete page.body;
+
+        return page;
+    },
+
     checkWhiteSpace(attribute, attributeName) {
         attribute = attribute.trim();
         if (attribute.includes(' ')) {
