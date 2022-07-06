@@ -80,6 +80,16 @@ BEGIN
     SELECT * FROM `page_edits`;
 END;
 
+CREATE PROCEDURE `read_page_edits_by_page_id`
+(
+    IN p_page_id CHAR(9);
+)
+BEGIN
+    SELECT *
+    FROM `page_edits`
+    WHERE `page_id` = p_page_id;
+DECLARE
+
 CREATE PROCEDURE `update_edit_summary`
 (
     IN p_page_edit_id CHAR(9),
@@ -159,4 +169,13 @@ BEGIN
 		DELETE FROM `page_edits` 
 		WHERE `page_edit_id` = p_page_edit_id;
 	END IF;
+END;
+
+CREATE PROCEDURE `delete_page_edits_of_deleted_page`
+(
+    IN p_page_id CHAR(9)
+)
+BEGIN
+    DELETE FROM `page_edits`
+    WHERE `page_id` = p_page_id;
 END;
