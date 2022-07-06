@@ -5,12 +5,12 @@ const knex = require('../database/knex');
 const CustomError = require('../error');
 
 class PageDAO {
-    async createPage(pageId, content) {
+    async createPage(pageId, username, content) {
         try {
             const { title, imageUrl, lead, body } = content;
             return await knex.raw(
                 'CALL create_page(?, ?, ?, ?, ?)',
-                [pageId, title, imageUrl, lead, body]
+                [pageId, title, username, imageUrl, lead, body]
             );
         } catch (error) {
             throw this._handleDBError(error);

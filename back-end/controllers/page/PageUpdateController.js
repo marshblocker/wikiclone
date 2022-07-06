@@ -34,20 +34,9 @@ class PageUpdateController {
             delete content.image_url;
 
             const result = await this._updateContent(pageId, content);
-            let updatedPage = result[0][0][0];
+            let updatedPageContent = result[0][0][0];
 
-            // This is the expected response format.
-            updatedPage = {
-                page_id: updatedPage.page_id,
-                freeze_page: updatedPage.freeze_page,
-                content: {
-                    title: updatedPage.title,
-                    image_url: updatedPage.image_url,
-                    lead: updatedPage.lead,
-                    body: updatedPage.body
-                }
-            };
-            return res.status(200).json(updatedPage);
+            return res.status(200).json(updatedPageContent);
         } catch (error) {
             if (error.code) {
                 return res.status(error.code).json({ 

@@ -21,17 +21,17 @@ class PageDeleteController {
             deletedPage['freeze_page'] = (deletedPage['freeze_page'] === 1) ? true : false;
             
             // This is the expected response format.
-            deletedPage = {
-                page_id: deletedPage.page_id,
-                page_version: deletedPage.page_version,
-                freeze_page: deletedPage.freeze_page,
-                content: {
-                    title: deletedPage.title,
-                    image_url: deletedPage.image_url,
-                    lead: deletedPage.lead,
-                    body: deletedPage.body
-                }
+            deletedPage.content = {
+                title: deletedPage.title,
+                image_url: deletedPage.image_url,
+                lead: deletedPage.lead,
+                body: deletedPage.body
             };
+            delete deletedPage.title;
+            delete deletedPage.image_url;
+            delete deletedPage.lead;
+            delete deletedPage.body;
+
             return res.status(200).json(deletedPage);
         } catch (error) {
             if (error.code) {

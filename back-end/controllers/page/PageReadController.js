@@ -19,17 +19,17 @@ class PageReadController {
             page['freeze_page'] = (page['freeze_page'] === 1) ? true : false;
 
             // This is the expected response format.
-            page = {
-                page_id: page.page_id,
-                page_version: page.page_version,
-                freeze_page: page.freeze_page,
-                content: {
-                    title: page.title,
-                    image_url: page.image_url,
-                    lead: page.lead,
-                    body: page.body
-                }
+            page.content = {
+                title: page.title,
+                image_url: page.image_url,
+                lead: page.lead,
+                body: page.body
             };
+            delete page.title;
+            delete page.image_url;
+            delete page.lead;
+            delete page.body;
+
             return res.status(200).json(page);
         } catch (error) {
             if (error.code) {
@@ -127,17 +127,16 @@ class PageReadController {
                 pages[i]['freeze_page'] = (pages[i]['freeze_page'] === 1) ? true : false; 
 
                 // This is the expected response format.
-                pages[i] = {
-                    page_id: pages[i].page_id,
-                    page_version: pages[i].page_version,
-                    freeze_page: pages[i].freeze_page,
-                    content: {
-                        title: pages[i].title,
-                        image_url: pages[i].image_url,
-                        lead: pages[i].lead,
-                        body: pages[i].body
-                    }
+                pages[i].content = {
+                    title: pages[i].title,
+                    image_url: pages[i].image_url,
+                    lead: pages[i].lead,
+                    body: pages[i].body
                 };
+                delete pages[i].title;
+                delete pages[i].image_url;
+                delete pages[i].lead;
+                delete pages[i].body;
             }
             return res.status(200).json(pages);
         } catch (error) {

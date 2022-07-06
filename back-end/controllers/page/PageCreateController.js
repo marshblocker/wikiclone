@@ -17,31 +17,34 @@ class PageCreateController {
             // }
 
             const pageId = shortid.generate();
+            const username = req.body['username'];
             const content = req.body['content'];
             if (!pageId) {
                 throw CustomError.MissingRequiredURLParamAttr('page_id');
             }
+            utils.checkUserInfo({ 'username': username }, ['username']);
             utils.checkPageContent(content);
 
             // To comply with JS naming convention.
             content.imageUrl = content.image_url;
             delete content.image_url;
 
-            const result = await this._createPage(pageId, content);
+            const result = await this._createPage(pageId, username, content);
             let newPage = result[0][0][0];
             newPage['freeze_page'] = (newPage['freeze_page'] === 1) ? true : false;
 
             // This is the expected response format.
-            newPage = {
-                page_id: newPage.page_id,
-                freeze_page: newPage.freeze_page,
-                content: {
-                    title: newPage.title,
-                    image_url: newPage.image_url,
-                    lead: newPage.lead,
-                    body: newPage.body
-                }
+            newPage.content = {
+                title: newPage.title,
+                image_url: newPage.image_url,
+                lead: newPage.lead,
+                body: newPage.body
             };
+            delete newPage.title;
+            delete newPage.image_url;
+            delete newPage.lead;
+            delete newPage.body;
+
             return res.status(200).json(newPage);
         } catch (error) {
             if (error.code) {
@@ -56,9 +59,9 @@ class PageCreateController {
         }
     }
 
-    async _createPage(pageId, content) {
+    async _createPage(pageId, username, content) {
         try {
-            return await this.pageDAO.createPage(pageId, content);
+            return await this.pageDAO.createPage(pageId, username, content);
         } catch (error) {
             throw error;
         }
