@@ -25,7 +25,7 @@ CREATE TABLE `pages` (
 CREATE TABLE `page_edits` (
  `page_edit_id` CHAR(9) NOT NULL UNIQUE,
  `page_version` INT NOT NULL,
- `edit_summary` TEXT NOT NULL,
+ `edit_summary` VARCHAR(500) NOT NULL,
  `user_id` CHAR(9) NOT NULL UNIQUE,
  `username` VARCHAR(20) NOT NULL UNIQUE,
  `role` VARCHAR(10) NOT NULL,
