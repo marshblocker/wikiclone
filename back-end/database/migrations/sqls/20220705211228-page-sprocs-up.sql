@@ -129,6 +129,28 @@ BEGIN
     COMMIT;
 END;
 
+CREATE PROCEDURE `update_username_in_pages`
+(
+    p_user_id CHAR(9),
+    p_username VARCHAR(20)
+)
+BEGIN
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION, SQLWARNING
+	BEGIN
+		ROLLBACK;
+		RESIGNAL;
+	END;
+    START TRANSACTION;
+
+    UPDATE `pages` 
+    SET `username` = p_username 
+    WHERE `user_id` = p_user_id;
+    
+    COMMIT;
+
+    SELECT p_username;
+END;
+
 CREATE PROCEDURE `delete_page`
 (
 	IN p_page_id CHAR(9)
