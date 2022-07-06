@@ -21,6 +21,7 @@ class PageReadController {
             // This is the expected response format.
             page = {
                 page_id: page.page_id,
+                page_version: page.page_version,
                 freeze_page: page.freeze_page,
                 content: {
                     title: page.title,
@@ -128,6 +129,7 @@ class PageReadController {
                 // This is the expected response format.
                 pages[i] = {
                     page_id: pages[i].page_id,
+                    page_version: pages[i].page_version,
                     freeze_page: pages[i].freeze_page,
                     content: {
                         title: pages[i].title,

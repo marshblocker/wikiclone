@@ -32,7 +32,7 @@ class PageDAO {
             return await knex.raw(
                 'CALL read_all_pages()'
             );
-        } catch(error) {
+        } catch (error) {
             throw this._handleDBError(error);
         }
     }

@@ -23,6 +23,7 @@ class PageDeleteController {
             // This is the expected response format.
             deletedPage = {
                 page_id: deletedPage.page_id,
+                page_version: deletedPage.page_version,
                 freeze_page: deletedPage.freeze_page,
                 content: {
                     title: deletedPage.title,

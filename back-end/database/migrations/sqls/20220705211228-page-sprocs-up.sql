@@ -81,7 +81,8 @@ BEGIN
         `title` = p_title,
         `image_url` = p_image_url,
         `lead` = p_lead,
-        `body` = p_body
+        `body` = p_body,
+        `page_version` = `page_version` + 1
     WHERE `page_id` = p_page_id;
 
     SELECT `title`, `image_url`, `lead`, `body` 
