@@ -13,6 +13,8 @@ CREATE TABLE `users` (
 CREATE TABLE `pages` (
  `page_id` CHAR(9) NOT NULL UNIQUE,
  `page_version` INT NOT NULL,
+ `timestamp` DATETIME NOT NULL,
+ `username` VARCHAR(20) NOT NULL UNIQUE,
  `title` VARCHAR(32) NOT NULL UNIQUE,
  `image_url` VARCHAR(2048),
  `lead` VARCHAR(65000) NOT NULL,
@@ -25,6 +27,7 @@ CREATE TABLE `pages` (
 CREATE TABLE `page_edits` (
  `page_edit_id` CHAR(9) NOT NULL UNIQUE,
  `page_version` INT NOT NULL,
+ `timestamp` DATETIME NOT NULL,
  `edit_summary` VARCHAR(500) NOT NULL,
  `user_id` CHAR(9) NOT NULL UNIQUE,
  `username` VARCHAR(20) NOT NULL UNIQUE,
