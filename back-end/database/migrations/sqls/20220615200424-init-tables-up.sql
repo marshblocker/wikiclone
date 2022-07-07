@@ -23,7 +23,7 @@ CREATE TABLE `pages` (
  `title` VARCHAR(32) NOT NULL UNIQUE,
  `image_url` VARCHAR(2048),
  `lead` VARCHAR(3000) NOT NULL,
- `body` VARCHAR(65000) NOT NULL,
+ `body` TEXT NOT NULL,
 
  PRIMARY KEY (`page_id`),
 );
