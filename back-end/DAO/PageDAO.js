@@ -71,6 +71,17 @@ class PageDAO {
         }
     }
 
+    async updateUsername(userId, username) {
+        try {
+            return await knex.raw(
+                'CALL update_username_in_pages(?, ?)',
+                [userId, username]
+            );
+        } catch (error) {
+            throw this._handleDBError(error);
+        }
+    }
+
     async deletePage(pageId) {
         try {
             const deletedPage = await knex.raw(

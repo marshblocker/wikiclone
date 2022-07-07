@@ -16,6 +16,9 @@ class UserUpdateController {
             utils.checkUserInfo({ 'username': username });
 
             const result = await this._updateUserName(userId, username);
+            await pageDAO.updateUsername(userId, username);
+            await pageEditDAO.updateUsername(userId, username);
+
             let updatedUsername = result[0][0][0];
             return res.status(200).json(updatedUsername);
         } catch (error) {
