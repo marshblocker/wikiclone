@@ -134,7 +134,7 @@ const utils = {
     },
 
     checkRole(role) {
-        if (!['user, admin, superadmin'].includes(role)) {
+        if (!['user', 'admin', 'superadmin'].includes(role)) {
             throw CustomError.InvalidUserRoleValue();
         }
     },
