@@ -36,9 +36,12 @@ class PageUpdateController {
             delete content.image_url;
 
             const result = await this._updateContent(pageId, username, userId, content);
-            let updatedPageContent = result[0][0][0];
+            let updatedPage = result[0][0][0];
+            updatedPage['freeze_page'] = (updatedPage['freeze_page'] === 1) ? true : false;
 
-            return res.status(200).json(updatedPageContent);
+            const formattedUpdatedPage = utils.formatPageContent(updatedPage);
+
+            return res.status(200).json(formattedUpdatedPage);
         } catch (error) {
             if (error.code) {
                 return res.status(error.code).json({ 
