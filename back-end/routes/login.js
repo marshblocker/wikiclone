@@ -5,6 +5,6 @@ var router = express.Router();
 
 const loginController = new LoginController(userController.userReadController);
 
-router.post('/', (req, res) => loginController.loginUser(req, res));
+router.post('/', async (req, res) => await loginController.loginUser(req, res));
 
 module.exports = router;

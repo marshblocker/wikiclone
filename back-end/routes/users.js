@@ -5,22 +5,22 @@ const utils = require('../utils');
 
 var router = express.Router();
 
-router.post('/', (req, res) => userController.userCreateController.createUser(req, res));
+router.post('/', async (req, res) => await userCreateController.createUser(req, res));
 
-router.get('/', (req, res) => userController.userReadController.readAllUsersInfo(req, res));
-router.get('/:user_id/info', (req, res) => userController.userReadController.readUserInfo(req, res));
+router.get('/', async (req, res) => await userReadController.readAllUsersInfo(req, res));
+router.get('/:user_id/info', async (req, res) => await userReadController.readUserInfo(req, res));
 
 router.use(utils.parseToken);
 
-router.get('/current', (req, res) => userController.userReadController.readCurrentUserInfo(req, res));
-router.get('/:user_id/password_hash', (req, res) => userController.userReadController.readUserPasswordHash(req, res));
+router.get('/current', async (req, res) => await userReadController.readCurrentUserInfo(req, res));
+router.get('/:user_id/password_hash', async (req, res) => await userReadController.readUserPasswordHash(req, res));
 
-router.patch('/:user_id/username', (req, res) => userController.userUpdateController.updateUserName(req, res));
-router.patch('/:user_id/password', (req, res) => userController.userUpdateController.updatePassword(req, res));
-router.patch('/:user_id/email', (req, res) => userController.userUpdateController.updateEmail(req, res));
-router.patch('/:user_id/role', (req, res) => userController.userUpdateController.updateRole(req, res));
-router.patch('/:user_id/can_edit', (req, res) => userController.userUpdateController.updateCanEdit(req, res));
+router.patch('/:user_id/username', async (req, res) => await userUpdateController.updateUserName(req, res));
+router.patch('/:user_id/password', async (req, res) => await userUpdateController.updatePassword(req, res));
+router.patch('/:user_id/email', async (req, res) => await userUpdateController.updateEmail(req, res));
+router.patch('/:user_id/role', async (req, res) => await userUpdateController.updateRole(req, res));
+router.patch('/:user_id/can_edit', async (req, res) => await userUpdateController.updateCanEdit(req, res));
 
-router.delete('/:user_id', (req, res) => userController.userDeleteController.deleteUser(req, res));
+router.delete('/:user_id', async (req, res) => await userDeleteController.deleteUser(req, res));
 
 module.exports = router;

@@ -16,32 +16,21 @@ const pageDeleteController = new PageDeleteController(pageDAO);
 
 var router = express.Router();
 
-// router.use(utils.parseToken);
+router.get('/:page_id', async (req, res) => await pageReadController.readPage(req, res));
+router.get('/', async (req, res) => await pageReadController.readAllPages(req, res));
 
 router.get('/', (req, res) => pageReadController.readAllPages(req, res));
 router.get('/:page_id', (req, res) => pageReadController.readPage(req, res));
 
-/*
-    Post request body structure:
-        {
-            "page_id": ...,
-            "content": {
-                "title": ...,
-                "image_url": ...,
-                "lead": ...,
-                "body": ...
-            }
-        }
-*/
-router.post('/',async (req, res) => await pageCreateController.createPage(req, res));
+router.post('/', async (req, res) => await pageCreateController.createPage(req, res));
 
-router.patch('/:page_id/content', (req, res) => {
-    pageUpdateController.updateContent(req, res);
+router.patch('/:page_id/content', async (req, res) => {
+    await pageUpdateController.updateContent(req, res);
 });
-router.patch('/:page_id/freeze_page', (req, res) => {
-    pageUpdateController.updateFreezePage(req, res);
+router.patch('/:page_id/freeze_page', async (req, res) => {
+    await pageUpdateController.updateFreezePage(req, res);
 });
 
-router.delete('/:page_id', (req, res) => pageDeleteController.deletePage(req, res));
+router.delete('/:page_id', async (req, res) => await pageDeleteController.deletePage(req, res));
 
 module.exports = router;
