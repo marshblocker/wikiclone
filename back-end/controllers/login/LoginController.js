@@ -17,7 +17,7 @@ class LoginController {
             for (let i = 0; i < allUsersInfo.length; i++) {
                 userInfo = allUsersInfo[i];
                 if (userInfo['username'] === credentials['usernameOrEmail'] || 
-                        userInfo['email'] === credentials['email']) {
+                        userInfo['email'] === credentials['usernameOrEmail']) {
                     break;
                 }
             }
