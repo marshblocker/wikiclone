@@ -22,7 +22,31 @@ const utils = {
         }
     },
     
-    checkUserInfo(info, attributeNames) {
+    checkPageMetaContent(metaContent) {
+        if (!metaContent) {
+            throw CustomError.InvalidAttributeValue('page meta-content');
+        }
+
+        const metaContentNames = Object.keys(metaContent);
+
+        if (metaContentNames.includes('page_version')) {
+            this.checkPageVersion(metaContent['page_version']);
+        }
+
+        if (metaContentNames.includes('timestamp')) {
+            this.checkTimestamp(metaContent['timestamp']);
+        }
+
+        if (metaContentNames.includes('edit_summary')) {
+            this.checkEditSummary(metaContent['edit_summary']);
+        }
+
+        if (metaContentNames.includes('freeze_page')) {
+            this.checkFreezePage(metaContent['freeze_page']);
+        }
+    },
+    
+    checkUserInfo(info) {
         if (!info) {
             throw CustomError.InvalidAttributeValue('info');
         }
