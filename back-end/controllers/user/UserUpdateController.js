@@ -1,6 +1,12 @@
 const CustomError = require('../../error');
 const utils = require('../../utils');
 
+const PageDAO = require('../../DAO/PageDAO');
+const PageEditDAO = require('../../DAO/PageEditDAO');
+
+const pageDAO = new PageDAO();
+const pageEditDAO = new PageEditDAO();
+
 class UserUpdateController {
     constructor(userDAO) {
         this.userDAO = userDAO;
@@ -119,6 +125,8 @@ class UserUpdateController {
             utils.checkRole(role);
 
             const result = await this._updateRole(userId, role);
+            await pageEditDAO.updateRole(userId, role);
+
             let updatedRole = result[0][0][0];
             return res.status(200).json(updatedRole);
         } catch (error) {
