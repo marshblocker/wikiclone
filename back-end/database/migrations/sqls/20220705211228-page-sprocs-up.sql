@@ -7,7 +7,7 @@ CREATE PROCEDURE `create_page`
     IN p_username VARCHAR(20),
     IN p_user_id CHAR(9),
     IN p_image_url VARCHAR(2048),
-    IN p_lead VARCHAR(65000),
+    IN p_lead VARCHAR(3000),
     IN p_body VARCHAR(65000) 
 )
 BEGIN
@@ -87,7 +87,7 @@ CREATE PROCEDURE `update_content`
     IN p_user_id CHAR(9),
     IN p_title VARCHAR(32),
     IN p_image_url VARCHAR(2048),
-    IN p_lead VARCHAR(65000),
+    IN p_lead VARCHAR(3000),
     IN p_body VARCHAR(65000)
 )
 BEGIN

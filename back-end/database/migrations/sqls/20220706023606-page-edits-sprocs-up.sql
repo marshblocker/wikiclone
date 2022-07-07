@@ -13,7 +13,7 @@ CREATE PROCEDURE `create_page_edit`
     IN p_freeze_page BOOLEAN,
     IN p_title VARCHAR(32),
     IN p_image_url VARCHAR(2048),
-    IN p_lead TEXT,
+    IN p_lead VARCHAR(3000),
     IN p_body TEXT
 )
 BEGIN

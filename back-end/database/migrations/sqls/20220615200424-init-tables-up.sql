@@ -22,7 +22,7 @@ CREATE TABLE `pages` (
  -- Content  
  `title` VARCHAR(32) NOT NULL UNIQUE,
  `image_url` VARCHAR(2048),
- `lead` VARCHAR(65000) NOT NULL,
+ `lead` VARCHAR(3000) NOT NULL,
  `body` VARCHAR(65000) NOT NULL,
 
  PRIMARY KEY (`page_id`),
@@ -38,7 +38,6 @@ CREATE TABLE `page_edits` (
  `role` VARCHAR(10) NOT NULL,
  `freeze_page` BOOLEAN NOT NULL,
  `image_url` VARCHAR(2048),
- `lead` VARCHAR(65000) NOT NULL,
- `body` VARCHAR(65000) NOT NULL,
+ `lead` VARCHAR(3000) NOT NULL,
  PRIMARY KEY (`page_edit_id`)
 );
