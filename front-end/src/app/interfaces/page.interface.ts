@@ -14,3 +14,13 @@ export interface PageContent {
     lead: string;
     body: string;
 }
+
+export interface PageSearchResultView {
+    page_id: string;
+    page_version: number;
+    timestamp: string;
+    username: string;
+    user_id: string;
+    title: string;
+    lead: string;
+}
