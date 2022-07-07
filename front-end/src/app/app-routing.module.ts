@@ -10,6 +10,7 @@ import { ProcessLoginComponent } from './components/process-login/process-login.
 import { ProcessRegisterComponent } from './components/process-register/process-register.component';
 import { RandomPageComponent } from './components/random-page/random-page.component';
 import { RegisterComponent } from './components/register/register.component';
+import { SearchResultComponent } from './components/search-result/search-result.component';
 import { TokenExpiredComponent } from './components/token-expired/token-expired.component';
 import { UserProfileComponent } from './components/user-profile/user-profile.component';
 
@@ -47,6 +48,12 @@ const routes: Routes = [
   {
     path: 'wiki/random',
     component: RandomPageComponent,
+  },
+  {
+    path: 'wiki/search',
+    component: SearchResultComponent,
+    title: 'Search Result',
+    data: { pageType: 'Search' }
   },
   {
     path: 'wiki/:page_id',

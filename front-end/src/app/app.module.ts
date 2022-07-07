@@ -23,6 +23,8 @@ import { ProcessLoginComponent } from './components/process-login/process-login.
 import { TokenService } from './services/token.service';
 import { UserProfileComponent } from './components/user-profile/user-profile.component';
 import { TokenExpiredComponent } from './components/token-expired/token-expired.component';
+import { SearchResultComponent } from './components/search-result/search-result.component';
+import { SearchEntryComponent } from './components/search-entry/search-entry.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +43,9 @@ import { TokenExpiredComponent } from './components/token-expired/token-expired.
     ProcessRegisterComponent,
     ProcessLoginComponent,
     UserProfileComponent,
-    TokenExpiredComponent
+    TokenExpiredComponent,
+    SearchResultComponent,
+    SearchEntryComponent
   ],
   imports: [
     BrowserModule,

@@ -51,7 +51,25 @@ export class PageService {
     });
   }
 
-  public submitNewPage(content: PageContent): Promise<string> {
+  public getPagesBasedOnSearchString(searchString: string): Promise<PageSearchResultView[]> {
+    return new Promise((resolve, reject) => {
+      const url = 'http://localhost:3000/pages?contains=' + searchString;
+      this.http.get<PageSearchResultView[]>(
+        url,
+        {
+          headers: { 'Authorization': document.cookie }, 
+          observe: 'response', 
+          responseType: 'json' 
+        }
+      ).subscribe((matchedPagesResponse: HttpResponse<PageSearchResultView[]>) => {
+        if (matchedPagesResponse.body == null) {
+          return reject('Get all page based on search string failed!');
+        }
+        return resolve(matchedPagesResponse.body);
+      });
+    });
+  }
+
     return new Promise((resolve, reject) => {
       const url = 'http://localhost:3000/pages';
       this.http.post<Page>(url, { 'content': content }, 

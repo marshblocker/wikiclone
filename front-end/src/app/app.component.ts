@@ -72,6 +72,7 @@ export class AppComponent implements OnInit {
 
   isViewingArticle(): boolean {
     return this.currentRoute.startsWith('/wiki/') &&
-           !(this.currentRoute.split('/wiki/')[1].includes('/'));
+           !(this.currentRoute.split('/wiki/')[1].includes('/')) &&
+           !(this.currentRoute.split('/wiki/')[1].startsWith('search?'));
   }
 }
