@@ -14,7 +14,7 @@ class UserCreateController {
             if (!userId) {
                 throw CustomError.MissingRequiredURLParamAttr('user_id');
             }
-            utils.checkUserInfo(info, ['username', 'password', 'email']);
+            utils.checkUserInfo(info);
 
             const hash = await utils.hashPassword(info['password']);
 

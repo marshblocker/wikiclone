@@ -13,7 +13,7 @@ class UserUpdateController {
             if (!userId) {
                 throw CustomError.MissingRequiredURLParamAttr('user_id');
             }
-            utils.checkUserInfo({ 'username': username }, ['username']);
+            utils.checkUserInfo({ 'username': username });
 
             const result = await this._updateUserName(userId, username);
             let updatedUsername = result[0][0][0];
@@ -46,7 +46,7 @@ class UserUpdateController {
             if (!userId) {
                 throw CustomError.MissingRequiredURLParamAttr('user_id');
             }
-            utils.checkUserInfo({ 'password': password }, ['password']);
+            utils.checkUserInfo({ 'password': password });
 
             const hash = await utils.hashPassword(password);
 
@@ -80,7 +80,7 @@ class UserUpdateController {
             if (!userId) {
                 throw CustomError.MissingRequiredURLParamAttr('user_id');
             }
-            utils.checkUserInfo({ 'email': email }, ['email']);
+            utils.checkUserInfo({ 'email': email });
 
             const result = await this._updateEmail(userId, email);
             let updatedEmail = result[0][0][0];

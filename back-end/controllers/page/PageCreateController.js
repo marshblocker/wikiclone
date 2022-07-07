@@ -23,7 +23,7 @@ class PageCreateController {
             if (!pageId) {
                 throw CustomError.MissingRequiredURLParamAttr('page_id');
             }
-            utils.checkUserInfo({ 'username': username }, ['username']);
+            utils.checkUserInfo({ 'username': username });
             utils.checkPageContent(content);
 
             // To comply with JS naming convention.
