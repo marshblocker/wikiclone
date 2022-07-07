@@ -1,4 +1,5 @@
 var express = require('express');
+const utils = require('../utils');
 
 const PageDAO = require('../DAO/PageDAO');
 const PageCreateController = require('../controllers/page/PageCreateController');
@@ -12,15 +13,12 @@ const pageReadController = new PageReadController(pageDAO);
 const pageUpdateController = new PageUpdateController(pageDAO);
 const pageDeleteController = new PageDeleteController(pageDAO);
 
-// const utils = require('../utils');
-
 var router = express.Router();
 
 router.get('/:page_id', async (req, res) => await pageReadController.readPage(req, res));
 router.get('/', async (req, res) => await pageReadController.readAllPages(req, res));
 
-router.get('/', (req, res) => pageReadController.readAllPages(req, res));
-router.get('/:page_id', (req, res) => pageReadController.readPage(req, res));
+router.use(utils.parseToken);
 
 router.post('/', async (req, res) => await pageCreateController.createPage(req, res));
 
