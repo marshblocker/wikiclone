@@ -1,6 +1,9 @@
 const CustomError = require('../../error');
 const utils = require('../../utils');
 
+const PageEditDAO = require('../../DAO/PageEditDAO');
+const pageEditDAO = new PageEditDAO();
+
 class PageDeleteController {
     constructor(pageDAO) {
         this.pageDAO = pageDAO;
@@ -18,6 +21,8 @@ class PageDeleteController {
             }
 
             const result = await this._deletePage(pageId);
+            await pageEditDAO.deletePageEditsOfDeletedPage(pageId);
+
             let deletedPage = result[0][0][0];
             deletedPage['freeze_page'] = (deletedPage['freeze_page'] === 1) ? true : false;
 
