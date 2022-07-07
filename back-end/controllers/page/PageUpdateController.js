@@ -81,10 +81,12 @@ class PageUpdateController {
             }
     
             const result = await this._updateFreezePage(pageId, username, userId, freezePage);
-            let updatedFreezePage = { 
-                "freeze_page": ((result[0][0][0]['freeze_page'] === 1) ? true : false) 
-            };
-            return res.status(200).json(updatedFreezePage);
+            let updatedPage = result[0][0][0];
+            updatedPage['freeze_page'] = (updatedPage['freeze_page'] === 1) ? true : false;
+
+            const formattedUpdatedPage = utils.formatPageContent(updatedPage);
+    
+            return res.status(200).json(formattedUpdatedPage);
         } catch (error) {
             if (error.code) {
                 return res.status(error.code).json({ 
