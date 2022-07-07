@@ -37,6 +37,17 @@ class PageDAO {
         }
     }
 
+    async readPagesBasedOnSearchString(searchString) {
+        try {
+            return await knex.raw(
+                'CALL read_pages_based_on_search_string(?)',
+                [searchString]
+            );
+        } catch (error) {
+            throw this._handleDBError(error);
+        }
+    }
+
     async updateContent(pageId, username, userId, content) {
         try {
             const { title, imageUrl, lead, body } = content;

@@ -5,7 +5,7 @@ const utils = require('../../utils');
 
 class PageReadController {
     constructor(pageDAO) {
-        this.pageDAO = pageDAO
+        this.pageDAO = pageDAO;
     }
 
     async readPage(req, res) {
@@ -112,22 +112,30 @@ class PageReadController {
 
     async readAllPages(req, res) {
         try {
-            const result = await this._readAllPages();
-            const pages = result[0][0];
-            for (let i = 0; i < pages.length; i++) {
-                pages[i]['freeze_page'] = (pages[i]['freeze_page'] === 1) ? true : false; 
-
-                // This is the expected response format.
-                pages[i].content = {
-                    title: pages[i].title,
-                    image_url: pages[i].image_url,
-                    lead: pages[i].lead,
-                    body: pages[i].body
-                };
-                delete pages[i].title;
-                delete pages[i].image_url;
-                delete pages[i].lead;
-                delete pages[i].body;
+            const searchString = req.query['contains'];
+            let result;
+            let pages;
+            if (searchString) {
+                result = await this._readPagesBasedOnSearchString(searchString);
+                pages = result[0][0];
+            } else {
+                result = await this._readAllPages();
+                pages = result[0][0];
+                for (let i = 0; i < pages.length; i++) {
+                    pages[i]['freeze_page'] = (pages[i]['freeze_page'] === 1) ? true : false; 
+    
+                    // This is the expected response format.
+                    pages[i].content = {
+                        title: pages[i].title,
+                        image_url: pages[i].image_url,
+                        lead: pages[i].lead,
+                        body: pages[i].body
+                    };
+                    delete pages[i].title;
+                    delete pages[i].image_url;
+                    delete pages[i].lead;
+                    delete pages[i].body;
+                }
             }
             return res.status(200).json(pages);
         } catch (error) {
@@ -146,6 +154,14 @@ class PageReadController {
     async _readAllPages() {
         try {
             return await this.pageDAO.readAllPages();
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async _readPagesBasedOnSearchString(searchString) {
+        try {
+            return await this.pageDAO.readPagesBasedOnSearchString(searchString);
         } catch (error) {
             throw error;
         }
