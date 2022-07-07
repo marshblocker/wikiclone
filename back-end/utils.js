@@ -51,6 +51,8 @@ const utils = {
             throw CustomError.InvalidAttributeValue('info');
         }
 
+        const attributeNames = Object.keys(info);
+
         const infoKeys = Object.keys(info);
         for (let i = 0; i < infoKeys.length; i++) {
             this.checkWhiteSpace(info[infoKeys[i]], infoKeys[i]);
@@ -64,6 +66,9 @@ const utils = {
         }
         if (attributeNames.includes('email')) {
             this.checkEmail(info['email']);
+        }
+        if (attributeNames.includes('role')) {
+            this.checkRole(info['role']);
         }
     },
 
