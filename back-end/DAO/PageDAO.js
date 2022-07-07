@@ -9,7 +9,7 @@ class PageDAO {
         try {
             const { title, imageUrl, lead, body } = content;
             return await knex.raw(
-                'CALL create_page(?, ?, ?, ?, ?)',
+                'CALL create_page(?, ?, ?, ?, ?, ?, ?)',
                 [pageId, title, username, userId, imageUrl, lead, body]
             );
         } catch (error) {
@@ -52,8 +52,8 @@ class PageDAO {
         try {
             const { title, imageUrl, lead, body } = content;
             return await knex.raw(
-                'CALL update_content(?, ?, ?, ?, ?)',
-                [username, userId, pageId, title, imageUrl, lead, body]
+                'CALL update_content(?, ?, ?, ?, ?, ?, ?)',
+                [pageId, username, userId, title, imageUrl, lead, body]
             );
         } catch (error) {
             throw this._handleDBError(error);
@@ -63,7 +63,7 @@ class PageDAO {
     async updateFreezePage(pageId, username, userId, freezePage) {
         try {
             return await knex.raw(
-                'CALL update_freeze_page(?, ?)',
+                'CALL update_freeze_page(?, ?, ?, ?)',
                 [pageId, username, userId, freezePage]
             );
         } catch (error) {
