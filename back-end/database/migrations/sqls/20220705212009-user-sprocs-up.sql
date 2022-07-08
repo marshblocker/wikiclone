@@ -36,6 +36,17 @@ BEGIN
     SELECT `user_id`, `username`, `email`, `role`, `can_edit` FROM `users` WHERE `user_id` = p_user_id;
 END;
 
+CREATE PROCEDURE `read_user_info_with_matching_username_or_email` 
+(
+    IN username_or_email VARCHAR(320)
+)
+BEGIN
+    SELECT * 
+	FROM `users` 
+	WHERE (BINARY `username` = username_or_email) OR 
+		  (BINARY `email` = username_or_email);
+END;
+
 CREATE PROCEDURE `read_user_password_hash` 
 (
     IN p_user_id CHAR(9)

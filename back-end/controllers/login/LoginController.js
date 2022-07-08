@@ -3,6 +3,9 @@ const jwt = require('jsonwebtoken');
 const constants = require('../../constants');
 const CustomError = require('../../error');
 
+const UserDAO = require('../../DAO/UserDAO');
+const userDAO = new UserDAO();
+
 
 class LoginController {
     constructor(userReadController) {
@@ -12,20 +15,18 @@ class LoginController {
     async loginUser(req, res) {
         try {
             const credentials = req.body.credentials;
-            const allUsersInfo = (await this.userReadController._readAllUsersInfo())[0][0];
-            let userInfo;
-            for (let i = 0; i < allUsersInfo.length; i++) {
-                userInfo = allUsersInfo[i];
-                if (userInfo['username'] === credentials['usernameOrEmail'] || 
-                        userInfo['email'] === credentials['usernameOrEmail']) {
-                    break;
-                }
+            let userInfo = await userDAO
+                .readUserInfoWithMatchingUsernameOrEmail(credentials['usernameOrEmail']);
+
+            if (userInfo == undefined) {
+                throw CustomError.UserDoesNotExist();
             }
+
             const passwordHash = (await this.userReadController
                 ._readUserPasswordHash(userInfo['user_id']))[0][0][0]['password_hash'];
 
-            const correctPassword = await bcrypt.compare(credentials['password'], passwordHash);
-            if (!correctPassword) {
+            const isCorrectPassword = await bcrypt.compare(credentials['password'], passwordHash);
+            if (!isCorrectPassword) {
                 throw CustomError.WrongPassword();
             }
 

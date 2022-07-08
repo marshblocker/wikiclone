@@ -44,7 +44,8 @@ class CustomError {
     IDNotFixedLength = (attributeSpecifics) => new SpecificReturnedError(400, `400 Bad Request: The length of the provided ${attributeSpecifics.resourceName} id is not equal to ${attributeSpecifics.fixed_length}.`, null, 1025);
     DuplicateQueryParameter = (givenQueryParameter) => new SpecificReturnedError(400, `400 Bad Request: The ${givenQueryParameter} query parameter was already used.`, null, 1026);
     WrongPassword = () => new ReturnedError(400, '400 Bad Request: Wrong password.', 1027);
-    NoJWTPassed = () => new ReturnedError(400, '400 Bad Request: No JSON Web Token passed.', 1028)
+    NoJWTPassed = () => new ReturnedError(400, '400 Bad Request: No JSON Web Token passed.', 1028);
+    UserDoesNotExist = () => new ReturnedError(400, '400 Bad Request: The given user credentials does not match an existing user in the database.', 1029);
 
     // Code 403: Client has no access to the requested resource or action to a resource.
     ForbidCreatePage = () => new ReturnedError(403, '403 Forbidden: The user is not allowed to create a new page.', 2001);
