@@ -40,7 +40,7 @@ class PageUpdateController {
             const result = await this._updateContent(pageId, username, userId, content);
             let updatedPage = result[0][0][0];
             updatedPage['freeze_page'] = (updatedPage['freeze_page'] === 1) ? true : false;
-
+            
             const formattedUpdatedPage = utils.formatPageContent(updatedPage);
 
             return res.status(200).json(formattedUpdatedPage);
@@ -67,7 +67,10 @@ class PageUpdateController {
 
     async updateFreezePage(req, res) {
         try {
-            if (!req.parsedToken || req.parsedToken.role === 'user' || !req.parsedToken.canEdit) {
+            if (!req.parsedToken) {
+                throw CustomError.NoJWTPassed();
+            }
+            if (req.parsedToken.role === 'user' || !req.parsedToken.canEdit) {
                 throw CustomError.ForbidFreezePage();
             }
 
