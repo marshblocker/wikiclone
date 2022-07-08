@@ -7,7 +7,9 @@ import { Router } from '@angular/router';
 import { OutputData } from '@editorjs/editorjs';
 
 import { PageEditor } from 'src/app/classes/page-editor.class';
-import { PageContent } from 'src/app/interfaces/page.interface';
+import { PageEdit } from 'src/app/interfaces/page-edit.interface';
+import { Page, PageContent } from 'src/app/interfaces/page.interface';
+import { PageEditService } from 'src/app/services/page-edit.service';
 import { PageService } from 'src/app/services/page.service';
 import { TokenService } from 'src/app/services/token.service';
 import { PageHTML } from '../../classes/page-html.class';
@@ -28,7 +30,8 @@ export class NewPageEditorComponent implements OnInit {
   constructor(private pageService: PageService, 
               private sanitizer: DomSanitizer, 
               private router: Router,
-              private tokenService: TokenService) {}
+              private tokenService: TokenService,
+              private pageEditService: PageEditService) {}
 
   ngOnInit(): void {
     if (!this.tokenService.tokenInCookie()) {
@@ -55,12 +58,21 @@ export class NewPageEditorComponent implements OnInit {
     };
 
     this.pageService.submitNewPage(content)
-      .then(pageId => {
-        this.router.navigateByUrl('/wiki/' + pageId)
-          .then(navigated => {
-            if (!navigated) {
-              console.log('Failed to go to the newly-created page.');
-            }
+      .then((newPage: Page) => {
+        const editSummary = 'First article edit.';
+        newPage.timestamp = newPage.timestamp
+          .replace('T', ' ')
+          .split('.')[0];
+        this.pageEditService.submitNewPageEdit(newPage, editSummary)
+          .then((newPageEdit: PageEdit) => {
+            console.log(newPageEdit);
+            this.router.navigateByUrl('/wiki/' + newPage['page_id'])
+              .then(navigated => {
+                if (!navigated) {
+                  console.log('Failed to go to the newly-created page.');
+                }
+              })
+              .catch(console.log);
           })
           .catch(console.log);
       })
