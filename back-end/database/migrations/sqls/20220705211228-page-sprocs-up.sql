@@ -109,11 +109,11 @@ BEGIN
         `page_version` = `page_version` + 1
     WHERE `page_id` = p_page_id;
 
-    SELECT `title`, `image_url`, `lead`, `body` 
+    COMMIT;
+
+    SELECT * 
     FROM `pages` 
     WHERE `page_id` = p_page_id;
-    
-    COMMIT;
 END;
 
 CREATE PROCEDURE `update_freeze_page`(
@@ -137,7 +137,10 @@ BEGIN
         `freeze_page` = p_freeze_page,
         `page_version` = `page_version` + 1
     WHERE `page_id` = p_page_id;
-    SELECT `freeze_page` FROM `pages` WHERE `page_id` = p_page_id;
+    
+    SELECT * 
+    FROM `pages` 
+    WHERE `page_id` = p_page_id;
     
     COMMIT;
 END;
