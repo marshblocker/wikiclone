@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoginCredentials, UserPublic } from 'src/app/interfaces/user.interface';
 import { TokenService } from 'src/app/services/token.service';

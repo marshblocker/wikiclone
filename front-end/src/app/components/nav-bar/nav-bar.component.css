@@ -30,6 +30,7 @@
 .nav-bar-small-screen .flex-right-side .search
 {
     width: 10em;
+    max-width: 10em;
 }
 
 .nav-bar-large-screen

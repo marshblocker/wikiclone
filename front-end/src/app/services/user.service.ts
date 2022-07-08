@@ -51,8 +51,8 @@ export class UserService {
       const url = 'http://localhost:3000/users';
       this.http.get<{'info': UserPublic}[]>(url, 
         {
-          headers: { 'Authorization': document.cookie }, 
-          observe: 'response', 
+          headers: { 'Authorization': document.cookie },
+          observe: 'response',
           responseType: 'json'
         }
       ).subscribe((response: HttpResponse<{'info': UserPublic}[]>) => {

@@ -32,7 +32,6 @@ class UserReadController {
     async readCurrentUserInfo(req, res) {
         try {
             const userId = req.parsedToken['userId'];
-            console.log(req.parsedToken);
             if (!userId) {
                 throw CustomError.NoJWTPassed();
             }

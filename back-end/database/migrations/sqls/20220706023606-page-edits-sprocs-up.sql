@@ -34,6 +34,7 @@ BEGIN
         `username`,
         `role`,
         `page_id`,
+        `freeze_page`,
         `title`,
         `image_url`,
         `lead`,
@@ -49,10 +50,11 @@ BEGIN
         p_username,
         p_role,
         p_page_id,
+        p_freeze_page,
         p_title,
         p_image_url,
         p_lead,
-        p_body,
+        p_body
     );
 
     COMMIT;
@@ -83,13 +85,13 @@ END;
 
 CREATE PROCEDURE `read_page_edits_by_page_id`
 (
-    IN p_page_id CHAR(9);
+    IN p_page_id CHAR(9)
 )
 BEGIN
     SELECT *
     FROM `page_edits`
     WHERE `page_id` = p_page_id;
-DECLARE
+END;
 
 CREATE PROCEDURE `update_edit_summary`
 (

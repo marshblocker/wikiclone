@@ -130,7 +130,6 @@ export class ExistingPageEditorComponent implements OnInit {
         if (!navigated) {
           console.log('Failed to go to the updated page.');
         }
-        console.log('yo');
       })
       .catch(console.log);
   }

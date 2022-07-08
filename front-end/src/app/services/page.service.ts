@@ -41,7 +41,7 @@ export class PageService {
       ).subscribe((allPagesResponse: HttpResponse<Page[]>) => {
         let allPageId: string[] = [];
         if (allPagesResponse.body === null) {
-          return reject('Get all page request failed!');
+          return reject('Get all page id request failed!');
         }
         allPagesResponse.body.forEach(page => {
           allPageId.push(page.page_id);
