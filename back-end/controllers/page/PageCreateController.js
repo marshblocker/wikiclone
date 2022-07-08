@@ -12,7 +12,10 @@ class PageCreateController {
 
     async createPage(req, res) {
         try {
-            if (!req.parsedToken || !req.parsedToken.canEdit) {
+            if (!req.parsedToken) {
+                throw CustomError.NoJWTPassed();
+            }
+            if (!req.parsedToken.canEdit) {
                 throw CustomError.ForbidCreatePage();
             }
 

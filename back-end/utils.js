@@ -146,15 +146,19 @@ const utils = {
     },
 
     parseToken(req, res, next) {
-        console.log('Hi');
-        if (req.get('Authorization') == null) {
+        if (req.get('Authorization') == '') {
             req.parsedToken = null;
             next();
         }
         const token = req.get('Authorization').split('=')[1];
         if (!token) {
-            return res.status(400).json({ message: 'No token found.' });
+            let err = CustomError.NoJWTPassed();
+            return res.status(400).json({ 
+                message: err.message, 
+                customCode: err.customCode 
+            });
         }
+        // TODO: Return unauthorized access if verify failed.
         const parsedToken = jwt.verify(token, constants.jwt.ACCESS_TOKEN_SECRET);
         req.parsedToken = parsedToken;
         next();

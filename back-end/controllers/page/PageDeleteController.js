@@ -11,7 +11,10 @@ class PageDeleteController {
 
     async deletePage(req, res) {
         try {
-            if (!req.parsedToken || req.parsedToken.role === 'user' || !req.parsedToken.canEdit) {
+            if (!req.parsedToken) {
+                throw CustomError.NoJWTPassed();
+            }
+            if (req.parsedToken.role === 'user' || !req.parsedToken.canEdit) {
                 throw CustomError.ForbidDeletePage();
             }
 

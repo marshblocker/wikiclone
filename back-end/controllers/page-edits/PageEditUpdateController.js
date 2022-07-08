@@ -8,7 +8,10 @@ class PageEditUpdateController {
 
     async updateEditSummary(req, res) {
         try {
-            if (!req.parsedToken || !req.parsedToken.canEdit) {
+            if (!req.parsedToken) {
+                throw CustomError.NoJWTPassed();
+            }
+            if (!req.parsedToken.canEdit) {
                 throw CustomError.ForbidEditPage();
             }
             const pageEditId = req.params['page_edit_id'];
