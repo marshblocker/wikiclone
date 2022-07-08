@@ -22,8 +22,7 @@ class PageUpdateController {
             const username = req.parsedToken.username;
             const userId = req.parsedToken.userId;
             let freezePage = (await pageReadController._readPage(pageId));
-            freezePage = freezePage[0][0][0]['freeze_page'];
-            console.log(freezePage);
+            freezePage = (freezePage[0][0][0]['freeze_page'] === 1) ? true : false;
             if (freezePage) {
                 throw CustomError.ForbidEditPage();
             }
