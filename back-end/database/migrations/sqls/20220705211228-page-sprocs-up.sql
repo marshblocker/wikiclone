@@ -108,7 +108,7 @@ BEGIN
         `body` = p_body,
         `page_version` = `page_version` + 1
     WHERE `page_id` = p_page_id;
-
+    
     COMMIT;
 
     SELECT * 
@@ -164,7 +164,7 @@ BEGIN
     
     COMMIT;
 
-    SELECT p_username;
+    SELECT `page_id` FROM `pages` WHERE `username` = p_username;
 END;
 
 CREATE PROCEDURE `delete_page`
