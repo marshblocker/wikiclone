@@ -2,6 +2,7 @@
 //       the page_id exists in the database.
 
 const knex = require('../database/knex');
+const redis = require('../database/redis');
 const CustomError = require('../error');
 
 class PageDAO {
@@ -19,9 +20,40 @@ class PageDAO {
 
     async readPage(pageId) {
         try {
-            return await knex.raw(
-                'CALL read_page(?)', [pageId]
-            );
+            if (await redis.exists(pageId)) {
+                console.log('Already cached!');
+                let cachedPage = await redis.hgetall(pageId);
+
+                // The triple brackets are needed to match the format 
+                // of the returned data via the stored procedure call.
+                return [[[cachedPage]]];
+            } else {
+                console.log('Not cached!');
+                let res = await knex.raw(
+                    'CALL read_page(?)', [pageId]
+                );
+
+                let page = res[0][0][0];
+                redis
+                    .pipeline()
+                    .hset(pageId,
+                        'page_version', page['page_version'],
+                        'timestamp', page['timestamp'],
+                        'username', page['username'],
+                        'user_id', page['user_id'],
+                        'freeze_page', page['freeze_page'],
+                        'title', page['title'],
+                        'image_url', page['image_url'],
+                        'lead', page['lead'],
+                        'body', page['body']
+                    )
+                    .expire(pageId, 180) // Expires after 3 minutes.
+                    .exec((err, results) => {
+                        if (err) throw err;
+                    })
+
+                return res;
+            }
         } catch (error) {
             throw this._handleDBError(error);
         }
@@ -51,10 +83,12 @@ class PageDAO {
     async updateContent(pageId, username, userId, content) {
         try {
             const { title, imageUrl, lead, body } = content;
-            return await knex.raw(
+            let res = await knex.raw(
                 'CALL update_content(?, ?, ?, ?, ?, ?, ?)',
                 [pageId, username, userId, title, imageUrl, lead, body]
             );
+            await redis.del(pageId);
+            return res;
         } catch (error) {
             throw this._handleDBError(error);
         }
@@ -62,10 +96,12 @@ class PageDAO {
 
     async updateFreezePage(pageId, username, userId, freezePage) {
         try {
-            return await knex.raw(
+            let res = await knex.raw(
                 'CALL update_freeze_page(?, ?, ?, ?)',
                 [pageId, username, userId, freezePage]
             );
+            await redis.del(pageId);
+            return res;
         } catch (error) {
             throw this._handleDBError(error);
         }
@@ -73,10 +109,18 @@ class PageDAO {
 
     async updateUsername(userId, username) {
         try {
-            return await knex.raw(
+            let res = await knex.raw(
                 'CALL update_username_in_pages(?, ?)',
                 [userId, username]
             );
+
+            let pageIds = [];
+            for (let i = 0; i < res[0][0].length; i++) {
+                pageIds.push(res[0][0][i]['page_id']);
+            }
+            await redis.del(...pageIds);
+
+            return res;
         } catch (error) {
             throw this._handleDBError(error);
         }
@@ -90,6 +134,7 @@ class PageDAO {
             await knex.raw(
                 'CALL delete_page(?)', [pageId]
             );
+            await redis.del(pageId);
             return deletedPage;
         } catch (error) {
             throw this._handleDBError(error);
