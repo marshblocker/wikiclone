@@ -1,6 +1,6 @@
 <div class="search-entry" *ngIf="finishedProcessing">
   <h3>
-    <a routerLink="/wiki/{{ page.page_id }}">
+    <a routerLink="/wiki/{{ page.title }}">
       {{ page.title }}
     </a>
   </h3>
@@ -14,7 +14,7 @@
   </p>
   <p id="last-edited-by">
     Last edited by
-    <a routerLink="/user/{{ page.user_id }}/profile">{{ page.username }}</a>
-    on {{page.timestamp}}.
+    <a routerLink="/user/{{ page.username }}/profile">{{ page.username }}</a>
+    on {{ page.timestamp | date: "medium" }}.
   </p>
 </div>
