@@ -23,7 +23,8 @@
 
 #update-article-preview-btn,
 #update-article-btn,
-#cancel-update-btn
+#cancel-update-btn,
+#freeze-article-btn
 {
     margin-top: 1em;
     margin-bottom: 1em;
@@ -40,4 +41,10 @@
     min-height: 10em;
     background-color: #ffffff;
     padding: 1em;
+}
+
+#edit-summary-input
+{
+    width: 50%;
+    height: 2em;
 }
