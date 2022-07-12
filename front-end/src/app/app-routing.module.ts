@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { AdminDashboardComponent } from './components/admin-dashboard/admin-dashboard.component';
 import { ExistingPageEditorComponent } from './components/existing-page-editor/existing-page-editor.component';
 import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
@@ -67,6 +68,12 @@ const routes: Routes = [
     title: 'Process Register'
   },
   {
+  {
+    path: 'user/:username/admin',
+    component: AdminDashboardComponent,
+    title: 'Admin Dashboard',
+    data: { pageType: 'Admin Dashboard' }
+  },
     path: 'user/register',
     component: RegisterComponent,
     title: 'Registration',

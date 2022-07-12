@@ -25,6 +25,7 @@ import { UserProfileComponent } from './components/user-profile/user-profile.com
 import { TokenExpiredComponent } from './components/token-expired/token-expired.component';
 import { SearchResultComponent } from './components/search-result/search-result.component';
 import { SearchEntryComponent } from './components/search-entry/search-entry.component';
+import { AdminDashboardComponent } from './components/admin-dashboard/admin-dashboard.component';
 
 @NgModule({
   declarations: [
@@ -45,7 +46,7 @@ import { SearchEntryComponent } from './components/search-entry/search-entry.com
     UserProfileComponent,
     TokenExpiredComponent,
     SearchResultComponent,
-    SearchEntryComponent
+    AdminDashboardComponent
   ],
   imports: [
     BrowserModule,
