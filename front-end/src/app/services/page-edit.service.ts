@@ -22,6 +22,7 @@ export class PageEditService {
           'edit_summary': editSummary,
           'page_id': page_id,
           'freeze_page': freeze_page,
+          'current_title': content.title,
           'content': content 
         }, 
         { 
@@ -35,6 +36,60 @@ export class PageEditService {
           }
           return resolve(newPageEditResponse.body);
         });
+    });
+  }
+
+  getUserPageEdits(username: string): Promise<PageEdit[]> {
+    return new Promise((resolve, reject) => {
+      const url = 'http://localhost:3000/page-edits?username=' + username;
+      this.http.get<PageEdit[]>(url, 
+        { 
+          headers: { 'Authorization': document.cookie }, 
+          observe: 'response', 
+          responseType: 'json'
+        }
+      ).subscribe((userPageEditsResponse: HttpResponse<PageEdit[]>) => {
+        if (userPageEditsResponse.body === null) {
+          return reject('Failed to get user page edits!');
+        }
+        return resolve(userPageEditsResponse.body);
+      })
+    });
+  }
+
+  getPageEditByPageTitleAndPageVersion(pageTitle: string, pageVersion: string): Promise<PageEdit> {
+    return new Promise((resolve, reject) => {
+      const url = 'http://localhost:3000/page-edits?page_title=' + pageTitle + '&page_version=' + pageVersion;
+      this.http.get<PageEdit>(url, 
+        { 
+          headers: { 'Authorization': document.cookie }, 
+          observe: 'response', 
+          responseType: 'json'
+        }
+      ).subscribe((pageEditResponse: HttpResponse<PageEdit>) => {
+        if (pageEditResponse.body === null) {
+          return reject('Failed to get user page edits!');
+        }
+        return resolve(pageEditResponse.body);
+      })
+    });
+  }
+
+  getAllPageEditsOfAPage(pageTitle: string): Promise<PageEdit[]> {
+    return new Promise((resolve, reject) => {
+      const url = 'http://localhost:3000/page-edits?page_title=' + pageTitle;
+      this.http.get<PageEdit[]>(url,
+        { 
+          headers: { 'Authorization': document.cookie }, 
+          observe: 'response', 
+          responseType: 'json'
+        }
+      ).subscribe((pageEditsResponse: HttpResponse<PageEdit[]>) => {
+        if (pageEditsResponse.body === null) {
+          return reject('Failed to get page edits of a page.');
+        }
+        return resolve(pageEditsResponse.body);
+      })
     })
   }
 }
