@@ -1,6 +1,7 @@
 // TODO: Validate that when updating, reading, or deleting a page,
 //       the page_id exists in the database.
 
+const constants = require('../constants');
 const knex = require('../database/knex');
 const redis = require('../database/redis');
 const CustomError = require('../error');
@@ -47,7 +48,7 @@ class PageDAO {
                         'lead', page['lead'],
                         'body', page['body']
                     )
-                    .expire(pageId, 180) // Expires after 3 minutes.
+                    .expire(pageId, constants.reddis.CACHE_EXPIRATION_TIME)
                     .exec((err, results) => {
                         if (err) throw err;
                     })
