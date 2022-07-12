@@ -6,6 +6,7 @@ import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
 import { NewPageEditorComponent } from './components/new-page-editor/new-page-editor.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
+import { PageVersionListComponent } from './components/page-version-list/page-version-list.component';
 import { PageVersionViewComponent } from './components/page-version-view/page-version-view.component';
 import { PageViewComponent } from './components/page-view/page-view.component';
 import { ProcessLoginComponent } from './components/process-login/process-login.component';
@@ -36,7 +37,7 @@ const routes: Routes = [
     data: { pageType: '' }
   },
   {
-    path: 'wiki/:page_id/edit',
+    path: 'wiki/:title/edit',
     component: ExistingPageEditorComponent,
     title: 'Edit Article',
     data: { pageType: 'Edit Article' },
@@ -64,6 +65,13 @@ const routes: Routes = [
     data: { pageType: 'Article Past Version' }
   },
   {
+    path: 'wiki/:title/versions',
+    component: PageVersionListComponent,
+    title: 'Article Edit History',
+    data: { pageType: 'Article Edit History' }
+  },
+  {
+    path: 'wiki/:title',
     component: PageViewComponent,
     title: 'WikiClone Article',
     data: { pageType: 'Article' },

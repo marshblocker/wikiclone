@@ -1,0 +1,45 @@
+<div *ngIf="renderReady" class="page-version-list">
+  <h2>Edit History</h2>
+  <ul class="vertical-links-ul">
+    <div *ngFor="let pageEdit of pageEdits; index as i">
+      <a
+        [routerLink]="
+          i === 0
+            ? '/wiki/' + pageEdit.current_title
+            : '/wiki/' + pageEdit.current_title + '/versions/' + pageEdit.page_version
+        "
+        style="text-decoration: none; color: inherit"
+      >
+        <li class="no-bullet-li">
+          <div style="display: flex; justify-content: space-between">
+            <div
+              *ngIf="i === 0; then currentVersion; else previousVersion"
+            ></div>
+            <ng-template #currentVersion>
+              <h3>Version {{ pageEdit.page_version }} (Current version)</h3>
+            </ng-template>
+            <ng-template #previousVersion>
+              <h3>Version {{ pageEdit.page_version }}</h3>
+            </ng-template>
+
+            <p>
+              {{ pageEdit.timestamp | date: "medium" }}
+            </p>
+          </div>
+
+          Contributed by
+          <a routerLink="/user/{{ pageEdit.username }}/profile">{{
+            pageEdit.username
+          }}</a
+          >.
+          <p>
+            Edit Summary: <em>{{ pageEdit.edit_summary }} </em>
+          </p>
+        </li>
+      </a>
+    </div>
+  </ul>
+  <a routerLink="/wiki/{{ pageTitle }}">
+    <button>Return to article</button>
+  </a>
+</div>
