@@ -25,10 +25,23 @@ table
     flex: 1 1 0px;
 }
 
+.col-header
+{
+    margin-bottom: 0.5em;
+}
+
 #col1
 {
-    border-right: 1px solid #a2a9b1;
     margin-right: 2em;
+    border-right: 1px solid #a2a9b1;
+}
+
+#user-info
+{
+    display: flex;
+    flex-flow: column nowrap;
+    padding-right: 2em;
+    margin-bottom: 14em;
 }
 
 #user-info-table td:nth-child(1)
@@ -45,6 +58,7 @@ table
 {
     padding-left: 10px;
     border-bottom: 1px solid #a2a9b1;
+    border-right: 1px solid #a2a9b1;
 }
 
 #user-info-table td:nth-child(3)
@@ -54,4 +68,34 @@ table
 
 .update-user-info div > * {
     margin-right: 5px;
+}
+
+#page-contributions-list
+{
+    display: flex;
+    flex-flow: column nowrap;
+    height: 400px;
+    margin-right: 10em;
+    margin-bottom: 2em;
+    overflow-y: auto;
+}
+
+#page-contributions-list h1,
+#page-contributions-list h2,
+#page-contributions-list h3
+{
+    font-family: monospace, monospace;
+}
+
+#page-contributions-list li
+{
+    padding-top: 1em;
+    padding-left: 2em;
+    background-color: gainsboro;
+    border-bottom: 1px solid #a2a9b1;
+}
+
+#page-contributions-list li:hover
+{
+    background-color: #a2a9b1;
 }
