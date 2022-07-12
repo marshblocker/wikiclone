@@ -2,6 +2,7 @@ import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { NavigationEnd, Router, RoutesRecognized } from '@angular/router';
 import { UserPublic } from './interfaces/user.interface';
+import { PageService } from './services/page.service';
 import { TokenService } from './services/token.service';
 import { UserService } from './services/user.service';
 
@@ -15,10 +16,15 @@ export class AppComponent implements OnInit {
   pageType = 'Article'; // This is passed to the navBar.
   currentRoute!: string;
   currentUserInfo: UserPublic | null = null;
+  freezePage!: boolean;
   loggedIn = false;
   viewingArticle = false;
 
-  constructor(private router: Router, private location: Location, private userService: UserService, private tokenService: TokenService) {}
+  constructor(private router: Router, 
+              private location: Location, 
+              private userService: UserService, 
+              private tokenService: TokenService,
+              private pageService: PageService) {}
 
   ngOnInit(): void {
     this.router.events.subscribe(event => {
@@ -51,6 +57,14 @@ export class AppComponent implements OnInit {
           this.loggedIn = false;
         }
         this.viewingArticle = this.isViewingArticle();
+        if (this.viewingArticle) {
+          const pageTitle = this.currentRoute.split('/wiki/')[1];
+          this.pageService.getPageByTitle(pageTitle)
+            .then(page => {
+              this.freezePage = page.freeze_page;
+            })
+            .catch(console.log);
+        }
       }
     })
   }
