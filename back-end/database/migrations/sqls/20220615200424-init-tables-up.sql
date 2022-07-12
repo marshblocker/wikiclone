@@ -10,6 +10,9 @@ CREATE TABLE `users` (
  PRIMARY KEY (`user_id`)
 );
 
+INSERT INTO `users`
+VALUES ('xdZWspFv2', 'admin', '$2b$10$qBIq2TyD/Il//nJw8s1tU.q.oKjXmTKOVSsmUqe8PO8xBq1SDkvQq', 'admin@gmail.com', 'admin', '1');
+
 CREATE TABLE `pages` (
  -- Meta-content 
  `page_id` CHAR(9) NOT NULL UNIQUE,
