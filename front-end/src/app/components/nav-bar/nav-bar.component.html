@@ -44,11 +44,23 @@
         </li>
         <li *ngIf="loggedIn" class="no-bullet-li horizontal-links-li">
           <a
-            routerLink="/user/{{currentUser}}/profile"
+            routerLink="/user/{{ currentUsername }}/profile"
             ariaCurrentWhenActive="page"
             class="small-anchor"
             title="View/Edit your User Profile."
-            >{{currentUser}}</a
+            >{{ currentUser }}</a
+          >
+        </li>
+        <li
+          *ngIf="loggedIn && currentRole === 'admin'"
+          class="no-bullet-li horizontal-links-li"
+        >
+          <a
+            routerLink="/user/{{ currentUsername }}/admin"
+            ariaCurrentWhenActive="page"
+            class="small-anchor"
+            title="View/Edit your User Profile."
+            >Admin Dashboard</a
           >
         </li>
         <li *ngIf="loggedIn" class="no-bullet-li horizontal-links-li">
@@ -80,7 +92,12 @@
           <!-- <li class="no-bullet-li horizontal-links-li">
             <a href="#" class="small-anchor">Read</a>
           </li> -->
-          <li *ngIf="loggedIn" class="no-bullet-li horizontal-links-li">
+          <li class="no-bullet-li horizontal-links-li">
+            <a routerLink="{{ currentRoute }}/versions" class="small-anchor"
+              >View History</a
+            >
+          </li>
+          <li *ngIf="loggedIn && currentCanEdit && (currentRole === 'admin' || (currentRole === 'user' && !freezePage)) " class="no-bullet-li horizontal-links-li">
             <a
               routerLink="{{ currentRoute }}/edit"
               ariaCurrentWhenActive="page"
@@ -88,9 +105,6 @@
               >Edit Article</a
             >
           </li>
-          <!-- <li class="no-bullet-li horizontal-links-li"> TO BE IMPLEMENTED
-            <a href="#" class="small-anchor">View History</a>
-          </li> -->
         </ul>
 
         <div class="search">
@@ -101,7 +115,12 @@
             id="search-bar"
             placeholder="Search Wikipedia"
           />
-          <input class="search-button" type="button" value="Go" (click)="performSearch()" />
+          <input
+            class="search-button"
+            type="button"
+            value="Go"
+            (click)="performSearch()"
+          />
         </div>
       </div>
     </div>
