@@ -12,14 +12,14 @@ export class RandomPageComponent implements OnInit {
   constructor(private router: Router, private pageService: PageService) { }
 
   ngOnInit(): void {
-    this.pageService.getAllPageId()
-      .then((allPageId: string[]) => {
+    this.pageService.getAllPageTitles()
+      .then((allPageTitles: string[]) => {
         const pickRandomElement = (arr: any[]) => {
           return arr[Math.floor(Math.random()*arr.length)]
         };
 
-        const randomPageId = pickRandomElement(allPageId);
-        this.router.navigateByUrl('/wiki/' + randomPageId)
+        const randomPageTitle = pickRandomElement(allPageTitles);
+        this.router.navigateByUrl('/wiki/' + randomPageTitle)
           .then(navigated => {
             if (!navigated) {
               console.log('Failed to go to the random page.');

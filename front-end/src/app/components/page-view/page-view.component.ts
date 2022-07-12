@@ -1,10 +1,9 @@
-import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer, SafeHtml, Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { OutputBlockData, OutputData } from '@editorjs/editorjs';
 import { PageHTML } from 'src/app/classes/page-html.class';
-import { PageContent } from 'src/app/interfaces/page.interface';
+import { Page } from 'src/app/interfaces/page.interface';
 import { PageService } from 'src/app/services/page.service';
 
 @Component({
@@ -20,8 +19,7 @@ export class PageViewComponent implements OnInit {
               private router: Router, 
               private pageService: PageService, 
               private sanitizer: DomSanitizer,
-              private titleService: Title,
-              private location: Location) { }
+              private titleService: Title) { }
 
   ngOnInit(): void {
     this._renderPageView()
@@ -38,24 +36,22 @@ export class PageViewComponent implements OnInit {
   _renderPageView(): Promise<null> {
     return new Promise((resolve, reject) => {
       this.route.paramMap.subscribe(params => {
-        const pageId = params.get('page_id');
-        if (typeof pageId !== 'string') {
-          console.log('Error: pageId is null.');
+        const pageTitle = params.get('title');
+        if (pageTitle == null) {
+          console.log('Error: pageTitle is null.');
           return;
         }
-        this.pageService.getPageContent(pageId)
-          .then((pageContent: PageContent) => {
+        this.pageTitle = pageTitle;
+        this.pageService.getPageByTitle(pageTitle)
+          .then((page: Page) => {
             // Convert pageContent to its HTML format.
-            this.pageTitle = pageContent.title;
-            this.location.go('/wiki/' + this.pageTitle);
-
-            const pageImageUrl = pageContent.image_url;
+            const pageImageUrl = page.content.image_url;
             const pageLeadData: OutputBlockData<string, any>[] = 
-              (JSON.parse(pageContent.lead) as OutputData).blocks;
+              (JSON.parse(page.content.lead) as OutputData).blocks;
             const pageBodyData: OutputBlockData<string, any>[] = 
-              (JSON.parse(pageContent.body) as OutputData).blocks;
+              (JSON.parse(page.content.body) as OutputData).blocks;
   
-            const pageHTML = new PageHTML(this.pageTitle, pageImageUrl, pageLeadData, pageBodyData);
+            const pageHTML = new PageHTML(pageTitle, pageImageUrl, pageLeadData, pageBodyData);
             this.pageSafeHTML = this.sanitizer.bypassSecurityTrustHtml(
               pageHTML.getHTMLRepresentation()
             );

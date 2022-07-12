@@ -12,5 +12,6 @@ export interface PageEdit {
 
     page_id: string;
     freeze_page: string;
+    current_title: string;
     content: PageContent;
 }

@@ -66,7 +66,7 @@ export class NewPageEditorComponent implements OnInit {
         this.pageEditService.submitNewPageEdit(newPage, editSummary)
           .then((newPageEdit: PageEdit) => {
             console.log(newPageEdit);
-            this.router.navigateByUrl('/wiki/' + newPage['page_id'])
+            this.router.navigateByUrl('/wiki/' + newPage.content.title)
               .then(navigated => {
                 if (!navigated) {
                   console.log('Failed to go to the newly-created page.');
