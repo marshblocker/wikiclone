@@ -27,6 +27,7 @@ CREATE TABLE `pages` (
  `body` TEXT NOT NULL,
 
  PRIMARY KEY (`page_id`),
+ INDEX search_page_index (`title`, `lead`)
 );
 
 CREATE TABLE `page_edits` (
