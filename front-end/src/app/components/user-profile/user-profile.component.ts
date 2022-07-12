@@ -41,7 +41,7 @@ export class UserProfileComponent implements OnInit {
       }
       this.userService.readUser(username)
         .then((userInfo: UserPublic) => {
-    this.userService.readCurrentUser()
+          this.userService.readCurrentUser()
             .then((currentUserInfo: UserPublic) => {
               if (currentUserInfo.role === 'admin') {
                 this.viewerIsAdmin = true;
@@ -53,8 +53,8 @@ export class UserProfileComponent implements OnInit {
               this.pageEditService.getUserPageEdits(username)
                 .then((userPageEdits: PageEdit[]) => {
                   this.pageEdits = userPageEdits;
-      })
-      .catch(console.log);
+                })
+                .catch(console.log);
             })
             .catch(console.log);
         })
@@ -140,6 +140,42 @@ export class UserProfileComponent implements OnInit {
       .catch(console.log);
   }
 
+  updateRole() {
+    const newRole = (this.userInfo?.role === 'user') ? 'admin' : 'user';
+    if (this.userInfo == null) {
+      console.log('No user found!');
+      return;
+    }
+
+    const proceed = window.confirm('Update role?');
+    if (!proceed) return;
+
+    this.userService.updateRole(this.userInfo?.user_id, newRole)
+      .then(newRole => {
+        console.log('new role:', newRole);
+        location.reload();
+      })
+      .catch(console.log);
+  }
+
+  updateCanEdit() {
+    const newCanEdit = (this.userInfo?.can_edit) ? false : true;
+    if (this.userInfo == null) {
+      console.log('No user found!');
+      return;
+    }
+
+    const proceed = window.confirm('Update can_edit?');
+    if (!proceed) return;
+
+    this.userService.updateCanEdit(this.userInfo?.user_id, newCanEdit)
+      .then(newCanEdit => {
+        console.log('new can_edit:', newCanEdit);
+        location.reload();
+      })
+      .catch(console.log);
+  }
+
   deleteAccount() {
     if (this.userInfo == null) {
       console.log('No user found!');
@@ -149,7 +185,7 @@ export class UserProfileComponent implements OnInit {
     const proceed = window.confirm('Are you sure you want to delete your account?');
     if (!proceed) return;
 
-    this.userService.deleteUser(this.userInfo.user_id)
+    this.userService.deleteUser(this.userInfo.username)
       .then(deletedUserInfo => {
         console.log(deletedUserInfo);
         this.logout();

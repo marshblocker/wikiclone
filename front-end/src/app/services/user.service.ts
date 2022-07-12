@@ -68,9 +68,9 @@ export class UserService {
     });
   }
 
-  public readUser(userId: string): Promise<UserPublic> {
+  public readUser(username: string): Promise<UserPublic> {
     return new Promise((resolve, reject) => {
-      const url = 'http://localhost:3000/users/' + userId + '/info';
+      const url = 'http://localhost:3000/users/' + username + '/info';
       this.http.get<{'info': UserPublic}>(url, 
         {
           headers: { 'Authorization': document.cookie }, 
@@ -158,9 +158,45 @@ export class UserService {
     })
   } 
 
-  public deleteUser(userId: string): Promise<UserPublic> {
+  public updateRole(userId: string, newRole: string): Promise<string> {
     return new Promise((resolve, reject) => {
-      const url = 'http://localhost:3000/users/' + userId;
+      const url = 'http://localhost:3000/users/' + userId + '/role';
+      this.http.patch<{role: string}>(url, {role: newRole}, 
+        {
+          headers: { 'Authorization': document.cookie }, 
+          observe: 'response', 
+          responseType: 'json'
+        }
+      ).subscribe((response: HttpResponse<{role: string}>) => {
+        if (response.body == null) {
+          return reject('Failed to update username!');
+        }
+        return resolve(response.body.role);
+      })
+    })
+  }
+  
+  public updateCanEdit(userId: string, canEdit: boolean): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const url = 'http://localhost:3000/users/' + userId + '/can_edit';
+      this.http.patch<{can_edit: string}>(url, {can_edit: canEdit}, 
+        {
+          headers: { 'Authorization': document.cookie }, 
+          observe: 'response', 
+          responseType: 'json'
+        }
+      ).subscribe((response: HttpResponse<{can_edit: string}>) => {
+        if (response.body == null) {
+          return reject('Failed to update username!');
+        }
+        return resolve(response.body.can_edit);
+      })
+    })
+  }   
+
+  public deleteUser(username: string): Promise<UserPublic> {
+    return new Promise((resolve, reject) => {
+      const url = 'http://localhost:3000/users/' + username;
       this.http.delete<{info: UserPublic}>(url, 
         {
           headers: { 'Authorization': document.cookie }, 
@@ -169,7 +205,7 @@ export class UserService {
         }  
       ).subscribe((response: HttpResponse<{info: UserPublic}>) => {
         if (response.body == null) {
-          return reject('Failede to delete user');
+          return reject('Failed to delete user');
         }
         return resolve(response.body.info);
       })
