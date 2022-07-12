@@ -19,7 +19,7 @@
         >Random Article</a
       >
     </li>
-    <li class="no-bullet-li" *ngIf="loggedIn">
+    <li class="no-bullet-li" *ngIf="loggedIn && canEdit">
       <a
         class="small-anchor"
         routerLink="/wiki/new"

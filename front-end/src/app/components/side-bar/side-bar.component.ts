@@ -7,6 +7,7 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class SideBarComponent implements OnInit {
   @Input() loggedIn = false;
+  @Input() canEdit? = false;
 
   constructor() { }
 
