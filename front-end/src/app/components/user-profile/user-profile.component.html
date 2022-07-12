@@ -2,11 +2,12 @@
   <h1>{{ userInfo.username }}'s Profile</h1>
   <div class="multi-col">
     <div id="col1" class="col">
+      <div id="user-info">
       <div style="margin-bottom: 1em">
-        <h2>User Information</h2>
-        <small
+          <h2 class="col-header">User Information</h2>
+          <small *ngIf="viewingOwnProfile"
           ><em
-            >Note: You need to sign in again if you update your user
+              >Note: You need to sign in again after you update your user
             information.</em
           ></small
         >
@@ -15,8 +16,11 @@
         <tr>
           <td><strong>Username</strong></td>
           <td>{{ userInfo.username }}</td>
-          <td>
-            <button (click)="startUpdateUsername()" *ngIf="!isUpdatingUserInfo">
+            <td *ngIf="viewingOwnProfile || viewerIsAdmin">
+              <button
+                (click)="startUpdateUsername()"
+                *ngIf="!isUpdatingUserInfo"
+              >
               Change username
             </button>
           </td>
@@ -24,8 +28,11 @@
         <tr>
           <td><strong>Password</strong></td>
           <td><em>Cannot be shown here.</em></td>
-          <td>
-            <button (click)="startUpdatePassword()" *ngIf="!isUpdatingUserInfo">
+            <td *ngIf="viewingOwnProfile || viewerIsAdmin">
+              <button
+                (click)="startUpdatePassword()"
+                *ngIf="!isUpdatingUserInfo"
+              >
               Change password
             </button>
           </td>
@@ -33,7 +40,7 @@
         <tr>
           <td><strong>Email</strong></td>
           <td>{{ userInfo.email }}</td>
-          <td>
+            <td *ngIf="viewingOwnProfile || viewerIsAdmin">
             <button (click)="startUpdateEmail()" *ngIf="!isUpdatingUserInfo">
               Change email
             </button>
@@ -42,12 +49,24 @@
         <tr>
           <td><strong>Role</strong></td>
           <td>
-            {{ userInfo.role.charAt(0).toUpperCase() + userInfo.role.slice(1) }}
+              {{
+                userInfo.role.charAt(0).toUpperCase() + userInfo.role.slice(1)
+              }}
+            </td>
+            <td *ngIf="viewerIsAdmin">
+              <button (click)="updateRole()">
+                {{userInfo.role === 'user' ? 'Promote to admin' : 'Demote to user'}}
+              </button>
           </td>
         </tr>
         <tr>
           <td><strong>Allowed to Edit</strong></td>
           <td>{{ userInfo.can_edit === true ? "Yes" : "No" }}</td>
+            <td *ngIf="viewerIsAdmin">
+              <button (click)="updateCanEdit()">
+                {{userInfo.can_edit === true ? 'Remove editing rights' : 'Return editing rights'}}
+              </button>
+            </td>
         </tr>
       </table>
 
