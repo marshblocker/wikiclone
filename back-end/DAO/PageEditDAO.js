@@ -4,14 +4,14 @@ const CustomError = require('../error');
 class PageEditDAO {
     async createPageEdit(pageEditId, pageVersion, timestamp, 
                          editSummary, userId, username, 
-                         role, pageId, freezePage, content) {
+                         role, pageId, freezePage, currentTitle, content) {
         try {
             const { title, imageUrl, lead, body } = content;
             return await knex.raw(
-                'CALL create_page_edit(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+                'CALL create_page_edit(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
                 [
                     pageEditId, pageVersion, timestamp, editSummary, userId, username, 
-                    role, pageId, freezePage, title, imageUrl, lead, body
+                    role, pageId, freezePage, currentTitle, title, imageUrl, lead, body
                 ]
             );
         } catch (error) {
@@ -29,11 +29,33 @@ class PageEditDAO {
         }
     }
 
-    async readPageEditsByPageId(pageId) {
+    async readPageEditByPageTitleAndPageVersion(pageTitle, pageVersion) {
         try {
             return await knex.raw(
-                'CALL read_page_edits_by_page_id()',
-                [pageId]
+                'CALL read_page_edit_by_page_title_and_page_version(?, ?)', 
+                [pageTitle, pageVersion]
+            );
+        } catch (error) {
+            throw this._handleDBError(error);
+        }
+    }
+
+    async readPageEditsByPageTitle(pageTitle) {
+        try {
+            return await knex.raw(
+                'CALL read_page_edits_by_page_title(?)',
+                [pageTitle]
+            );
+        } catch (error) {
+            throw this._handleDBError(error);
+        }
+    }
+
+    async readUserPageEdits(username) {
+        try {
+            return await knex.raw(
+                'CALL read_user_page_edits(?)',
+                [username]
             );
         } catch (error) {
             throw this._handleDBError(error);
@@ -77,6 +99,17 @@ class PageEditDAO {
             return await knex.raw(
                 'CALL update_role_in_page_edits(?, ?)',
                 [userId, role]
+            );
+        } catch (error) {
+            throw this._handleDBError(error);
+        }
+    }
+
+    async updateCurrentTitle(pageId, currentTitle) {
+        try {
+            return await knex.raw(
+                'CALL update_current_title_in_page_edits(?, ?)',
+                [pageId, currentTitle]
             );
         } catch (error) {
             throw this._handleDBError(error);

@@ -26,14 +26,14 @@ END;
 
 CREATE PROCEDURE `read_user_info` 
 (
-    IN p_user_id CHAR(9)
+    IN p_username VARCHAR(20)
 )
 BEGIN
-	IF NOT EXISTS(SELECT * FROM `users` WHERE `user_id` = p_user_id) THEN
+	IF NOT EXISTS(SELECT * FROM `users` WHERE `username` = p_username) THEN
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'ResourceDNE:user';
 	END IF;
 
-    SELECT `user_id`, `username`, `email`, `role`, `can_edit` FROM `users` WHERE `user_id` = p_user_id;
+    SELECT `user_id`, `username`, `email`, `role`, `can_edit` FROM `users` WHERE `username` = p_username;
 END;
 
 CREATE PROCEDURE `read_user_info_with_matching_username_or_email` 
@@ -61,7 +61,9 @@ END;
 
 CREATE PROCEDURE `read_all_users_info` ()
 BEGIN
-    SELECT `user_id`, `username`, `email`, `role`, `can_edit` FROM `users`;
+    SELECT `user_id`, `username`, `email`, `role`, `can_edit` 
+	FROM `users`
+	ORDER BY `role` ASC, `username` ASC;
 END;
 
 CREATE PROCEDURE `update_username`
@@ -161,13 +163,13 @@ END;
 
 CREATE PROCEDURE `delete_user`
 (
-	IN p_user_id CHAR(9)
+	IN p_username VARCHAR(20)
 )
 BEGIN
-    IF NOT EXISTS(SELECT * FROM `users` WHERE `user_id` = p_user_id) THEN
+    IF NOT EXISTS(SELECT * FROM `users` WHERE `username` = p_username) THEN
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'ResourceDNE:user';
 	ELSE
 		DELETE FROM `users` 
-		WHERE `user_id` = p_user_id;
+		WHERE `username` = p_username;
 	END IF;
 END;

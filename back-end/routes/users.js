@@ -18,7 +18,7 @@ var router = express.Router();
 router.post('/', async (req, res) => await userCreateController.createUser(req, res));
 
 router.get('/', async (req, res) => await userReadController.readAllUsersInfo(req, res));
-router.get('/:user_id/info', async (req, res) => await userReadController.readUserInfo(req, res));
+router.get('/:username/info', async (req, res) => await userReadController.readUserInfo(req, res));
 
 router.use(utils.parseToken);
 
@@ -31,6 +31,6 @@ router.patch('/:user_id/email', async (req, res) => await userUpdateController.u
 router.patch('/:user_id/role', async (req, res) => await userUpdateController.updateRole(req, res));
 router.patch('/:user_id/can_edit', async (req, res) => await userUpdateController.updateCanEdit(req, res));
 
-router.delete('/:user_id', async (req, res) => await userDeleteController.deleteUser(req, res));
+router.delete('/:username', async (req, res) => await userDeleteController.deleteUser(req, res));
 
 module.exports = router;

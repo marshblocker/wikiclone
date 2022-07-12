@@ -17,7 +17,6 @@ class PageEditCreateController {
             }
 
             const pageEditId = nanoid(9);
-            console.log(pageEditId);
             const pageVersion = req.body['page_version'];
             const timestamp = req.body['timestamp'];
             const editSummary = req.body['edit_summary'];
@@ -26,6 +25,8 @@ class PageEditCreateController {
             const role = req.parsedToken.role;
             const pageId = req.body['page_id'];
             const freezePage = req.body['freeze_page'];
+            const currentTitle = req.body['current_title'];
+            console.log(currentTitle);
             const content = req.body['content'];
 
             if (!pageEditId) {
@@ -54,7 +55,8 @@ class PageEditCreateController {
 
             const result = await this._createPageEdit(
                 pageEditId, pageVersion, timestamp, editSummary,
-                userId, username, role, pageId, freezePage, content
+                userId, username, role, pageId, freezePage, currentTitle, 
+                content
             );
             let newPageEdit = result[0][0][0];
             newPageEdit['freeze_page'] = (newPageEdit['freeze_page'] === 1) ? true : false;
@@ -77,11 +79,12 @@ class PageEditCreateController {
 
     async _createPageEdit(pageEditId, pageVersion, timestamp, 
                           editSummary, userId, username, 
-                          role, pageId, freezePage, content) {
+                          role, pageId, freezePage, currentTitle, 
+                          content) {
         try {
             return await this.pageEditDAO.createPageEdit(
                 pageEditId, pageVersion, timestamp, editSummary, 
-                userId, username, role, pageId, freezePage, content
+                userId, username, role, pageId, freezePage, currentTitle, content
             );
         } catch (error) {
             throw error;

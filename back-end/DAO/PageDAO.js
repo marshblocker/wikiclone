@@ -80,6 +80,17 @@ class PageDAO {
         }
     }
 
+    async readPageBasedOnTitle(title) {
+        try {
+            return await knex.raw(
+                'CALL read_page_based_on_title(?)',
+                [title]
+            );
+        } catch (error) {
+            throw this._handleDBError(error);
+        }
+    }
+
     async updateContent(pageId, username, userId, content) {
         try {
             const { title, imageUrl, lead, body } = content;

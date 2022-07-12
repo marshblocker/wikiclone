@@ -18,6 +18,7 @@ CREATE TABLE `pages` (
  `username` VARCHAR(20) NOT NULL,
  `user_id` CHAR(9) NOT NULL,
  `freeze_page` BOOLEAN NOT NULL,
+ `current_title` VARCHAR(32) NOT NULL,
 
  -- Content  
  `title` VARCHAR(32) NOT NULL UNIQUE,
@@ -33,11 +34,14 @@ CREATE TABLE `page_edits` (
  `page_version` INT NOT NULL,
  `timestamp` DATETIME DEFAULT 0 NOT NULL,
  `edit_summary` VARCHAR(500) NOT NULL,
+
  `user_id` CHAR(9) NOT NULL,
  `username` VARCHAR(20) NOT NULL,
  `role` VARCHAR(10) NOT NULL,
+
  `page_id` CHAR(9) NOT NULL,
  `freeze_page` BOOLEAN NOT NULL,
+ `current_title` VARCHAR(32) NOT NULL,
  `title` VARCHAR(32) NOT NULL,
  `image_url` VARCHAR(2048),
  `lead` VARCHAR(3000) NOT NULL,

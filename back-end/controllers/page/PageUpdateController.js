@@ -1,8 +1,10 @@
 const CustomError = require('../../error');
 const utils = require('../../utils');
 const PageDAO = require('../../DAO/PageDAO');
+const PageEditDAO = require('../../DAO/PageEditDAO');
 const PageReadController = require('./PageReadController');
 
+const pageEditDAO = new PageEditDAO();
 const pageReadController = new PageReadController(new PageDAO());
 
 class PageUpdateController {
@@ -40,6 +42,8 @@ class PageUpdateController {
             const result = await this._updateContent(pageId, username, userId, content);
             let updatedPage = result[0][0][0];
             updatedPage['freeze_page'] = (updatedPage['freeze_page'] === 1) ? true : false;
+            
+            await pageEditDAO.updateCurrentTitle(pageId, updatedPage['current_title']);
             
             const formattedUpdatedPage = utils.formatPageContent(updatedPage);
 

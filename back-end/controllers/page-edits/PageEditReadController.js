@@ -41,12 +41,44 @@ class PageEditReadController {
         }
     }
 
+    async readPageEditByPageTitleAndPageVersion(pageTitle, pageVersion) {
+        try {
+            const result = await this._readPageEditByPageTitleAndPageVersion(pageTitle, pageVersion);
+            let pageEdit = result[0][0][0];
+            pageEdit['freeze_page'] = (pageEdit['freeze_page'] === 1) ? true : false;
+
+            const formattedPageEdit = utils.formatPageContent(pageEdit);
+
+            return formattedPageEdit;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async _readPageEditByPageTitleAndPageVersion(pageTitle, pageVersion) {
+        try {
+            return await this.pageEditDAO.readPageEditByPageTitleAndPageVersion(pageTitle, pageVersion);
+        } catch (error) {
+            throw error;
+        }
+    }
+
     async readAllPageEdits(req, res) {
         try {
-            const pageId = req.query['page_id'];
+            const pageTitle = req.query['page_title'];
+            const pageVersion = req.query['page_version'];
+            const username = req.query['username'];
+
+            if (pageVersion) {
+                const formattedPageEdit = await this.readPageEditByPageTitleAndPageVersion(pageTitle, pageVersion);
+                return res.status(200).json(formattedPageEdit);
+            }
+            
             let result;
-            if (pageId) {
-                result = await this._readPageEditsByPageId(pageId);
+            if (pageTitle) {
+                result = await this._readPageEditsByPageTitle(pageTitle);
+            } else if (username) {
+                result = await this._readUserPageEdits(username);
             } else {
                 result = await this._readAllPageEdits();
             }
@@ -81,9 +113,17 @@ class PageEditReadController {
         }
     }
 
-    async _readPageEditsByPageId(pageId) {
+    async _readPageEditsByPageTitle(pageTitle) {
         try {
-            return await this.pageEditDAO.readPageEditsByPageId(pageId);
+            return await this.pageEditDAO.readPageEditsByPageTitle(pageTitle);
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async _readUserPageEdits(username) {
+        try {
+            return await this.pageEditDAO.readUserPageEdits(username);
         } catch (error) {
             throw error;
         }

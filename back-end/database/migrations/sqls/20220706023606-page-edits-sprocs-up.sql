@@ -11,6 +11,7 @@ CREATE PROCEDURE `create_page_edit`
     IN p_role VARCHAR(10),
     IN p_page_id CHAR(9),
     IN p_freeze_page BOOLEAN,
+    IN p_current_title VARCHAR(32),
     IN p_title VARCHAR(32),
     IN p_image_url VARCHAR(2048),
     IN p_lead VARCHAR(3000),
@@ -35,6 +36,7 @@ BEGIN
         `role`,
         `page_id`,
         `freeze_page`,
+        `current_title`,
         `title`,
         `image_url`,
         `lead`,
@@ -51,6 +53,7 @@ BEGIN
         p_role,
         p_page_id,
         p_freeze_page,
+        p_current_title,
         p_title,
         p_image_url,
         p_lead,
@@ -78,9 +81,27 @@ BEGIN
 	END IF;
 END;
 
-CREATE PROCEDURE `read_all_page_edits`()
+CREATE PROCEDURE `read_page_edit_by_page_title_and_page_version`
+(
+    IN p_current_title VARCHAR(32),
+    IN p_page_version INT
+)
 BEGIN
-    SELECT * FROM `page_edits`;
+    SELECT *
+    FROM `page_edits`
+    WHERE (`current_title` = p_current_title) AND 
+          (`page_version` = p_page_version);
+END;
+
+CREATE PROCEDURE `read_page_edits_by_page_title`
+(
+    IN p_title VARCHAR(32)
+)
+BEGIN
+    SELECT *
+    FROM `page_edits`
+    WHERE `current_title` = p_title
+    ORDER BY `page_version` DESC;
 END;
 
 CREATE PROCEDURE `read_page_edits_by_page_id`
@@ -90,7 +111,24 @@ CREATE PROCEDURE `read_page_edits_by_page_id`
 BEGIN
     SELECT *
     FROM `page_edits`
-    WHERE `page_id` = p_page_id;
+    WHERE `page_id` = p_page_id
+    ORDER BY `page_version` DESC;
+END;
+
+CREATE PROCEDURE `read_user_page_edits`
+(
+    IN p_username VARCHAR(20)
+)
+BEGIN
+    SELECT *
+    FROM `page_edits`
+    WHERE `username` = p_username
+    ORDER BY `timestamp` DESC;
+END;
+
+CREATE PROCEDURE `read_all_page_edits`()
+BEGIN
+    SELECT * FROM `page_edits`;
 END;
 
 CREATE PROCEDURE `update_edit_summary`
@@ -159,6 +197,28 @@ BEGIN
     COMMIT;
 
     SELECT p_role;
+END;
+
+CREATE PROCEDURE `update_current_title_in_page_edits`
+(
+    IN p_page_id CHAR(9),
+    IN p_current_title VARCHAR(32)
+)
+BEGIN
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION, SQLWARNING
+	BEGIN
+		ROLLBACK;
+		RESIGNAL;
+	END;
+    START TRANSACTION;
+
+    UPDATE `page_edits` 
+    SET `current_title` = p_current_title 
+    WHERE `page_id` = p_page_id;
+    
+    COMMIT;
+
+    SELECT p_current_title;
 END;
 
 CREATE PROCEDURE `delete_page_edit`

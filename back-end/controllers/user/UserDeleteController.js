@@ -7,12 +7,12 @@ class UserDeleteController {
 
     async deleteUser(req, res) {
         try {
-            const userId = req.params['user_id'];
-            if (!userId) {
+            const username = req.params['username'];
+            if (!username) {
                 throw CustomError.MissingRequiredURLParamAttr('user_id');
             }
 
-            const result = await this._deleteUser(userId);
+            const result = await this._deleteUser(username);
             let info = result[0][0][0];
             info['can_edit'] = (info['can_edit'] === 1) ? true : false;
             return res.status(200).json({ "info": info });
@@ -29,9 +29,9 @@ class UserDeleteController {
         }
     }
 
-    async _deleteUser(userId) {
+    async _deleteUser(username) {
         try {
-            return await this.userDAO.deleteUser(userId);
+            return await this.userDAO.deleteUser(username);
         } catch (error) {
             throw error;
         }

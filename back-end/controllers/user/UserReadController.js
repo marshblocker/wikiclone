@@ -1,4 +1,5 @@
 const CustomError = require('../../error');
+const utils = require('../../utils');
 
 class UserReadController {
     constructor(userDAO) {
@@ -7,18 +8,16 @@ class UserReadController {
 
     async readUserInfo(req, res) {
         try {
-            const userId = req.params['user_id'];
-            if (!userId) {
-                throw CustomError.MissingRequiredURLParamAttr('user_id');
-            }
+            const username = req.params['username'];
+            utils.checkUserInfo({'username': username});
 
-            const result = await this._readUserInfo(userId);
+            const result = await this._readUserInfo(username);
             let info = result[0][0][0];
             info['can_edit'] = (info['can_edit'] === 1) ? true : false;
             return res.status(200).json({ "info": info }); 
         } catch (error) {
             if (error.code) {
-                return res.status(error.code).json({ 
+                return res.status(error.code).json({    
                     custom_code: error.custom_code, 
                     message: error.message 
                 });
@@ -31,12 +30,12 @@ class UserReadController {
 
     async readCurrentUserInfo(req, res) {
         try {
-            const userId = req.parsedToken['userId'];
-            if (!userId) {
+            const username = req.parsedToken['username'];
+            if (!username) {
                 throw CustomError.NoJWTPassed();
             }
 
-            const result = await this._readUserInfo(userId);
+            const result = await this._readUserInfo(username);
             let info = result[0][0][0];
             info['can_edit'] = (info['can_edit'] === 1) ? true : false;
             return res.status(200).json({ "info": info });
@@ -53,10 +52,9 @@ class UserReadController {
         }
     }
 
-
-    async _readUserInfo(userId) {
+    async _readUserInfo(username) {
         try {
-            return await this.userDAO.readUserInfo(userId);
+            return await this.userDAO.readUserInfo(username);
         } catch (error) {
             throw error;
         }

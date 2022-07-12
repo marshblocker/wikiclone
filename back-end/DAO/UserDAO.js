@@ -2,10 +2,10 @@ const knex = require('../database/knex');
 const CustomError = require('../error');
 
 class UserDAO {
-    async readUserInfo(userId) {
+    async readUserInfo(username) {
         try {
             return await knex.raw(
-                'CALL read_user_info(?)', [userId]
+                'CALL read_user_info(?)', [username]
             );
         } catch (error) {
             throw this._handleDBError(error);
@@ -112,13 +112,13 @@ class UserDAO {
         }
     }
 
-    async deleteUser(userId) {
+    async deleteUser(username) {
         try {
             const info = await knex.raw(
-                'CALL read_user_info(?)', [userId]
+                'CALL read_user_info(?)', [username]
             );
             await knex.raw(
-                'CALL delete_user(?)', [userId]
+                'CALL delete_user(?)', [username]
             );
             return info;
         } catch (error) {

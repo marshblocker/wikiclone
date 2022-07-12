@@ -25,6 +25,7 @@ BEGIN
         `username`, 
         `user_id`,
         `freeze_page`,
+        `current_title`,
         `title`, 
         `image_url`, 
         `lead`, 
@@ -37,6 +38,7 @@ BEGIN
         p_username,
         p_user_id,
         0,
+        p_title, 
         p_title, 
         p_image_url, 
         p_lead, 
@@ -64,7 +66,8 @@ END;
 
 CREATE PROCEDURE `read_all_pages`()
 BEGIN
-	SELECT * FROM `pages`;
+	SELECT * FROM `pages`
+    ORDER BY `title` ASC;
 END;
 
 CREATE PROCEDURE `read_pages_based_on_search_string`
@@ -78,6 +81,18 @@ BEGIN
         (`title` LIKE CONCAT('%', search_string, '%')) OR 
         (`lead` LIKE CONCAT('%', search_string, '%')) OR
         (`body` LIKE CONCAT('%', search_string, '%'));
+END;
+
+CREATE PROCEDURE `read_page_based_on_title`
+(
+	IN p_title VARCHAR(32)
+)
+BEGIN
+	IF NOT EXISTS(SELECT * FROM `pages` WHERE `title` = p_title) THEN
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'ResourceDNE:page';
+	ELSE
+		SELECT * FROM `pages` WHERE `title` = p_title;
+	END IF;
 END;
 
 CREATE PROCEDURE `update_content`
@@ -102,6 +117,7 @@ BEGIN
     SET
         `username` = p_username,
         `user_id` = p_user_id,
+        `current_title` = p_title,
         `title` = p_title,
         `image_url` = p_image_url,
         `lead` = p_lead,

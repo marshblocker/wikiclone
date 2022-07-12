@@ -1,5 +1,3 @@
-// TODO: Implement request query parameters.
-
 const CustomError = require('../../error');
 const utils = require('../../utils');
 
@@ -113,11 +111,18 @@ class PageReadController {
     async readAllPages(req, res) {
         try {
             const searchString = req.query['contains'];
+            const title = req.query['title'];
             let result;
             let pages;
             if (searchString) {
                 result = await this._readPagesBasedOnSearchString(searchString);
                 pages = result[0][0];
+            } else if (title) {
+                result = await this._readPageBasedOnTitle(title);
+                let page = result[0][0][0];
+                page = utils.formatPageContent(page);
+                page['freeze_page'] = (page['freeze_page'] === 1) ? true : false;
+                return res.status(200).json(page);
             } else {
                 result = await this._readAllPages();
                 pages = result[0][0];
@@ -162,6 +167,14 @@ class PageReadController {
     async _readPagesBasedOnSearchString(searchString) {
         try {
             return await this.pageDAO.readPagesBasedOnSearchString(searchString);
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async _readPageBasedOnTitle(title) {
+        try {
+            return await this.pageDAO.readPageBasedOnTitle(title);
         } catch (error) {
             throw error;
         }
