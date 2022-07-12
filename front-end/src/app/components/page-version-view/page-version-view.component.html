@@ -1,0 +1,10 @@
+<div *ngIf="renderReady">
+  <div class="page-view" [innerHTML]="pageSafeHTML"></div>
+  <hr />
+  <button *ngIf="!freezePage && currentUserInfo.can_edit" (click)="setThisVersionAsCurrentVersion()">
+    Restore article to this version
+  </button>
+  <a routerLink="/wiki/{{ pageCurrentTitle }}" style="text-decoration: none">
+    <button>View current version.</button>
+  </a>
+</div>

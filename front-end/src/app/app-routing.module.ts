@@ -6,6 +6,7 @@ import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
 import { NewPageEditorComponent } from './components/new-page-editor/new-page-editor.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
+import { PageVersionViewComponent } from './components/page-version-view/page-version-view.component';
 import { PageViewComponent } from './components/page-view/page-view.component';
 import { ProcessLoginComponent } from './components/process-login/process-login.component';
 import { ProcessRegisterComponent } from './components/process-register/process-register.component';
@@ -57,7 +58,12 @@ const routes: Routes = [
     data: { pageType: 'Search' }
   },
   {
-    path: 'wiki/:page_id',
+    path: 'wiki/:title/versions/:page_version',
+    component: PageVersionViewComponent,
+    title: 'WikiClone Article Past Version',
+    data: { pageType: 'Article Past Version' }
+  },
+  {
     component: PageViewComponent,
     title: 'WikiClone Article',
     data: { pageType: 'Article' },
