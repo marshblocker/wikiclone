@@ -129,7 +129,9 @@ class PageDAO {
             for (let i = 0; i < res[0][0].length; i++) {
                 pageIds.push(res[0][0][i]['page_id']);
             }
+            if (pageIds.length > 0) {
             await redis.del(...pageIds);
+            }
 
             return res;
         } catch (error) {

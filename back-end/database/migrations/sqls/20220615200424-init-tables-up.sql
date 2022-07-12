@@ -33,7 +33,7 @@ CREATE TABLE `pages` (
 CREATE TABLE `page_edits` (
  `page_edit_id` CHAR(9) NOT NULL UNIQUE,
  `page_version` INT NOT NULL,
- `timestamp` DATETIME DEFAULT 0 NOT NULL,
+ `timestamp` DATETIME NOT NULL,
  `edit_summary` VARCHAR(500) NOT NULL,
 
  `user_id` CHAR(9) NOT NULL,
