@@ -169,7 +169,21 @@ export class PageService {
     });
   }
 
-        return resolve(updatedPageResponse.body.content);
+  public updateFreezePage(pageId: string, freezePage: boolean): Promise<Page> {
+    return new Promise((resolve, reject) => {
+      const url = 'http://localhost:3000/pages/' + pageId + '/freeze_page';
+      this.http.patch<Page>(
+        url, { 'freeze_page': freezePage },
+        { 
+          headers: { 'Authorization': document.cookie }, 
+          observe: 'response', 
+          responseType: 'json'
+        }
+      ).subscribe((response: HttpResponse<Page>) => {
+        if (response.body == null) {
+          return reject('Frozen page is null!');
+        }
+        return resolve(response.body);
       })
     });
   }
