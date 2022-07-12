@@ -25,7 +25,9 @@ import { UserProfileComponent } from './components/user-profile/user-profile.com
 import { TokenExpiredComponent } from './components/token-expired/token-expired.component';
 import { SearchResultComponent } from './components/search-result/search-result.component';
 import { SearchEntryComponent } from './components/search-entry/search-entry.component';
+import { PageEditService } from './services/page-edit.service';
 import { PageVersionViewComponent } from './components/page-version-view/page-version-view.component';
+import { PageVersionListComponent } from './components/page-version-list/page-version-list.component';
 import { AdminDashboardComponent } from './components/admin-dashboard/admin-dashboard.component';
 
 @NgModule({
@@ -47,7 +49,9 @@ import { AdminDashboardComponent } from './components/admin-dashboard/admin-dash
     UserProfileComponent,
     TokenExpiredComponent,
     SearchResultComponent,
+    SearchEntryComponent,
     PageVersionViewComponent,
+    PageVersionListComponent,
     AdminDashboardComponent
   ],
   imports: [
@@ -55,7 +59,7 @@ import { AdminDashboardComponent } from './components/admin-dashboard/admin-dash
     AppRoutingModule,
     HttpClientModule
   ],
-  providers: [PageService, UserService, TokenService],
+  providers: [PageService, UserService, TokenService, PageEditService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
