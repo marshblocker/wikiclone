@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { PageEdit } from 'src/app/interfaces/page-edit.interface';
 import { UserPublic } from 'src/app/interfaces/user.interface';
+import { PageEditService } from 'src/app/services/page-edit.service';
 import { TokenService } from 'src/app/services/token.service';
 import { UserService } from 'src/app/services/user.service';
 
@@ -11,24 +13,53 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class UserProfileComponent implements OnInit {
   userInfo?: UserPublic;
+  pageEdits?: PageEdit[];
   isUpdatingUserInfo = false;
   isUpdatingUsername = false;
   isUpdatingPassword = false;
   isUpdatingEmail = false;
   passwordsMatch = true;
+  viewingOwnProfile = false;
+  viewerIsAdmin = false;
 
-  constructor(private router: Router, private userService: UserService, private tokenService: TokenService) { }
+  constructor(private router: Router,
+              private route: ActivatedRoute,
+              private userService: UserService,
+              private pageEditService: PageEditService, 
+              private tokenService: TokenService) { }
 
   ngOnInit(): void {
     if (!this.tokenService.tokenInCookie()) {
       this.router.navigateByUrl('/token_expired');
       return;
     }
+    this.route.paramMap.subscribe(params => {
+      const username = params.get('username');
+      if (username == null) {
+        console.log('Username is null!');
+        return;
+      }
+      this.userService.readUser(username)
+        .then((userInfo: UserPublic) => {
     this.userService.readCurrentUser()
-      .then(currentUserInfo => {
-        this.userInfo = currentUserInfo;
+            .then((currentUserInfo: UserPublic) => {
+              if (currentUserInfo.role === 'admin') {
+                this.viewerIsAdmin = true;
+              }
+              if (currentUserInfo.username === userInfo.username) {
+                this.viewingOwnProfile = true;
+              }
+              this.userInfo = userInfo;
+              this.pageEditService.getUserPageEdits(username)
+                .then((userPageEdits: PageEdit[]) => {
+                  this.pageEdits = userPageEdits;
       })
       .catch(console.log);
+            })
+            .catch(console.log);
+        })
+        .catch(console.log);
+    })
   }
 
   startUpdateUsername() {
