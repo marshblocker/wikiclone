@@ -82,12 +82,18 @@ const routes: Routes = [
     title: 'Process Register'
   },
   {
+    path: 'user/:username/profile',
+    component: UserProfileComponent,
+    title: 'User Profile',
+    data: { pageType: 'User Profile' }
+  },
   {
     path: 'user/:username/admin',
     component: AdminDashboardComponent,
     title: 'Admin Dashboard',
     data: { pageType: 'Admin Dashboard' }
   },
+  {
     path: 'user/register',
     component: RegisterComponent,
     title: 'Registration',
@@ -103,12 +109,6 @@ const routes: Routes = [
     component: LoginComponent,
     title: 'Sign In',
     data: { pageType: 'Sign In' }
-  },
-  {
-    path: 'user/:username/profile',
-    component: UserProfileComponent,
-    title: 'User Profile',
-    data: { pageType: 'User Profile' }
   },
   { path: '**', redirectTo: '404' },
 ];
