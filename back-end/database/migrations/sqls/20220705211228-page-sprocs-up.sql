@@ -77,6 +77,7 @@ END;
 
 CREATE PROCEDURE `read_pages_based_on_search_string`
 (
+    IN p_search_string VARCHAR(50),
     IN p_offset INT,
     IN p_limit INT
 )
@@ -84,6 +85,9 @@ BEGIN
     SELECT `page_id`, `page_version`, `timestamp`, `username`, `user_id`, `title`, `lead`
     FROM `pages`
     WHERE 
+        (`title` LIKE CONCAT('%', p_search_string, '%')) OR 
+        (`lead` LIKE CONCAT('%', p_search_string, '%')) OR
+        (`body` LIKE CONCAT('%', p_search_string, '%'))
     ORDER BY `title` ASC
     LIMIT p_offset, p_limit;
 END;

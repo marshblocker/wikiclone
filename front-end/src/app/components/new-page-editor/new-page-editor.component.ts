@@ -64,8 +64,7 @@ export class NewPageEditorComponent implements OnInit {
           .replace('T', ' ')
           .split('.')[0];
         this.pageEditService.submitNewPageEdit(newPage, editSummary)
-          .then((newPageEdit: PageEdit) => {
-            console.log(newPageEdit);
+          .then(() => {
             this.router.navigateByUrl('/wiki/' + newPage.content.title)
               .then(navigated => {
                 if (!navigated) {
