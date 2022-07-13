@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { PageEdit } from 'src/app/interfaces/page-edit.interface';
-import { PageEditService } from 'src/app/services/page-edit.service';
 
 @Component({
   selector: 'app-page-version-list',
@@ -9,12 +7,10 @@ import { PageEditService } from 'src/app/services/page-edit.service';
   styleUrls: ['./page-version-list.component.css']
 })
 export class PageVersionListComponent implements OnInit {
-  pageEdits?: PageEdit[];
+  paginationType = 'get-all-page-edits-of-page';
   pageTitle!: string;
-  latestVersion!: number;
-  renderReady = false;
 
-  constructor(private route: ActivatedRoute, private pageEditService: PageEditService) { }
+  constructor(private route: ActivatedRoute) { }
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
@@ -24,13 +20,6 @@ export class PageVersionListComponent implements OnInit {
         return;
       }
       this.pageTitle = pageTitle;
-      this.pageEditService.getAllPageEditsOfAPage(pageTitle)
-        .then((pageEdits: PageEdit[]) => {
-          this.pageEdits = pageEdits;
-          this.renderReady = true;
-        })
     })
   }
-
-
 }

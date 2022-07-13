@@ -151,37 +151,7 @@
     </div>
     <div id="col2" class="col">
       <h2 class="col-header">Page Contributions</h2>
-      <div id="page-contributions-list">
-        <ul class="vertical-links-ul">
-          <li
-            *ngFor="let pageEdit of pageEdits; index as i"
-            class="no-bullet-li"
-          >
-            <span>
-              <a
-                [routerLink]="
-                  i === 0
-                    ? '/wiki/' + pageEdit.current_title
-                    : '/wiki/' +
-                      pageEdit.current_title +
-                      '/versions/' +
-                      pageEdit.page_version
-                "
-              >
-                <h2>
-                  {{ pageEdit.current_title }}
-                </h2>
-              </a>
-              Version {{ pageEdit.page_version }} ({{
-                pageEdit.timestamp | date: "medium"
-              }})
-            </span>
-            <p>
-              <em>{{ pageEdit["edit_summary"] }}</em>
-            </p>
-          </li>
-        </ul>
-      </div>
+      <app-pagination [paginationType]="paginationType"></app-pagination>
     </div>
   </div>
 </div>

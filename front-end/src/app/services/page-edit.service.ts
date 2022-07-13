@@ -10,7 +10,7 @@ export class PageEditService {
 
   constructor(private http: HttpClient) { }
 
-  submitNewPageEdit(page: Page, editSummary: string): Promise<PageEdit> {
+  submitNewPageEdit = (page: Page, editSummary: string): Promise<PageEdit> => {
     return new Promise((resolve, reject) => {
       const url = 'http://localhost:3000/page-edits';
 
@@ -39,9 +39,9 @@ export class PageEditService {
     });
   }
 
-  getUserPageEdits(username: string): Promise<PageEdit[]> {
+  getUserPageEdits = (offset: number, limit: number, username: string): Promise<PageEdit[]> => {
     return new Promise((resolve, reject) => {
-      const url = 'http://localhost:3000/page-edits?username=' + username;
+      const url = 'http://localhost:3000/page-edits?username=' + username + '&offset=' + offset + '&limit=' + limit;
       this.http.get<PageEdit[]>(url, 
         { 
           headers: { 'Authorization': document.cookie }, 
@@ -57,7 +57,7 @@ export class PageEditService {
     });
   }
 
-  getPageEditByPageTitleAndPageVersion(pageTitle: string, pageVersion: string): Promise<PageEdit> {
+  getPageEditByPageTitleAndPageVersion = (pageTitle: string, pageVersion: string): Promise<PageEdit> => {
     return new Promise((resolve, reject) => {
       const url = 'http://localhost:3000/page-edits?page_title=' + pageTitle + '&page_version=' + pageVersion;
       this.http.get<PageEdit>(url, 
@@ -75,9 +75,9 @@ export class PageEditService {
     });
   }
 
-  getAllPageEditsOfAPage(pageTitle: string): Promise<PageEdit[]> {
+  getAllPageEditsOfAPage = (offset: number, limit: number, pageTitle: string): Promise<PageEdit[]> => {
     return new Promise((resolve, reject) => {
-      const url = 'http://localhost:3000/page-edits?page_title=' + pageTitle;
+      const url = 'http://localhost:3000/page-edits?page_title=' + pageTitle + '&offset=' + offset + '&limit=' + limit;
       this.http.get<PageEdit[]>(url,
         { 
           headers: { 'Authorization': document.cookie }, 

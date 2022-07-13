@@ -35,7 +35,7 @@ export class ProcessLoginComponent implements OnInit {
       this.userService.loginUser(credentials)
         .then(token => {
           this.tokenService.storeTokenInCookie(token, 4);
-          this.userService.readAllUsers()
+          this.userService.readAllUsers(0, 10000000)
             .then(allUsersInfo => {
               let user: UserPublic | null = null;
               for (let i = 0; i < allUsersInfo.length; i++) {

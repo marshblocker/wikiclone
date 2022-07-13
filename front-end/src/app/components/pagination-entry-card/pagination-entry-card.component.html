@@ -1,0 +1,162 @@
+<div *ngIf="type === 'user-page-edit-card'" id="user-page-edit-card">
+  <li class="no-bullet-li">
+    <span>
+      <a
+        [routerLink]="
+          i === 0
+            ? '/wiki/' + pageEdit?.current_title
+            : '/wiki/' +
+              pageEdit?.current_title +
+              '/versions/' +
+              pageEdit?.page_version
+        "
+      >
+        <h2>
+          {{ pageEdit?.current_title }}
+        </h2>
+      </a>
+      Version {{ pageEdit?.page_version }} ({{
+        pageEdit?.timestamp | date: "medium"
+      }})
+    </span>
+    <p>
+      <em>{{ pageEdit?.edit_summary }}</em>
+    </p>
+  </li>
+</div>
+
+<div *ngIf="type === 'page-edit-of-page-card'" id="page-edit-of-page-card">
+  <a
+    [routerLink]="
+      i === 0
+        ? '/wiki/' + pageEdit?.current_title
+        : '/wiki/' +
+          pageEdit?.current_title +
+          '/versions/' +
+          pageEdit?.page_version
+    "
+    style="text-decoration: none; color: inherit"
+  >
+    <li class="no-bullet-li">
+      <div style="display: flex; justify-content: space-between">
+        <div *ngIf="i === 0; then currentVersion; else previousVersion"></div>
+        <ng-template #currentVersion>
+          <h3>Version {{ pageEdit?.page_version }} (Current version)</h3>
+        </ng-template>
+        <ng-template #previousVersion>
+          <h3>Version {{ pageEdit?.page_version }}</h3>
+        </ng-template>
+
+        <p>
+          {{ pageEdit?.timestamp | date: "medium" }}
+        </p>
+      </div>
+
+      Contributed by
+      <a routerLink="/user/{{ pageEdit?.username }}/profile">{{
+        pageEdit?.username
+      }}</a
+      >.
+      <p>
+        Edit Summary: <em>{{ pageEdit?.edit_summary }} </em>
+      </p>
+    </li>
+  </a>
+</div>
+
+<div *ngIf="type === 'page-search-card'" id="page-search-card">
+  <h3>
+    <a routerLink="/wiki/{{ pageSearchEntry?.title }}">
+      {{ pageSearchEntry?.title }}
+    </a>
+  </h3>
+  <p>
+    <em>
+      <!-- {{
+        lead.length > 125 ? (lead | slice: 0:125) + "..." : lead
+      }} -->
+      <div [innerHTML]="lead"></div>
+    </em>
+  </p>
+  <p id="last-edited-by">
+    Last edited by
+    <a routerLink="/user/{{ pageSearchEntry?.username }}/profile">{{
+      pageSearchEntry?.username
+    }}</a>
+    on {{ pageSearchEntry?.timestamp | date: "medium" }}.
+  </p>
+</div>
+
+<div *ngIf="type === 'page-card'" id="page-card">
+  <li class="no-bullet-li">
+    <div style="display: flex; justify-content: space-between">
+      <div>
+        <h3 style="margin-top: 0">{{ page?.content?.title }}</h3>
+        <p><strong>Page ID:</strong> {{ page?.page_id }}</p>
+        <p><strong>Version:</strong> {{ page?.page_version }}</p>
+        <p>
+          <strong>Most Recent Edit:</strong>
+          {{ page?.timestamp | date: "medium" }} (by
+          <a routerLink="/user/{{ page?.username }}/profile">{{
+            page?.username
+          }}</a
+          >)
+        </p>
+        <p>
+          <strong>Frozen:</strong>
+          {{ page?.freeze_page === true ? "Yes" : "No" }}
+        </p>
+      </div>
+      <div
+        style="
+          display: flex;
+          flex-flow: column nowrap;
+          justify-content: space-evenly;
+        "
+      >
+        <a routerLink="/wiki/{{ page?.content?.title }}/edit">
+          <button>Edit page</button>
+        </a>
+        <button
+          (click)="adminDashboardDeletePageButtonClicked.emit(page?.page_id)"
+          style="color: red"
+        >
+          Delete page
+        </button>
+      </div>
+    </div>
+  </li>
+</div>
+
+<div *ngIf="type === 'user-card'" id="user-card">
+  <li class="no-bullet-li">
+    <div style="display: flex; justify-content: space-between">
+      <div>
+        <h3 style="margin-top: 0">{{ user?.username }}</h3>
+        <p><strong>User ID:</strong> {{ user?.user_id }}</p>
+        <p><strong>Role:</strong> {{ user?.role }}</p>
+        <p>
+          <strong>Can Edit:</strong>
+          {{ user?.can_edit === true ? "Yes" : "No" }}
+        </p>
+      </div>
+      <div
+        style="
+          display: flex;
+          flex-flow: column nowrap;
+          justify-content: space-evenly;
+        "
+      >
+        <a routerLink="/user/{{ user?.username }}/profile">
+          <button>Edit user</button>
+        </a>
+        <button
+          (click)="adminDashboardDeleteUserButtonClicked.emit(user?.username)"
+          style="color: red"
+        >
+          Delete user
+        </button>
+      </div>
+    </div>
+  </li>
+</div>

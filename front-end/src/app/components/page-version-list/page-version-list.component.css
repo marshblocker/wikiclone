@@ -1,24 +1,3 @@
-ul
-{
-    margin-bottom: 1em;
-    margin-right: 50%;
-}
-
-li
-{
-    padding-top: 1em;
-    padding-bottom: 1em;
-    padding-left: 2em;
-    padding-right: 2em;
-    background-color: gainsboro;
-    border-bottom: 1px solid #a2a9b1;
-}
-
-li:hover
-{
-    background-color: #a2a9b1;
-}
-
 .page-version-list
 {
     margin-bottom: 1em;

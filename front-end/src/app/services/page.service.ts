@@ -9,7 +9,7 @@ export class PageService {
 
   constructor(private http: HttpClient) { }
 
-  public getPage(pageId: string): Promise<Page> {
+  public getPage = (pageId: string): Promise<Page> => {
     return new Promise((resolve, reject) => {
       const url = 'http://localhost:3000/pages/' + pageId;
       this.http.get<Page>(
@@ -28,7 +28,7 @@ export class PageService {
     });
   }
 
-  public getPageByTitle(title: string): Promise<Page> {
+  public getPageByTitle = (title: string): Promise<Page> => {
     return new Promise((resolve, reject) => {
       const url = 'http://localhost:3000/pages?title=' + title;
       this.http.get<Page>(
@@ -39,7 +39,6 @@ export class PageService {
           responseType: 'json' 
         }
       ).subscribe((pageResponse: HttpResponse<Page>) => {
-        console.log(pageResponse);
         if (pageResponse.body === null) {
           return reject('Page is null!');
         }
@@ -48,9 +47,9 @@ export class PageService {
     });
   }
 
-  public getAllPages(): Promise<Page[]> {
+  public getAllPages = (offset: number, limit: number): Promise<Page[]> => {
     return new Promise((resolve, reject) => {
-      const url = 'http://localhost:3000/pages';
+      const url = 'http://localhost:3000/pages?' + 'offset=' + offset + '&limit=' + limit;
       this.http.get<Page[]>(
         url, 
         { 
@@ -67,32 +66,9 @@ export class PageService {
     });
   }
 
-  public getAllPageId(): Promise<string[]> {
+  public getAllPageTitles = (): Promise<string[]> => {
     return new Promise((resolve, reject) => {
-      const url = 'http://localhost:3000/pages';
-      this.http.get<Page[]>(
-        url, 
-        { 
-          headers: { 'Authorization': document.cookie }, 
-          observe: 'response', 
-          responseType: 'json' 
-        }
-      ).subscribe((allPagesResponse: HttpResponse<Page[]>) => {
-        let allPageId: string[] = [];
-        if (allPagesResponse.body === null) {
-          return reject('Get all page id request failed!');
-        }
-        allPagesResponse.body.forEach(page => {
-          allPageId.push(page.page_id);
-        })
-        return resolve(allPageId);
-      });
-    });
-  }
-
-  public getAllPageTitles(): Promise<string[]> {
-    return new Promise((resolve, reject) => {
-      const url = 'http://localhost:3000/pages';
+      const url = 'http://localhost:3000/pages?offset=0&limit=1000000';
       this.http.get<Page[]>(
         url, 
         { 
@@ -113,9 +89,9 @@ export class PageService {
     });
   }
 
-  public getPagesBasedOnSearchString(searchString: string): Promise<PageSearchResultView[]> {
+  public getPagesBasedOnSearchString = (offset: number, limit: number, searchString: string): Promise<PageSearchResultView[]> => {
     return new Promise((resolve, reject) => {
-      const url = 'http://localhost:3000/pages?contains=' + searchString;
+      const url = 'http://localhost:3000/pages?contains=' + searchString + '&offset=' + offset + '&limit=' + limit;
       this.http.get<PageSearchResultView[]>(
         url,
         {
@@ -132,7 +108,7 @@ export class PageService {
     });
   }
 
-  public submitNewPage(content: PageContent): Promise<Page> {
+  public submitNewPage = (content: PageContent): Promise<Page> => {
     return new Promise((resolve, reject) => {
       const url = 'http://localhost:3000/pages';
       this.http.post<Page>(url, { 'content': content }, 
@@ -150,7 +126,7 @@ export class PageService {
     })
   }
 
-  public updatePage(pageId: string, content: PageContent): Promise<Page> {
+  public updatePage = (pageId: string, content: PageContent): Promise<Page> => {
     return new Promise((resolve, reject) => {
       const url = 'http://localhost:3000/pages/' + pageId + '/content';
       this.http.patch<Page>(
@@ -169,7 +145,7 @@ export class PageService {
     });
   }
 
-  public updateFreezePage(pageId: string, freezePage: boolean): Promise<Page> {
+  public updateFreezePage = (pageId: string, freezePage: boolean): Promise<Page> => {
     return new Promise((resolve, reject) => {
       const url = 'http://localhost:3000/pages/' + pageId + '/freeze_page';
       this.http.patch<Page>(
@@ -188,7 +164,7 @@ export class PageService {
     });
   }
 
-  public deletePage(pageId: string): Promise<Page> {
+  public deletePage = (pageId: string): Promise<Page> => {
     return new Promise((resolve, reject) => {
       const url = 'http://localhost:3000/pages/' + pageId;
       this.http.delete<Page>(url,

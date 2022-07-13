@@ -64,23 +64,28 @@ BEGIN
 	END IF;
 END;
 
-CREATE PROCEDURE `read_all_pages`()
+CREATE PROCEDURE `read_all_pages`
+(
+    IN p_offset INT,
+    IN p_limit INT
+)
 BEGIN
 	SELECT * FROM `pages`
-    ORDER BY `title` ASC;
+    ORDER BY `title` ASC
+    LIMIT p_offset, p_limit;
 END;
 
 CREATE PROCEDURE `read_pages_based_on_search_string`
 (
-    IN search_string VARCHAR(50)
+    IN p_offset INT,
+    IN p_limit INT
 )
 BEGIN
     SELECT `page_id`, `page_version`, `timestamp`, `username`, `user_id`, `title`, `lead`
     FROM `pages`
     WHERE 
-        (`title` LIKE CONCAT('%', search_string, '%')) OR 
-        (`lead` LIKE CONCAT('%', search_string, '%')) OR
-        (`body` LIKE CONCAT('%', search_string, '%'));
+    ORDER BY `title` ASC
+    LIMIT p_offset, p_limit;
 END;
 
 CREATE PROCEDURE `read_page_based_on_title`

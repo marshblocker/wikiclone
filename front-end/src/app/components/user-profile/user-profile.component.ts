@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PageEdit } from 'src/app/interfaces/page-edit.interface';
 import { UserPublic } from 'src/app/interfaces/user.interface';
-import { PageEditService } from 'src/app/services/page-edit.service';
 import { TokenService } from 'src/app/services/token.service';
 import { UserService } from 'src/app/services/user.service';
 
@@ -13,7 +11,6 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class UserProfileComponent implements OnInit {
   userInfo?: UserPublic;
-  pageEdits?: PageEdit[];
   isUpdatingUserInfo = false;
   isUpdatingUsername = false;
   isUpdatingPassword = false;
@@ -21,11 +18,11 @@ export class UserProfileComponent implements OnInit {
   passwordsMatch = true;
   viewingOwnProfile = false;
   viewerIsAdmin = false;
+  paginationType = 'get-all-page-edits-of-user';
 
   constructor(private router: Router,
               private route: ActivatedRoute,
               private userService: UserService,
-              private pageEditService: PageEditService, 
               private tokenService: TokenService) { }
 
   ngOnInit(): void {
@@ -50,11 +47,6 @@ export class UserProfileComponent implements OnInit {
                 this.viewingOwnProfile = true;
               }
               this.userInfo = userInfo;
-              this.pageEditService.getUserPageEdits(username)
-                .then((userPageEdits: PageEdit[]) => {
-                  this.pageEdits = userPageEdits;
-                })
-                .catch(console.log);
             })
             .catch(console.log);
         })

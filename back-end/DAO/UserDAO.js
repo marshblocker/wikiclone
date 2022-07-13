@@ -24,10 +24,11 @@ class UserDAO {
         }
     }
 
-    async readAllUsersInfo() {
+    async readAllUsersInfo(offset, limit) {
         try {
             return await knex.raw(
-                'CALL read_all_users_info()'
+                'CALL read_all_users_info(?, ?)',
+                [offset, limit]
             );
         } catch (error) {
             throw this._handleDBError(error);

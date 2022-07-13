@@ -1,0 +1,64 @@
+/* Styling user page edit cards. */
+
+#user-page-edit-card h1,
+#user-page-edit-card h2,
+#user-page-edit-card h3
+{
+    font-family: monospace, monospace;
+}
+
+#user-page-edit-card
+{
+    padding-top: 1em;
+    padding-left: 2em;
+    background-color: gainsboro;
+    border-bottom: 1px solid #a2a9b1;
+}
+
+#user-page-edit-card:hover
+{
+    background-color: #a2a9b1;
+}
+
+/* Styling page's page edit cards. */
+
+#page-edit-of-page-card ul
+{
+    margin-bottom: 1em;
+    margin-right: 50%;
+}
+
+#page-edit-of-page-card li
+{
+    padding-top: 1em;
+    padding-bottom: 1em;
+    padding-left: 2em;
+    padding-right: 2em;
+    background-color: gainsboro;
+    border-bottom: 1px solid #a2a9b1;
+}
+
+#page-edit-of-page-card li:hover
+{
+    background-color: #a2a9b1;
+}
+
+/* Styling page search card. */
+
+#page-search-card
+{
+    background-color: #f6f6f6;
+    padding: 0.25em;
+    padding-left: 2em;
+    margin-top: 1em;
+}
+
+/* Styling page and user card. */
+
+#page-card, #user-card
+{
+    padding-top: 1em;
+    padding-bottom: 1em;
+    margin-right: 2em;
+    border-bottom: 1px solid #a2a9b1;
+}

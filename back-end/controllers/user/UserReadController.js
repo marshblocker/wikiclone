@@ -62,7 +62,12 @@ class UserReadController {
 
     async readAllUsersInfo(req, res) {
         try {
-            const result = await this._readAllUsersInfo();
+            const offset = req.query['offset'];
+            const limit = req.query['limit'];
+            if (!offset || !limit) {
+                throw CustomError.MissingRequiredURLQueryAttr('offset or limit');
+            }
+            const result = await this._readAllUsersInfo(offset, limit);
             let allUsersInfo = result[0][0];
 
             for (let i = 0; i < allUsersInfo.length; i++) {
@@ -83,9 +88,9 @@ class UserReadController {
         }
     }
 
-    async _readAllUsersInfo() {
+    async _readAllUsersInfo(offset, limit) {
         try {
-            return await this.userDAO.readAllUsersInfo();
+            return await this.userDAO.readAllUsersInfo(offset, limit);
         } catch (error) {
             throw error;
         }

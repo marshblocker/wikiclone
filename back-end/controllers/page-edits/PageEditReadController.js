@@ -76,9 +76,19 @@ class PageEditReadController {
             
             let result;
             if (pageTitle) {
-                result = await this._readPageEditsByPageTitle(pageTitle);
+                const offset = req.query['offset'];
+                const limit = req.query['limit'];
+                if (!offset || !limit) {
+                    throw CustomError.MissingRequiredURLQueryAttr('offset or limit');
+                }
+                result = await this._readPageEditsByPageTitle(pageTitle, offset, limit);
             } else if (username) {
-                result = await this._readUserPageEdits(username);
+                const offset = req.query['offset'];
+                const limit = req.query['limit'];
+                if (!offset || !limit) {
+                    throw CustomError.MissingRequiredURLQueryAttr('offset or limit');
+                }
+                result = await this._readUserPageEdits(username, offset, limit);
             } else {
                 result = await this._readAllPageEdits();
             }
@@ -113,17 +123,17 @@ class PageEditReadController {
         }
     }
 
-    async _readPageEditsByPageTitle(pageTitle) {
+    async _readPageEditsByPageTitle(pageTitle, offset, limit) {
         try {
-            return await this.pageEditDAO.readPageEditsByPageTitle(pageTitle);
+            return await this.pageEditDAO.readPageEditsByPageTitle(pageTitle, offset, limit);
         } catch (error) {
             throw error;
         }
     }
 
-    async _readUserPageEdits(username) {
+    async _readUserPageEdits(username, offset, limit) {
         try {
-            return await this.pageEditDAO.readUserPageEdits(username);
+            return await this.pageEditDAO.readUserPageEdits(username, offset, limit);
         } catch (error) {
             throw error;
         }

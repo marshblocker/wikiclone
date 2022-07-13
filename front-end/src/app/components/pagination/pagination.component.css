@@ -1,0 +1,40 @@
+#pagination-entries-listing
+{
+    margin-bottom: 1em;
+}
+
+#get-all-page-edits-of-user
+{
+    display: flex;
+    flex-flow: column nowrap;
+    height: 400px;
+    margin-right: 10em;
+    margin-bottom: 2em;
+    overflow-y: auto;
+}
+
+#get-all-pages ul,
+#get-all-users ul
+{
+    margin-top: 0;
+}
+
+#get-all-pages li,
+#get-all-users li
+{
+    border-bottom: 1px solid #a2a9b1;
+}
+
+.admin-dashboard-listing
+{
+    margin-right: 30%;
+    padding-left: 2em;
+    border: 1px solid #a2a9b1;
+    border-top: none;
+    background-color: gainsboro;
+}
+
+#search-controller
+{
+    margin-bottom: 1em;
+}

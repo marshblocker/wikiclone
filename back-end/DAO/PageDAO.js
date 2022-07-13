@@ -60,21 +60,22 @@ class PageDAO {
         }
     }
 
-    async readAllPages() {
+    async readAllPages(offset, limit) {
         try {
             return await knex.raw(
-                'CALL read_all_pages()'
+                'CALL read_all_pages(?, ?)',
+                [offset, limit]
             );
         } catch (error) {
             throw this._handleDBError(error);
         }
     }
 
-    async readPagesBasedOnSearchString(searchString) {
+    async readPagesBasedOnSearchString(searchString, offset, limit) {
         try {
             return await knex.raw(
-                'CALL read_pages_based_on_search_string(?)',
-                [searchString]
+                'CALL read_pages_based_on_search_string(?, ?, ?)',
+                [searchString, offset, limit]
             );
         } catch (error) {
             throw this._handleDBError(error);

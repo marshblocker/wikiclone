@@ -9,7 +9,7 @@ export class UserService {
 
   constructor(private http: HttpClient) { }
 
-  public registerNewUser(info: UserRequiredInfo): Promise<UserPublic> {
+  public registerNewUser = (info: UserRequiredInfo): Promise<UserPublic> => {
     return new Promise((resolve, reject) => {
       const url = 'http://localhost:3000/users';
       this.http.post<{ info: UserPublic }>(url, { 'info': info }, 
@@ -27,7 +27,7 @@ export class UserService {
     });
   }
 
-  public loginUser(credentials: LoginCredentials): Promise<string> {
+  public loginUser = (credentials: LoginCredentials): Promise<string> => {
     return new Promise((resolve, reject) => {
       const url = 'http://localhost:3000/login';
       this.http.post<{token: string}>(url, { 'credentials': credentials },
@@ -46,9 +46,9 @@ export class UserService {
     });
   }
 
-  public readAllUsers(): Promise<UserPublic[]> {
+  public readAllUsers = (offset: number, limit: number): Promise<UserPublic[]> => {
     return new Promise((resolve, reject) => {
-      const url = 'http://localhost:3000/users';
+      const url = 'http://localhost:3000/users?offset=' + offset + '&limit=' + limit;
       this.http.get<{'info': UserPublic}[]>(url, 
         {
           headers: { 'Authorization': document.cookie },
@@ -68,7 +68,7 @@ export class UserService {
     });
   }
 
-  public readUser(username: string): Promise<UserPublic> {
+  public readUser = (username: string): Promise<UserPublic> => {
     return new Promise((resolve, reject) => {
       const url = 'http://localhost:3000/users/' + username + '/info';
       this.http.get<{'info': UserPublic}>(url, 
@@ -86,7 +86,7 @@ export class UserService {
     });
   }
 
-  public readCurrentUser(): Promise<UserPublic> {
+  public readCurrentUser = (): Promise<UserPublic> => {
     return new Promise((resolve, reject) => {
       const url = 'http://localhost:3000/users/current';
       this.http.get<{'info': UserPublic}>(url, 
@@ -104,7 +104,7 @@ export class UserService {
     });
   }
 
-  public updateUsername(userId: string, newUsername: string): Promise<string> {
+  public updateUsername = (userId: string, newUsername: string): Promise<string> => {
     return new Promise((resolve, reject) => {
       const url = 'http://localhost:3000/users/' + userId + '/username';
       this.http.patch<{username: string}>(url, {username: newUsername}, 
@@ -122,7 +122,7 @@ export class UserService {
     })
   } 
 
-  public updateEmail(userId: string, newEmail: string): Promise<string> {
+  public updateEmail = (userId: string, newEmail: string): Promise<string> => {
     return new Promise((resolve, reject) => {
       const url = 'http://localhost:3000/users/' + userId + '/email';
       this.http.patch<{email: string}>(url, {email: newEmail}, 
@@ -140,7 +140,7 @@ export class UserService {
     })
   } 
 
-  public updatePassword(userId: string, newPassword: string): Promise<string> {
+  public updatePassword = (userId: string, newPassword: string): Promise<string> => {
     return new Promise((resolve, reject) => {
       const url = 'http://localhost:3000/users/' + userId + '/password';
       this.http.patch<{password: string}>(url, {password: newPassword}, 
@@ -158,7 +158,7 @@ export class UserService {
     })
   } 
 
-  public updateRole(userId: string, newRole: string): Promise<string> {
+  public updateRole = (userId: string, newRole: string): Promise<string> => {
     return new Promise((resolve, reject) => {
       const url = 'http://localhost:3000/users/' + userId + '/role';
       this.http.patch<{role: string}>(url, {role: newRole}, 
@@ -176,7 +176,7 @@ export class UserService {
     })
   }
   
-  public updateCanEdit(userId: string, canEdit: boolean): Promise<string> {
+  public updateCanEdit = (userId: string, canEdit: boolean): Promise<string> => {
     return new Promise((resolve, reject) => {
       const url = 'http://localhost:3000/users/' + userId + '/can_edit';
       this.http.patch<{can_edit: string}>(url, {can_edit: canEdit}, 
@@ -194,7 +194,7 @@ export class UserService {
     })
   }   
 
-  public deleteUser(username: string): Promise<UserPublic> {
+  public deleteUser = (username: string): Promise<UserPublic> => {
     return new Promise((resolve, reject) => {
       const url = 'http://localhost:3000/users/' + username;
       this.http.delete<{info: UserPublic}>(url, 

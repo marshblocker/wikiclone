@@ -59,11 +59,16 @@ BEGIN
     SELECT `password_hash` FROM `users` WHERE `user_id` = p_user_id;
 END;
 
-CREATE PROCEDURE `read_all_users_info` ()
+CREATE PROCEDURE `read_all_users_info` 
+(
+	IN p_offset INT, 
+	IN p_limit INT
+)
 BEGIN
     SELECT `user_id`, `username`, `email`, `role`, `can_edit` 
 	FROM `users`
-	ORDER BY `role` ASC, `username` ASC;
+	ORDER BY `role` ASC, `username` ASC
+	LIMIT p_offset, p_limit;
 END;
 
 CREATE PROCEDURE `update_username`

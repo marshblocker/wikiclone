@@ -95,13 +95,16 @@ END;
 
 CREATE PROCEDURE `read_page_edits_by_page_title`
 (
-    IN p_title VARCHAR(32)
+    IN p_title VARCHAR(32),
+    IN p_offset INT,
+    IN p_limit INT
 )
 BEGIN
     SELECT *
     FROM `page_edits`
     WHERE `current_title` = p_title
-    ORDER BY `page_version` DESC;
+    ORDER BY `page_version` DESC
+    LIMIT p_offset, p_limit;
 END;
 
 CREATE PROCEDURE `read_page_edits_by_page_id`
@@ -117,13 +120,16 @@ END;
 
 CREATE PROCEDURE `read_user_page_edits`
 (
-    IN p_username VARCHAR(20)
+    IN p_username VARCHAR(20),
+    IN p_offset INT,
+    IN p_limit INT
 )
 BEGIN
     SELECT *
     FROM `page_edits`
     WHERE `username` = p_username
-    ORDER BY `timestamp` DESC;
+    ORDER BY `timestamp` DESC
+    LIMIT p_offset, p_limit;
 END;
 
 CREATE PROCEDURE `read_all_page_edits`()

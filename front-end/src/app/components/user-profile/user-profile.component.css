@@ -69,33 +69,3 @@ table
 .update-user-info div > * {
     margin-right: 5px;
 }
-
-#page-contributions-list
-{
-    display: flex;
-    flex-flow: column nowrap;
-    height: 400px;
-    margin-right: 10em;
-    margin-bottom: 2em;
-    overflow-y: auto;
-}
-
-#page-contributions-list h1,
-#page-contributions-list h2,
-#page-contributions-list h3
-{
-    font-family: monospace, monospace;
-}
-
-#page-contributions-list li
-{
-    padding-top: 1em;
-    padding-left: 2em;
-    background-color: gainsboro;
-    border-bottom: 1px solid #a2a9b1;
-}
-
-#page-contributions-list li:hover
-{
-    background-color: #a2a9b1;
-}

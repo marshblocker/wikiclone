@@ -40,22 +40,22 @@ class PageEditDAO {
         }
     }
 
-    async readPageEditsByPageTitle(pageTitle) {
+    async readPageEditsByPageTitle(pageTitle, offset, limit) {
         try {
             return await knex.raw(
-                'CALL read_page_edits_by_page_title(?)',
-                [pageTitle]
+                'CALL read_page_edits_by_page_title(?, ?, ?)',
+                [pageTitle, offset, limit]
             );
         } catch (error) {
             throw this._handleDBError(error);
         }
     }
 
-    async readUserPageEdits(username) {
+    async readUserPageEdits(username, offset, limit) {
         try {
             return await knex.raw(
-                'CALL read_user_page_edits(?)',
-                [username]
+                'CALL read_user_page_edits(?, ?, ?)',
+                [username, offset, limit]
             );
         } catch (error) {
             throw this._handleDBError(error);

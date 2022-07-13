@@ -1,0 +1,129 @@
+<div id="pagination-entries-listing">
+  <div
+    *ngIf="paginationType === 'get-all-page-edits-of-user'"
+    id="get-all-page-edits-of-user"
+  >
+    <ul *ngIf="noResult">
+      <h3>The user have not edited any article.</h3>
+    </ul>
+    <ul *ngIf="!noResult" class="vertical-links-ul">
+      <app-pagination-entry-card
+        *ngFor="let entry of currentPaginationEntries; index as i"
+        [type]="'user-page-edit-card'"
+        [i]="i"
+        [pageEdit]="entry"
+      >
+      </app-pagination-entry-card>
+    </ul>
+  </div>
+
+  <div
+    *ngIf="paginationType === 'get-all-page-edits-of-page'"
+    id="get-all-page-edits-of-page"
+  >
+    <app-pagination-entry-card
+      *ngFor="let entry of currentPaginationEntries; index as i"
+      [type]="'page-edit-of-page-card'"
+      [i]="i"
+      [pageEdit]="entry"
+    ></app-pagination-entry-card>
+  </div>
+
+  <div *ngIf="paginationType === 'search-pages'" id="search-pages">
+    <div *ngIf="noResult; then noResultMessage; else showSearchResults"></div>
+    <ng-template #noResultMessage>
+      <h3>No articles matched your search query.</h3>
+    </ng-template>
+    <ng-template #showSearchResults>
+      <app-pagination-entry-card
+        *ngFor="let entry of currentPaginationEntries"
+        [type]="'page-search-card'"
+        [pageSearchEntry]="entry"
+      ></app-pagination-entry-card>
+    </ng-template>
+  </div>
+
+  <div *ngIf="paginationType === 'get-all-pages'" id="get-all-pages">
+    <ul
+      *ngIf="noResult"
+      class="admin-dashboard-listing"
+      style="padding-top: 1em"
+    >
+      <h3>No pages</h3>
+    </ul>
+    <ul *ngIf="!noResult" class="vertical-link-ul admin-dashboard-listing">
+      <app-pagination-entry-card
+        *ngFor="let entry of currentPaginationEntries"
+        [type]="'page-card'"
+        [page]="entry"
+        (adminDashboardDeletePageButtonClicked)="
+          adminDashboardDeletePageButtonClicked.emit($event)
+        "
+      ></app-pagination-entry-card>
+    </ul>
+  </div>
+
+  <div *ngIf="paginationType === 'get-all-users'" id="get-all-users">
+    <ul
+      *ngIf="noResult"
+      class="admin-dashboard-listing"
+      style="padding-top: 1em"
+    >
+      <h3>No users</h3>
+    </ul>
+    <ul *ngIf="!noResult" class="vertical-link-ul admin-dashboard-listing">
+      <app-pagination-entry-card
+        *ngFor="let entry of currentPaginationEntries"
+        [type]="'user-card'"
+        [user]="entry"
+        (adminDashboardDeleteUserButtonClicked)="
+          adminDashboardDeleteUserButtonClicked.emit($event)
+        "
+      ></app-pagination-entry-card>
+    </ul>
+  </div>
+</div>
+
+<div *ngIf="!noResult" id="search-controller">
+  View (
+  <div
+    *ngIf="isPaginationFirstPage; then prevTextStyle; else prevAnchorStyle"
+  ></div>
+  <ng-template #prevTextStyle> previous {{ limit }} </ng-template>
+  <ng-template #prevAnchorStyle>
+    <a href="javascript:void(0);" (click)="goToPreviousPage()">
+      previous {{ limit }}
+    </a>
+  </ng-template>
+  |
+  <div
+    *ngIf="isPaginationLastPage; then nextTextStyle; else nextAnchorStyle"
+  ></div>
+  <ng-template #nextTextStyle> next {{ limit }} </ng-template>
+  <ng-template #nextAnchorStyle>
+    <a href="javascript:void(0);" (click)="goToNextPage()">
+      next {{ limit }}
+    </a>
+  </ng-template>
+  ) (
+  <a *ngIf="limit !== 5" href="javascript:void(0);" (click)="changeLimit(5)"
+    >5</a
+  >
+  <span *ngIf="limit === 5">5</span>
+  |
+  <a *ngIf="limit !== 20" href="javascript:void(0);" (click)="changeLimit(20)"
+    >20</a
+  >
+  <span *ngIf="limit === 20">20</span>
+  |
+  <a *ngIf="limit !== 50" href="javascript:void(0);" (click)="changeLimit(50)"
+    >50</a
+  >
+  <span *ngIf="limit === 50">50</span>
+  |
+  <a *ngIf="limit !== 100" href="javascript:void(0);" (click)="changeLimit(100)"
+    >100</a
+  >
+  <span *ngIf="limit === 100">100</span>
+  )
+</div>

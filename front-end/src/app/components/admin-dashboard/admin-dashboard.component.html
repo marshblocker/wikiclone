@@ -1,4 +1,4 @@
-<div *ngIf="renderReady" class="admin-dashboard">
+<div class="admin-dashboard">
   <h2>Admin Dashboard</h2>
   <div class="header-buttons">
     <button
@@ -16,85 +16,18 @@
       <h4>Pages</h4>
     </button>
   </div>
+  
   <div *ngIf="displayUsers; then userList; else pageList"></div>
   <ng-template #userList>
-    <ul *ngIf="noUsers" class="listing" style="padding-top: 1em;">
-      <h3>No users</h3>
-    </ul>
-    <ul *ngIf="!noUsers" class="vertical-link-ul listing">
-      <div *ngFor="let user of users" class="listing-item">
-        <li class="no-bullet-li">
-          <div style="display: flex; justify-content: space-between">
-            <div>
-              <h3 style="margin-top: 0">{{ user.username }}</h3>
-              <p><strong>User ID:</strong> {{ user.user_id }}</p>
-              <p><strong>Role:</strong> {{ user.role }}</p>
-              <p>
-                <strong>Can Edit:</strong>
-                {{ user.can_edit === true ? "Yes" : "No" }}
-              </p>
-            </div>
-            <div
-              style="
-                display: flex;
-                flex-flow: column nowrap;
-                justify-content: space-evenly;
-              "
-            >
-              <a routerLink="/user/{{ user.username }}/profile">
-                <button>
-                  Edit user
-                </button>
-              </a>
-              <button (click)="deleteUser(user.username)" style="color: red">
-                Delete user
-              </button>
-            </div>
-          </div>
-        </li>
-      </div>
-    </ul>
+    <app-pagination
+      [paginationType]="'get-all-users'"
+      (adminDashboardDeleteUserButtonClicked)="deleteUser($event)"
+    ></app-pagination>
   </ng-template>
   <ng-template #pageList>
-    <ul *ngIf="noPages" class="listing" style="padding-top: 1em;">
-      <h3>No pages</h3>
-    </ul>
-    <ul *ngIf="!noPages" class="vertical-link-ul listing">
-      <div *ngFor="let page of pages" class="listing-item">
-        <li class="no-bullet-li">
-          <div style="display: flex; justify-content: space-between">
-            <div>
-              <h3 style="margin-top: 0">{{ page.content.title }}</h3>
-              <p><strong>Page ID:</strong> {{ page.page_id }}</p>
-              <p><strong>Version:</strong> {{ page.page_version }}</p>
-              <p>
-                <strong>Most Recent Edit:</strong>
-                {{ page.timestamp | date: "medium" }} (by
-                <a routerLink="/user/{{ page.username }}/profile">{{
-                  page.username
-                }}</a
-                >)
-              </p>
-              <p>
-                <strong>Frozen:</strong>
-                {{ page.freeze_page === true ? "Yes" : "No" }}
-              </p>
-            </div>
-            <div
-              style="
-                display: flex;
-                flex-flow: column nowrap;
-                justify-content: space-evenly;
-              "
-            >
-              <a routerLink="/wiki/{{page.content.title}}/edit">
-                <button>Edit page</button>
-              </a>
-              <button (click)="deletePage(page.page_id)" style="color: red">Delete page</button>
-            </div>
-          </div>
-        </li>
-      </div>
-    </ul>
+    <app-pagination
+      [paginationType]="'get-all-pages'"
+      (adminDashboardDeletePageButtonClicked)="deletePage($event)"
+    ></app-pagination>
   </ng-template>
 </div>

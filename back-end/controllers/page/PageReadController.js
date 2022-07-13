@@ -115,7 +115,12 @@ class PageReadController {
             let result;
             let pages;
             if (searchString) {
-                result = await this._readPagesBasedOnSearchString(searchString);
+                const offset = req.query['offset'];
+                const limit = req.query['limit'];
+                if (!offset || !limit) {
+                    throw CustomError.MissingRequiredURLQueryAttr('offset or limit');
+                }
+                result = await this._readPagesBasedOnSearchString(searchString, offset, limit);
                 pages = result[0][0];
             } else if (title) {
                 result = await this._readPageBasedOnTitle(title);
@@ -124,7 +129,12 @@ class PageReadController {
                 page['freeze_page'] = (page['freeze_page'] === 1) ? true : false;
                 return res.status(200).json(page);
             } else {
-                result = await this._readAllPages();
+                const offset = req.query['offset'];
+                const limit = req.query['limit'];
+                if (!offset || !limit) {
+                    throw CustomError.MissingRequiredURLQueryAttr('offset or limit');
+                }
+                result = await this._readAllPages(offset, limit);
                 pages = result[0][0];
                 for (let i = 0; i < pages.length; i++) {
                     pages[i]['freeze_page'] = (pages[i]['freeze_page'] === 1) ? true : false; 
@@ -156,17 +166,17 @@ class PageReadController {
         }
     }
 
-    async _readAllPages() {
+    async _readAllPages(offset, limit) {
         try {
-            return await this.pageDAO.readAllPages();
+            return await this.pageDAO.readAllPages(offset, limit);
         } catch (error) {
             throw error;
         }
     }
 
-    async _readPagesBasedOnSearchString(searchString) {
+    async _readPagesBasedOnSearchString(searchString, offset, limit) {
         try {
-            return await this.pageDAO.readPagesBasedOnSearchString(searchString);
+            return await this.pageDAO.readPagesBasedOnSearchString(searchString, offset, limit);
         } catch (error) {
             throw error;
         }
