@@ -84,9 +84,12 @@ export class AppComponent implements OnInit {
       .catch(console.log);
   }
 
+  // TODO: Ban the use of 'new', 'random', and 'search' as page title.
   isViewingArticle(): boolean {
+    const suffix = this.currentRoute.split('/wiki/')[1];
     return this.currentRoute.startsWith('/wiki/') &&
-           !(this.currentRoute.split('/wiki/')[1].includes('/')) &&
-           !(this.currentRoute.split('/wiki/')[1].startsWith('search?'));
+           !(suffix.includes('/')) &&
+           !(suffix.startsWith('search?')) &&
+           !(['new', 'random', 'search'].includes(suffix));
   }
 }
