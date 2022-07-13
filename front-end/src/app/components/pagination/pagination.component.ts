@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { constants } from 'src/app/constants';
 import { PageSearchResultView } from 'src/app/interfaces/page.interface';
 import { PageEditService } from 'src/app/services/page-edit.service';
 import { PageService } from 'src/app/services/page.service';
@@ -28,11 +29,12 @@ export class PaginationComponent implements OnInit {
   previousPaginationEntries!: any[];
   currentPaginationEntries: any[] = [];
   nextPaginationEntries!: any[];
-  offset: number = 0;
-  limit: number = 5;
+  offset = constants.PAGINATION_OFFSET_DEFAULT;
+  limit = constants.PAGINATION_LIMIT_DEFAULT;
   isPaginationFirstPage: boolean = true;
   isPaginationLastPage: boolean = false;
   noResult: boolean = false;
+  paginationLimits = constants.PAGINATION_LIMITS;
 
   searchBasedPaginations = ['search-pages', 'get-all-page-edits-of-page', 'get-all-page-edits-of-user'];
 
