@@ -1,6 +1,10 @@
 <div *ngIf="renderReady">
   <div class="page-view" [innerHTML]="pageSafeHTML"></div>
-  <hr />
+  <hr id="page-view-bottom-hr"/>
+  <h2>Edit Summary</h2>
+  <p id="edit-summary">
+    <em>{{pageEdit.edit_summary}}</em>
+  </p>
   <button
     *ngIf="viewerIsLoggedIn && !freezePage && currentUserInfo.can_edit"
     (click)="setThisVersionAsCurrentVersion()"
@@ -9,5 +13,8 @@
   </button>
   <a routerLink="/wiki/{{ pageCurrentTitle }}" style="text-decoration: none">
     <button>View current version</button>
+  </a>
+  <a routerLink="/wiki/{{ pageCurrentTitle }}/versions" style="text-decoration: none">
+    <button>View Edit History</button>
   </a>
 </div>

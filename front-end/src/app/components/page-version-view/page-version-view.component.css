@@ -4,6 +4,18 @@
     background-color: #ffffff;
 }
 
+#page-view-bottom-hr
+{
+    height: 5px; 
+    background-color: black;
+}
+
+#edit-summary
+{
+    border: 1px dashed gainsboro;
+    padding: 1em;
+}
+
 button
 {
     margin-right: 1em;
