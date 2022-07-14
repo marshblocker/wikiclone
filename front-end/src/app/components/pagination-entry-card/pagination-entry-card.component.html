@@ -88,7 +88,9 @@
   <li class="no-bullet-li">
     <div style="display: flex; justify-content: space-between">
       <div>
-        <h3 style="margin-top: 0">{{ page?.content?.title }}</h3>
+        <a routerLink="/wiki/{{page?.content?.title}}">
+          <h3 style="margin-top: 0">{{ page?.content?.title }}</h3>
+        </a>
         <p><strong>Page ID:</strong> {{ page?.page_id }}</p>
         <p><strong>Version:</strong> {{ page?.page_version }}</p>
         <p>
@@ -129,7 +131,9 @@
   <li class="no-bullet-li">
     <div style="display: flex; justify-content: space-between">
       <div>
-        <h3 style="margin-top: 0">{{ user?.username }}</h3>
+        <a routerLink="/user/{{user?.username}}/profile">
+          <h3 style="margin-top: 0">{{ user?.username }}</h3>
+        </a>
         <p><strong>User ID:</strong> {{ user?.user_id }}</p>
         <p><strong>Role:</strong> {{ user?.role }}</p>
         <p>
