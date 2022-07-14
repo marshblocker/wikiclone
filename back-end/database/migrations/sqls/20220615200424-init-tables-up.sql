@@ -8,10 +8,13 @@ CREATE TABLE `users` (
  `role` VARCHAR(10) NOT NULL,
  `can_edit` BOOLEAN NOT NULL,
  PRIMARY KEY (`user_id`)
+--  Add index to username and email.
 );
 
 INSERT INTO `users`
-VALUES ('xdZWspFv2', 'admin', '$2b$10$qBIq2TyD/Il//nJw8s1tU.q.oKjXmTKOVSsmUqe8PO8xBq1SDkvQq', 'admin@gmail.com', 'admin', '1');
+VALUES ('xdZWspFv2', 'admin', '$2b$10$qBIq2TyD/Il//nJw8s1tU.q.oKjXmTKOVSsmUqe8PO8xBq1SDkvQq', 'admin@gmail.com', 'admin', 1),
+       ('L_254KKf5', 'max', '$2b$10$wTuS0iRGlqYUTJ9AxEkV4u3Upn35hJz4JJo29KnLhWReBg0yWzyLW', 'max@gmail.com', 'user', 1);
+
 
 CREATE TABLE `pages` (
  -- Meta-content 
@@ -50,6 +53,6 @@ CREATE TABLE `page_edits` (
  `image_url` VARCHAR(2048),
  `lead` VARCHAR(3000) NOT NULL,
  `body` TEXT NOT NULL,
-
+-- TODO: add index with ref. to username and page_title.
  PRIMARY KEY (`page_edit_id`)
 );
