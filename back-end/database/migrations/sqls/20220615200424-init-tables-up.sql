@@ -50,5 +50,6 @@ CREATE TABLE `page_edits` (
  `lead` VARCHAR(3000) NOT NULL,
  `body` TEXT NOT NULL,
  PRIMARY KEY (`page_edit_id`),
- INDEX search_page_edits_index(`username`, `current_title`)
+ INDEX search_page_edits_by_username_index(`username`),
+ INDEX search_page_edits_by_title_index(`current_title`)
 );
