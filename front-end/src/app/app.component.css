@@ -2,7 +2,6 @@
 {
     display: flex;
     flex-flow: row nowrap;
-    /* border: 1px solid #000000; */
 }
 
 .sandwiched-main-content
