@@ -8,7 +8,8 @@ CREATE TABLE `users` (
  `role` VARCHAR(10) NOT NULL,
  `can_edit` BOOLEAN NOT NULL,
  PRIMARY KEY (`user_id`),
- INDEX search_users_index(`username`, `email`)
+ INDEX search_users_by_username_index(`username`),
+ INDEX search_users_by_email_index(`email`)
 );
 
 CREATE TABLE `pages` (
