@@ -7,8 +7,8 @@ CREATE TABLE `users` (
  `email` VARCHAR(320) NOT NULL UNIQUE,
  `role` VARCHAR(10) NOT NULL,
  `can_edit` BOOLEAN NOT NULL,
- PRIMARY KEY (`user_id`)
---  Add index to username and email.
+ PRIMARY KEY (`user_id`),
+ INDEX search_users_index(`username`, `email`)
 );
 
 INSERT INTO `users`
@@ -33,7 +33,7 @@ CREATE TABLE `pages` (
  `body` TEXT NOT NULL,
 
  PRIMARY KEY (`page_id`),
- INDEX search_page_index (`title`, `lead`)
+ INDEX search_pages_index (`title`, `lead`)
 );
 
 CREATE TABLE `page_edits` (
@@ -53,6 +53,6 @@ CREATE TABLE `page_edits` (
  `image_url` VARCHAR(2048),
  `lead` VARCHAR(3000) NOT NULL,
  `body` TEXT NOT NULL,
--- TODO: add index with ref. to username and page_title.
- PRIMARY KEY (`page_edit_id`)
+ PRIMARY KEY (`page_edit_id`),
+ INDEX search_page_edits_index(`username`, `current_title`)
 );
