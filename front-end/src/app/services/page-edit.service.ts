@@ -1,4 +1,4 @@
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { PageEdit } from '../interfaces/page-edit.interface';
 import { Page } from '../interfaces/page.interface';
@@ -60,17 +60,29 @@ export class PageEditService {
   getPageEditByPageTitleAndPageVersion = (pageTitle: string, pageVersion: string): Promise<PageEdit> => {
     return new Promise((resolve, reject) => {
       const url = 'http://localhost:3000/page-edits?page_title=' + pageTitle + '&page_version=' + pageVersion;
+      let pageEdit: PageEdit;
       this.http.get<PageEdit>(url, 
         { 
           headers: { 'Authorization': document.cookie }, 
           observe: 'response', 
           responseType: 'json'
         }
-      ).subscribe((pageEditResponse: HttpResponse<PageEdit>) => {
-        if (pageEditResponse.body === null) {
-          return reject('Failed to get user page edits!');
+      ).subscribe({
+
+        next: (pageEditResponse: HttpResponse<PageEdit>) => {
+          if (pageEditResponse.body === null) {
+            return reject('Failed to get user page edits!');
+          }
+          pageEdit = pageEditResponse.body;
+        },
+
+        error: (err: HttpErrorResponse) => {
+          return reject(err);
+        },
+
+        complete: () => {
+          return resolve(pageEdit);
         }
-        return resolve(pageEditResponse.body);
       })
     });
   }

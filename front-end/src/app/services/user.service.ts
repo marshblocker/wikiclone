@@ -71,17 +71,29 @@ export class UserService {
   public readUser = (username: string): Promise<UserPublic> => {
     return new Promise((resolve, reject) => {
       const url = 'http://localhost:3000/users/' + username + '/info';
+      let user: UserPublic;
       this.http.get<{'info': UserPublic}>(url, 
         {
           headers: { 'Authorization': document.cookie }, 
           observe: 'response', 
           responseType: 'json'
         }
-      ).subscribe((response: HttpResponse<{'info': UserPublic}>) => {
-        if(response.body === null) {
-          return reject('No user received!');
+      ).subscribe({
+
+        next: (response: HttpResponse<{'info': UserPublic}>) => {
+          if(response.body === null) {
+            return reject('No user received!');
+          }
+          user = response.body.info;
+        },
+
+        error: (err) => {
+          return reject(err);
+        },
+
+        complete: () => {
+          return resolve(user);
         }
-        return resolve(response.body.info);
       })
     });
   }

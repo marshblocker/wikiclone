@@ -31,6 +31,7 @@ export class PageService {
   public getPageByTitle = (title: string): Promise<Page> => {
     return new Promise((resolve, reject) => {
       const url = 'http://localhost:3000/pages?title=' + title;
+      let page: Page;
       this.http.get<Page>(
         url, 
         { 
@@ -38,11 +39,22 @@ export class PageService {
           observe: 'response', 
           responseType: 'json' 
         }
-      ).subscribe((pageResponse: HttpResponse<Page>) => {
-        if (pageResponse.body === null) {
-          return reject('Page is null!');
+      ).subscribe({
+        
+        next: (pageResponse: HttpResponse<Page>) => {
+          if (pageResponse.body === null) {
+            return reject('Page is null!');
+          }
+          page = pageResponse.body;
+        },
+
+        error: (err) => {
+          return reject(err);
+        },
+
+        complete: () => {
+          return resolve(page);
         }
-        return resolve(pageResponse.body);
       });
     });
   }

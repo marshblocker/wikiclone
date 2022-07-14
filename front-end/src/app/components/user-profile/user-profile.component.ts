@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserPublic } from 'src/app/interfaces/user.interface';
@@ -10,7 +11,7 @@ import { UserService } from 'src/app/services/user.service';
   styleUrls: ['./user-profile.component.css']
 })
 export class UserProfileComponent implements OnInit {
-  userInfo?: UserPublic;
+  userInfo!: UserPublic;
   isUpdatingUserInfo = false;
   isUpdatingUsername = false;
   isUpdatingPassword = false;
@@ -31,7 +32,8 @@ export class UserProfileComponent implements OnInit {
     this.route.paramMap.subscribe(params => {
       const username = params.get('username');
       if (username == null) {
-        console.log('Username is null!');
+        window.alert('Username is null!\n\nYou will be redirected back to the main page.');
+        this.router.navigateByUrl('/');
         return;
       }
       this.userService.readUser(username)
@@ -44,7 +46,7 @@ export class UserProfileComponent implements OnInit {
                 if (currentUserInfo.role === 'admin') {
                   this.viewerIsAdmin = true;
                 }
-                if (currentUserInfo.username === userInfo.username) {
+                if (currentUserInfo.username === this.userInfo.username) {
                   this.viewingOwnProfile = true;
                 }
               })
@@ -54,7 +56,14 @@ export class UserProfileComponent implements OnInit {
             this.viewingOwnProfile = false;
           }
         })
-        .catch(console.log);
+        .catch((err: HttpErrorResponse) => {
+          if (err.status === 404) {
+            this.router.navigateByUrl('/404?resource=user');
+          } else {
+            window.alert(`${err.error.message}\n\nYou will be redirected back to the main page.`);
+            this.router.navigateByUrl('/');
+          }
+        });
     })
   }
 

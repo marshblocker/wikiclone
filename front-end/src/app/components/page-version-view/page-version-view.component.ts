@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer, SafeHtml, Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -54,9 +55,13 @@ export class PageVersionViewComponent implements OnInit {
         }
         this.renderReady = true;
       })
-      .catch(err => {
-        console.log(err);
-        this.router.navigateByUrl('/404');
+      .catch((err: HttpErrorResponse) => {
+        if (err.status === 404) {
+          this.router.navigateByUrl('/404?resource=article-edit');
+        } else {
+          window.alert(`${err.error.message}\n\nYou will be redirected back to the main page.`);
+          this.router.navigateByUrl('/');
+        }
       })
   }
 

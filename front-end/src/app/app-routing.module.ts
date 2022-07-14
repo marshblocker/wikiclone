@@ -5,7 +5,6 @@ import { ExistingPageEditorComponent } from './components/existing-page-editor/e
 import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
 import { NewPageEditorComponent } from './components/new-page-editor/new-page-editor.component';
-import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { PageVersionListComponent } from './components/page-version-list/page-version-list.component';
 import { PageVersionViewComponent } from './components/page-version-view/page-version-view.component';
 import { PageViewComponent } from './components/page-view/page-view.component';
@@ -13,6 +12,7 @@ import { ProcessLoginComponent } from './components/process-login/process-login.
 import { ProcessRegisterComponent } from './components/process-register/process-register.component';
 import { RandomPageComponent } from './components/random-page/random-page.component';
 import { RegisterComponent } from './components/register/register.component';
+import { ResourceNotFoundComponent } from './components/resource-not-found/resource-not-found.component';
 import { SearchResultComponent } from './components/search-result/search-result.component';
 import { TokenExpiredComponent } from './components/token-expired/token-expired.component';
 import { UserProfileComponent } from './components/user-profile/user-profile.component';
@@ -26,9 +26,9 @@ const routes: Routes = [
   },
   {
     path: '404',
-    component: PageNotFoundComponent,
-    title: '404 Page Not Found',
-    data: { pageType: 'Page Not Found' },
+    component: ResourceNotFoundComponent,
+    title: '404 Resource Not Found',
+    data: { pageType: 'Resource Not Found' },
   },
   {
     path: 'token_expired',

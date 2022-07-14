@@ -12,7 +12,6 @@ import { PageViewComponent } from './components/page-view/page-view.component';
 
 import { PageService } from './services/page.service';
 import { HomeComponent } from './components/home/home.component';
-import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { RandomPageComponent } from './components/random-page/random-page.component';
 import { RegisterComponent } from './components/register/register.component';
 import { LoginComponent } from './components/login/login.component';
@@ -30,6 +29,7 @@ import { PageVersionListComponent } from './components/page-version-list/page-ve
 import { AdminDashboardComponent } from './components/admin-dashboard/admin-dashboard.component';
 import { PaginationComponent } from './components/pagination/pagination.component';
 import { PaginationEntryCardComponent } from './components/pagination-entry-card/pagination-entry-card.component';
+import { ResourceNotFoundComponent } from './components/resource-not-found/resource-not-found.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +40,6 @@ import { PaginationEntryCardComponent } from './components/pagination-entry-card
     NewPageEditorComponent,
     PageViewComponent,
     HomeComponent,
-    PageNotFoundComponent,
     RandomPageComponent,
     RegisterComponent,
     LoginComponent,
@@ -55,6 +54,7 @@ import { PaginationEntryCardComponent } from './components/pagination-entry-card
     AdminDashboardComponent,
     PaginationComponent,
     PaginationEntryCardComponent,
+    ResourceNotFoundComponent,
   ],
   imports: [
     BrowserModule,

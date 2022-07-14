@@ -45,6 +45,9 @@ class PageEditReadController {
         try {
             const result = await this._readPageEditByPageTitleAndPageVersion(pageTitle, pageVersion);
             let pageEdit = result[0][0][0];
+            if (pageEdit == undefined) {
+                throw CustomError.ResourceDoesNotExist('page edit');
+            }
             pageEdit['freeze_page'] = (pageEdit['freeze_page'] === 1) ? true : false;
 
             const formattedPageEdit = utils.formatPageContent(pageEdit);
