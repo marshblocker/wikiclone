@@ -99,7 +99,7 @@ export class UserProfileComponent implements OnInit {
         if (this.viewingOwnProfile) {
           this.logout();
         } else {
-          this.refreshPage();
+          this.refreshPage(newUsername);
         }
       })
       .catch(console.log);
@@ -225,8 +225,21 @@ export class UserProfileComponent implements OnInit {
     this.router.navigateByUrl('/?logout=true');
   }
 
-  refreshPage() {
-    location.reload();
+  refreshPage(username?: string) {
+    if (username) {
+      let route = `/user/${username}/profile`;
+      this.router.navigateByUrl(route)
+        .then(navigated => {
+          if (!navigated) {
+            console.log('Error! Failed to go to the user profile.');
+          } else {
+            location.reload();
+          }
+        })
+        .catch(console.log);
+    } else {
+      location.reload();
+    }
   }
 
   goHome() {
