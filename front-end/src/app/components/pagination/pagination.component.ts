@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { constants } from 'src/app/constants';
@@ -40,6 +41,9 @@ export class PaginationComponent implements OnInit {
 
   // If paginationType is in searchBasedPaginations.
   searchString!: string;
+
+  // If paginationType is 'get-all-page-edits-of-page' or 'get-all-page-edits-of-user'.
+  latestVersions!: {[page_title: string]: number};
 
   constructor(private route: ActivatedRoute, 
               private pageService: PageService,
@@ -93,14 +97,22 @@ export class PaginationComponent implements OnInit {
       });
     } else {
       this.route.paramMap.subscribe(params => {
-        const searchString = (this.paginationType === 'get-all-page-edits-of-page') ?
-          params.get('title') : params.get('username');
-        if (searchString == null) {
-          console.log('Search string is empty!');
-          return;
-        }
-        this.searchString = searchString;
-        this.goToFirstPage();
+        this.pageEditService.getLatestVersionOfEachPage()
+          .then((latestVersions: {[page_title: string]: number}) => {
+            this.latestVersions = latestVersions;
+            console.log(this.latestVersions);
+            const searchString = (this.paginationType === 'get-all-page-edits-of-page') ?
+              params.get('title') : params.get('username');
+            if (searchString == null) {
+              console.log('Search string is empty!');
+              return;
+            }
+            this.searchString = searchString;
+            this.goToFirstPage();
+          })
+          .catch((err: HttpErrorResponse) => {
+            console.log(err);
+          })
       })
     }
   }

@@ -15,7 +15,8 @@ export class PaginationEntryCardComponent implements OnInit {
   // If type is user-page-edit-card or page-edit-of-page-card,
   // set these attributes:
   @Input() i?: number;
-  @Input() pageEdit?: PageEdit;
+  @Input() pageEdit!: PageEdit;
+  @Input() latestVersions!: {[page_title: string]: number};
 
   // If type is page-search-card, set these attributes:
   @Input() pageSearchEntry?: PageSearchResultView;

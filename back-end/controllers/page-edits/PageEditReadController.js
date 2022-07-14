@@ -71,10 +71,19 @@ class PageEditReadController {
             const pageTitle = req.query['page_title'];
             const pageVersion = req.query['page_version'];
             const username = req.query['username'];
+            const ret = req.query['return'];
 
-            if (pageVersion) {
+            if (pageTitle && pageVersion) {
                 const formattedPageEdit = await this.readPageEditByPageTitleAndPageVersion(pageTitle, pageVersion);
                 return res.status(200).json(formattedPageEdit);
+            }
+
+            if (ret) {
+                if (ret === 'latest_versions') {
+                    const latestVersions = await this.readLatestVersionPerPages();
+                    console.log(latestVersions);
+                    return res.status(200).json(latestVersions);
+                }
             }
             
             let result;
@@ -123,6 +132,15 @@ class PageEditReadController {
                 console.log(error);
                 return res.status(500).json(error);
             }
+        }
+    }
+
+    async readLatestVersionPerPages() {
+        try {
+            let result = await this.pageEditDAO.readLatestVersionPerPages();
+            return result[0][0];
+        } catch (error) {
+            throw error;
         }
     }
 

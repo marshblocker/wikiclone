@@ -137,6 +137,13 @@ BEGIN
     SELECT * FROM `page_edits`;
 END;
 
+CREATE PROCEDURE `read_latest_version_per_pages`()
+BEGIN
+    SELECT `current_title`, MAX(`page_version`) AS `latest_version`
+    FROM `page_edits`
+    GROUP BY `current_title`;
+END;
+
 CREATE PROCEDURE `update_edit_summary`
 (
     IN p_page_edit_id CHAR(9),

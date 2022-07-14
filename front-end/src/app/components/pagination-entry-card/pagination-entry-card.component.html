@@ -3,24 +3,29 @@
     <span>
       <a
         [routerLink]="
-          i === 0
-            ? '/wiki/' + pageEdit?.current_title
+          latestVersions[pageEdit.current_title] === pageEdit.page_version
+            ? '/wiki/' + pageEdit.current_title
             : '/wiki/' +
-              pageEdit?.current_title +
+              pageEdit.current_title +
               '/versions/' +
-              pageEdit?.page_version
+              pageEdit.page_version
         "
       >
         <h2>
-          {{ pageEdit?.current_title }}
+          {{ pageEdit.current_title }}
+          {{
+            latestVersions[pageEdit.current_title] === pageEdit.page_version
+              ? "(Current Version)"
+              : ""
+          }}
         </h2>
       </a>
-      Version {{ pageEdit?.page_version }} ({{
-        pageEdit?.timestamp | date: "medium"
+      Version {{ pageEdit.page_version }} ({{
+        pageEdit.timestamp | date: "medium"
       }})
     </span>
     <p>
-      <em>{{ pageEdit?.edit_summary }}</em>
+      <em>{{ pageEdit.edit_summary }}</em>
     </p>
   </li>
 </div>
@@ -28,18 +33,24 @@
 <div *ngIf="type === 'page-edit-of-page-card'" id="page-edit-of-page-card">
   <a
     [routerLink]="
-      i === 0
-        ? '/wiki/' + pageEdit?.current_title
+      latestVersions[pageEdit.current_title] === pageEdit.page_version
+        ? '/wiki/' + pageEdit.current_title
         : '/wiki/' +
-          pageEdit?.current_title +
+          pageEdit.current_title +
           '/versions/' +
-          pageEdit?.page_version
+          pageEdit.page_version
     "
     style="text-decoration: none; color: inherit"
   >
     <li class="no-bullet-li">
       <div style="display: flex; justify-content: space-between">
-        <div *ngIf="i === 0; then currentVersion; else previousVersion"></div>
+        <div
+          *ngIf="
+            latestVersions[pageEdit.current_title] === pageEdit.page_version;
+            then currentVersion;
+            else previousVersion
+          "
+        ></div>
         <ng-template #currentVersion>
           <h3>Version {{ pageEdit?.page_version }} (Current version)</h3>
         </ng-template>
@@ -88,7 +99,7 @@
   <li class="no-bullet-li">
     <div style="display: flex; justify-content: space-between">
       <div>
-        <a routerLink="/wiki/{{page?.content?.title}}">
+        <a routerLink="/wiki/{{ page?.content?.title }}">
           <h3 style="margin-top: 0">{{ page?.content?.title }}</h3>
         </a>
         <p><strong>Page ID:</strong> {{ page?.page_id }}</p>
@@ -131,7 +142,7 @@
   <li class="no-bullet-li">
     <div style="display: flex; justify-content: space-between">
       <div>
-        <a routerLink="/user/{{user?.username}}/profile">
+        <a routerLink="/user/{{ user?.username }}/profile">
           <h3 style="margin-top: 0">{{ user?.username }}</h3>
         </a>
         <p><strong>User ID:</strong> {{ user?.user_id }}</p>

@@ -72,6 +72,16 @@ class PageEditDAO {
         }
     }
 
+    async readLatestVersionPerPages() {
+        try {
+            return await knex.raw(
+                'CALL read_latest_version_per_pages()'
+            );
+        } catch (error) {
+            throw this._handleDBError(error);
+        }
+    }
+
     async updateEditSummary(pageEditId, editSummary) {
         try {
             return await knex.raw(

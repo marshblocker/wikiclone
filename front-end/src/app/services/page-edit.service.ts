@@ -101,7 +101,44 @@ export class PageEditService {
           return reject('Failed to get page edits of a page.');
         }
         return resolve(pageEditsResponse.body);
-      })
+  getLatestVersionOfEachPage = (): Promise<
+    { [page_title: string]: number }
+  > => {
+    return new Promise((resolve, reject) => {
+      const url = constants.ROOT_URL + 'page-edits?return=latest_versions';
+      let latestVersions: { [page_title: string]: number } = {};
+      this.http
+        .get<{ latest_version: number; current_title: string }[]>(url, {
+          headers: { Authorization: document.cookie },
+          observe: 'response',
+          responseType: 'json',
     })
+        .subscribe({
+          next: (
+            response: HttpResponse<
+              { latest_version: number; current_title: string }[]
+            >
+          ) => {
+            if (response.body == null) {
+              return reject(
+                'Failed to get the latest versions of all the articles'
+              );
   }
+
+            response.body.forEach(
+              (obj: { latest_version: number; current_title: string }) => {
+                latestVersions[obj.current_title] = obj.latest_version;
+            });
+          },
+
+          error: (err: HttpErrorResponse) => {
+            return reject(err);
+          },
+
+          complete: () => {
+            return resolve(latestVersions);
+          },
+        });
+    });
+  };
 }

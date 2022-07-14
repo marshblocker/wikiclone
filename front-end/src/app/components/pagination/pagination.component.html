@@ -8,9 +8,9 @@
     </ul>
     <ul *ngIf="!noResult" class="vertical-links-ul">
       <app-pagination-entry-card
-        *ngFor="let entry of currentPaginationEntries; index as i"
+        *ngFor="let entry of currentPaginationEntries;"
         [type]="'user-page-edit-card'"
-        [i]="i"
+        [latestVersions]="latestVersions"
         [pageEdit]="entry"
       >
       </app-pagination-entry-card>
@@ -22,9 +22,9 @@
     id="get-all-page-edits-of-page"
   >
     <app-pagination-entry-card
-      *ngFor="let entry of currentPaginationEntries; index as i"
+      *ngFor="let entry of currentPaginationEntries;"
       [type]="'page-edit-of-page-card'"
-      [i]="i"
+      [latestVersions]="latestVersions"
       [pageEdit]="entry"
     ></app-pagination-entry-card>
   </div>
