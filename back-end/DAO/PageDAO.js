@@ -84,10 +84,44 @@ class PageDAO {
 
     async readPageBasedOnTitle(title) {
         try {
-            return await knex.raw(
-                'CALL read_page_based_on_title(?)',
-                [title]
-            );
+            if (await redis.exists(title)) {
+                console.log('Already cached!');
+                let cachedPage = await redis.hgetall(title);
+
+                // The triple brackets are needed to match the format
+                // of the returned data via the stored procedure call.
+                return [[[cachedPage]]];
+            } else {
+                console.log('Not cached!');
+                const res = await knex.raw(
+                    'CALL read_page_based_on_title(?)',
+                    [title]
+                );
+
+                let page = res[0][0][0];
+                const cachePageResult = await redis
+                    .pipeline()
+                    .hset(title,
+                        'page_id', page['page_id'],
+                        'page_version', page['page_version'],
+                        'timestamp', page['timestamp'],
+                        'username', page['username'],
+                        'user_id', page['user_id'],
+                        'freeze_page', page['freeze_page'],
+                        'current_title', page['current_title'],
+                        'title', page['title'],
+                        'image_url', page['image_url'],
+                        'lead', page['lead'],
+                        'body', page['body']
+                    )
+                    .expire(title, constants.reddis.CACHE_EXPIRATION_TIME)
+                    .hset(page['page_id'], 'current_title', page['current_title'])
+                    .expire(page['page_id'], constants.reddis.CACHE_EXPIRATION_TIME)
+                    .exec();
+                
+                console.log('Caching page result:', cachePageResult);
+                return res;
+            }
         } catch (error) {
             throw this._handleDBError(error);
         }
@@ -100,7 +134,16 @@ class PageDAO {
                 'CALL update_content(?, ?, ?, ?, ?, ?, ?)',
                 [pageId, username, userId, title, imageUrl, lead, body]
             );
-            await redis.del(pageId);
+
+            if (await redis.exists(pageId)) {
+                const cachedTitle = await redis.hget(pageId, 'current_title');
+                await redis
+                        .pipeline()
+                        .del(cachedTitle)
+                        .del(pageId)
+                        .exec();
+            }
+            
             return res;
         } catch (error) {
             throw this._handleDBError(error);
@@ -113,7 +156,16 @@ class PageDAO {
                 'CALL update_freeze_page(?, ?, ?, ?)',
                 [pageId, username, userId, freezePage]
             );
-            await redis.del(pageId);
+
+            if (await redis.exists(pageId)) {
+                const cachedTitle = await redis.hget(pageId, 'current_title');
+                await redis
+                        .pipeline()
+                        .del(cachedTitle)
+                        .del(pageId)
+                        .exec();
+            }
+
             return res;
         } catch (error) {
             throw this._handleDBError(error);
@@ -131,9 +183,18 @@ class PageDAO {
             for (let i = 0; i < res[0][0].length; i++) {
                 pageIds.push(res[0][0][i]['page_id']);
             }
-            if (pageIds.length > 0) {
-            await redis.del(...pageIds);
+
+            const pipeline = redis.pipeline();
+            console.log('Deleted cached pages: ');
+            for (let i = 0; i < pageIds.length; i++) {
+                if (await redis.exists(pageIds[i])) {
+                    let cachedTitle = await redis.hget(pageIds[i], 'current_title');
+                    console.log(cachedTitle);
+                    pipeline.del(cachedTitle);
+                }
+                pipeline.del(pageIds[i]);
             }
+            await pipeline.exec();
 
             return res;
         } catch (error) {
@@ -149,7 +210,16 @@ class PageDAO {
             await knex.raw(
                 'CALL delete_page(?)', [pageId]
             );
-            await redis.del(pageId);
+
+            if (await redis.exists(pageId)) {
+                const cachedTitle = await redis.hget(pageId, 'current_title');
+                await redis
+                        .pipeline()
+                        .del(cachedTitle)
+                        .del(pageId)
+                        .exec();
+            }
+
             return deletedPage;
         } catch (error) {
             throw this._handleDBError(error);
