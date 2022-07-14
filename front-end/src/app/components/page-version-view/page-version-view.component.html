@@ -6,7 +6,7 @@
     <em>{{pageEdit.edit_summary}}</em>
   </p>
   <button
-    *ngIf="viewerIsLoggedIn && !freezePage && currentUserInfo.can_edit"
+    *ngIf="viewerIsLoggedIn && !freezePage && canEdit"
     (click)="setThisVersionAsCurrentVersion()"
   >
     Restore article to this version

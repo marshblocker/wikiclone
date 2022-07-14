@@ -29,7 +29,7 @@ export class PageVersionViewComponent implements OnInit {
   renderReady = false;
   viewerIsLoggedIn = false;
 
-  currentUserInfo!: UserPublic;
+  canEdit = false;
 
   constructor(private route: ActivatedRoute, 
               private router: Router, 
@@ -49,7 +49,7 @@ export class PageVersionViewComponent implements OnInit {
         if (this.viewerIsLoggedIn) {
           this.userService.readCurrentUser()
             .then(currentUserInfo => {
-              this.currentUserInfo = currentUserInfo;
+              this.canEdit = currentUserInfo.can_edit;
             })
             .catch(console.log);
         }

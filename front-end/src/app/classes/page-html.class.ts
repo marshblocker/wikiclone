@@ -22,7 +22,7 @@ export class PageHTML {
                 <img 
                     src="${pageImageUrl}" 
                     alt="Image source: ${pageImageUrl}" 
-                    style="margin: auto; margin-top: 5px;  max-width: inherit; border: 2px solid black;"
+                    style="margin: auto; margin-top: 1em; max-width: inherit; border: 2px solid black;"
                 >
             </div>`;
 
