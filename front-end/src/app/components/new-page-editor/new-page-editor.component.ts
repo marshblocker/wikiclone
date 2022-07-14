@@ -7,7 +7,6 @@ import { Router } from '@angular/router';
 import { OutputData } from '@editorjs/editorjs';
 
 import { PageEditor } from 'src/app/classes/page-editor.class';
-import { PageEdit } from 'src/app/interfaces/page-edit.interface';
 import { Page, PageContent } from 'src/app/interfaces/page.interface';
 import { PageEditService } from 'src/app/services/page-edit.service';
 import { PageService } from 'src/app/services/page.service';

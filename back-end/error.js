@@ -56,7 +56,7 @@ class CustomError {
     SuperAdminChangeUserRoleRestriction = () => new ReturnedError(403, '403 Forbidden: A superadmin cannot change the role of another superadmin.', 2006);
 
     // Code 404: Requested resource does not exist in the database.
-    ResourceDoesNotExist = (resourceName) => new ReturnedError(404, `404 Not Found: The given id does not correspond to an existing ${resourceName} in the database!`, 3001);
+    ResourceDoesNotExist = (resourceName) => new ReturnedError(404, `404 Not Found: The given identifier does not correspond to an existing ${resourceName} in the database!`, 3001);
 
     // Code 405: The action to a specific resource is not allowed by the server.
     CannotDeletePage = () => new ReturnedError(405, '405 Method Not Allowed: The page is restricted from being deleted.', 4001);
