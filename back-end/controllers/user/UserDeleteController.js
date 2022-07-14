@@ -14,7 +14,7 @@ class UserDeleteController {
 
             const result = await this._deleteUser(username);
             let info = result[0][0][0];
-            info['can_edit'] = (info['can_edit'] === 1) ? true : false;
+            info['can_edit'] = (+info['can_edit'] === 1) ? true : false;
             return res.status(200).json({ "info": info });
         } catch (error) {
             if (error.code) {

@@ -41,7 +41,7 @@ class PageUpdateController {
 
             const result = await this._updateContent(pageId, username, userId, content);
             let updatedPage = result[0][0][0];
-            updatedPage['freeze_page'] = (updatedPage['freeze_page'] === 1) ? true : false;
+            updatedPage['freeze_page'] = (+updatedPage['freeze_page'] === 1) ? true : false;
             
             await pageEditDAO.updateCurrentTitle(pageId, updatedPage['current_title']);
             
@@ -91,7 +91,7 @@ class PageUpdateController {
     
             const result = await this._updateFreezePage(pageId, username, userId, freezePage);
             let updatedPage = result[0][0][0];
-            updatedPage['freeze_page'] = (updatedPage['freeze_page'] === 1) ? true : false;
+            updatedPage['freeze_page'] = (+updatedPage['freeze_page'] === 1) ? true : false;
 
             const formattedUpdatedPage = utils.formatPageContent(updatedPage);
     

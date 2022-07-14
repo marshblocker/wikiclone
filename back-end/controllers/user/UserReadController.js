@@ -13,7 +13,7 @@ class UserReadController {
 
             const result = await this._readUserInfo(username);
             let info = result[0][0][0];
-            info['can_edit'] = (info['can_edit'] === 1) ? true : false;
+            info['can_edit'] = (+info['can_edit'] === 1) ? true : false;
             return res.status(200).json({ "info": info }); 
         } catch (error) {
             if (error.code) {
@@ -37,7 +37,7 @@ class UserReadController {
 
             const result = await this._readUserInfo(username);
             let info = result[0][0][0];
-            info['can_edit'] = (info['can_edit'] === 1) ? true : false;
+            info['can_edit'] = (+info['can_edit'] === 1) ? true : false;
             return res.status(200).json({ "info": info });
         } catch (error) {
             if (error.code) {
@@ -71,7 +71,7 @@ class UserReadController {
             let allUsersInfo = result[0][0];
 
             for (let i = 0; i < allUsersInfo.length; i++) {
-                allUsersInfo[i]['can_edit'] = (allUsersInfo[i]['can_edit'] === 1) ? true : false; 
+                allUsersInfo[i]['can_edit'] = (+allUsersInfo[i]['can_edit'] === 1) ? true : false; 
                 allUsersInfo[i] = { "info": allUsersInfo[i] };
             }
             return res.status(200).json(allUsersInfo); 

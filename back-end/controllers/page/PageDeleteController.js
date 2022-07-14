@@ -27,7 +27,7 @@ class PageDeleteController {
             await pageEditDAO.deletePageEditsOfDeletedPage(pageId);
 
             let deletedPage = result[0][0][0];
-            deletedPage['freeze_page'] = (deletedPage['freeze_page'] === 1) ? true : false;
+            deletedPage['freeze_page'] = (+deletedPage['freeze_page'] === 1) ? true : false;
 
             const formattedDeletedPage = utils.formatPageContent(deletedPage)
             

@@ -24,7 +24,7 @@ class UserCreateController {
 
             const result = await this._createUser(userId, info);
             let newUserInfo = result[0][0][0];
-            newUserInfo['can_edit'] = (newUserInfo['can_edit'] === 1) ? true : false;
+            newUserInfo['can_edit'] = (+newUserInfo['can_edit'] === 1) ? true : false;
             return res.status(200).json({ "info": newUserInfo });
         } catch (error) {
             if (error.code) {

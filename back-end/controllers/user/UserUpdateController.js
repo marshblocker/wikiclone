@@ -161,7 +161,7 @@ class UserUpdateController {
 
             const result = await this._updateCanEdit(userId, canEdit);
             let updatedCanEdit = {
-                'can_edit': ((result[0][0][0]['can_edit'] === 1) ? true : false)
+                'can_edit': ((+result[0][0][0]['can_edit'] === 1) ? true : false)
             };
             return res.status(200).json(updatedCanEdit);
         } catch (error) {

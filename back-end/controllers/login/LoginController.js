@@ -35,7 +35,7 @@ class LoginController {
                 username: userInfo['username'],
                 email: userInfo['email'],
                 role: userInfo['role'],
-                canEdit: (userInfo['can_edit'] === 1) ? true : false
+                canEdit: (+userInfo['can_edit'] === 1) ? true : false
             };
             const token = jwt.sign(userCredentials, constants.jwt.ACCESS_TOKEN_SECRET);
             

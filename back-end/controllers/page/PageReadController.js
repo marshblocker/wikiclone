@@ -15,7 +15,7 @@ class PageReadController {
 
             const result = await this._readPage(pageId);
             let page = result[0][0][0];
-            page['freeze_page'] = (page['freeze_page'] === 1) ? true : false;
+            page['freeze_page'] = (+page['freeze_page'] === 1) ? true : false;
 
             const formattedPage = utils.formatPageContent(page);
 
@@ -59,7 +59,8 @@ class PageReadController {
                 result = await this._readPageBasedOnTitle(title);
                 let page = result[0][0][0];
                 page = utils.formatPageContent(page);
-                page['freeze_page'] = (page['freeze_page'] === 1) ? true : false;
+                page['freeze_page'] = (+page['freeze_page'] === 1) ? true : false;
+                console.log(page['freeze_page']);
                 return res.status(200).json(page);
             } else {
                 const offset = req.query['offset'];

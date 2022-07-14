@@ -35,7 +35,7 @@ class PageCreateController {
 
             const result = await this._createPage(pageId, username, userId, content);
             let newPage = result[0][0][0];
-            newPage['freeze_page'] = (newPage['freeze_page'] === 1) ? true : false;
+            newPage['freeze_page'] = (+newPage['freeze_page'] === 1) ? true : false;
 
             const formattedNewPage = utils.formatPageContent(newPage);
 
