@@ -159,8 +159,7 @@ BEGIN
     SET 
         `username` = p_username,
         `user_id` = p_user_id,
-        `freeze_page` = p_freeze_page,
-        `page_version` = `page_version` + 1
+        `freeze_page` = p_freeze_page
     WHERE `page_id` = p_page_id;
     
     SELECT * 
