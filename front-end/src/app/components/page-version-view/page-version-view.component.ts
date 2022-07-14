@@ -8,6 +8,7 @@ import { Page } from 'src/app/interfaces/page.interface';
 import { UserPublic } from 'src/app/interfaces/user.interface';
 import { PageEditService } from 'src/app/services/page-edit.service';
 import { PageService } from 'src/app/services/page.service';
+import { TokenService } from 'src/app/services/token.service';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
@@ -25,6 +26,7 @@ export class PageVersionViewComponent implements OnInit {
   pageEdit!: PageEdit;
   freezePage!: boolean;
   renderReady = false;
+  viewerIsLoggedIn = false;
 
   currentUserInfo!: UserPublic;
 
@@ -34,19 +36,23 @@ export class PageVersionViewComponent implements OnInit {
               private sanitizer: DomSanitizer,
               private titleService: Title,
               private pageService: PageService,
-              private userService: UserService) { }
+              private userService: UserService,
+              private tokenService: TokenService) { }
 
   ngOnInit(): void {
     this._renderPageView()
       .then(() => {
         // Change page title.
         this.titleService.setTitle(this.pageTitle);
-        this.userService.readCurrentUser()
-          .then(currentUserInfo => {
-            this.currentUserInfo = currentUserInfo;
-            this.renderReady = true;
-          })
-          .catch(console.log);
+        this.viewerIsLoggedIn = this.tokenService.tokenInCookie();
+        if (this.viewerIsLoggedIn) {
+          this.userService.readCurrentUser()
+            .then(currentUserInfo => {
+              this.currentUserInfo = currentUserInfo;
+            })
+            .catch(console.log);
+        }
+        this.renderReady = true;
       })
       .catch(err => {
         console.log(err);

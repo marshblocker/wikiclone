@@ -142,7 +142,7 @@
         </div>
       </div>
       <button
-        *ngIf="viewingOwnProfile"
+        *ngIf="viewingOwnProfile || viewerIsAdmin"
         (click)="deleteAccount()"
         style="color: red"
       >

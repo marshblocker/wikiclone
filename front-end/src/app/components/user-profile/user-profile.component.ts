@@ -18,6 +18,7 @@ export class UserProfileComponent implements OnInit {
   passwordsMatch = true;
   viewingOwnProfile = false;
   viewerIsAdmin = false;
+  viewerIsLoggedIn = false;
   paginationType = 'get-all-page-edits-of-user';
 
   constructor(private router: Router,
@@ -26,10 +27,7 @@ export class UserProfileComponent implements OnInit {
               private tokenService: TokenService) { }
 
   ngOnInit(): void {
-    if (!this.tokenService.tokenInCookie()) {
-      this.router.navigateByUrl('/token_expired');
-      return;
-    }
+    this.viewerIsLoggedIn = this.tokenService.tokenInCookie();
     this.route.paramMap.subscribe(params => {
       const username = params.get('username');
       if (username == null) {
@@ -38,17 +36,23 @@ export class UserProfileComponent implements OnInit {
       }
       this.userService.readUser(username)
         .then((userInfo: UserPublic) => {
-          this.userService.readCurrentUser()
-            .then((currentUserInfo: UserPublic) => {
-              if (currentUserInfo.role === 'admin') {
-                this.viewerIsAdmin = true;
-              }
-              if (currentUserInfo.username === userInfo.username) {
-                this.viewingOwnProfile = true;
-              }
-              this.userInfo = userInfo;
-            })
-            .catch(console.log);
+          this.userInfo = userInfo;
+
+          if (this.viewerIsLoggedIn) {
+            this.userService.readCurrentUser()
+              .then((currentUserInfo: UserPublic) => {
+                if (currentUserInfo.role === 'admin') {
+                  this.viewerIsAdmin = true;
+                }
+                if (currentUserInfo.username === userInfo.username) {
+                  this.viewingOwnProfile = true;
+                }
+              })
+              .catch(console.log);
+          } else {
+            this.viewerIsAdmin = false;
+            this.viewingOwnProfile = false;
+          }
         })
         .catch(console.log);
     })
@@ -83,7 +87,11 @@ export class UserProfileComponent implements OnInit {
     this.userService.updateUsername(this.userInfo.user_id, newUsername)
       .then(newUsername => {
         console.log('new username: ', newUsername);
-        this.logout();
+        if (this.viewingOwnProfile) {
+          this.logout();
+        } else {
+          this.refreshPage();
+        }
       })
       .catch(console.log);
   }
@@ -109,7 +117,11 @@ export class UserProfileComponent implements OnInit {
     this.userService.updatePassword(this.userInfo.user_id, newPassword)
       .then(() => {
         console.log('Password has been successfully updated.');
-        this.logout();
+        if (this.viewingOwnProfile) {
+          this.logout();
+        } else {
+          this.refreshPage();
+        }
       })
       .catch(console.log);
   }
@@ -127,7 +139,11 @@ export class UserProfileComponent implements OnInit {
     this.userService.updateEmail(this.userInfo.user_id, newEmail)
       .then(newEmail => {
         console.log('new email: ', newEmail);
-        this.logout();
+        if (this.viewingOwnProfile) {
+          this.logout();
+        } else {
+          this.refreshPage();
+        }
       })
       .catch(console.log);
   }
@@ -180,7 +196,11 @@ export class UserProfileComponent implements OnInit {
     this.userService.deleteUser(this.userInfo.username)
       .then(deletedUserInfo => {
         console.log(deletedUserInfo);
-        this.logout();
+        if (this.viewingOwnProfile) {
+          this.logout();
+        } else {
+          this.goHome();
+        }
       })
       .catch(console.log);
   }
@@ -194,6 +214,14 @@ export class UserProfileComponent implements OnInit {
 
   logout() {
     this.router.navigateByUrl('/?logout=true');
+  }
+
+  refreshPage() {
+    location.reload();
+  }
+
+  goHome() {
+    this.router.navigateByUrl('/');
   }
 
   removePasswordWarning() {
