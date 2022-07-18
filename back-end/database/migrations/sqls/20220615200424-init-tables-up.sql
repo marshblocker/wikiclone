@@ -8,8 +8,7 @@ CREATE TABLE `users` (
  `role` VARCHAR(10) NOT NULL,
  `can_edit` BOOLEAN NOT NULL,
  PRIMARY KEY (`user_id`),
- INDEX search_users_by_username_index(`username`),
- INDEX search_users_by_email_index(`email`)
+ INDEX search_users_index(`username`, `email`)
 );
 
 CREATE TABLE `pages` (
@@ -32,7 +31,7 @@ CREATE TABLE `pages` (
  INDEX search_pages_index (`title`, `lead`)
 );
 
-CREATE TABLE `page_edits` (
+CREATE TABLE `page_edits` ( 
  `page_edit_id` CHAR(9) NOT NULL UNIQUE,
  `page_version` INT NOT NULL,
  `timestamp` DATETIME NOT NULL,
@@ -50,6 +49,6 @@ CREATE TABLE `page_edits` (
  `lead` VARCHAR(3000) NOT NULL,
  `body` TEXT NOT NULL,
  PRIMARY KEY (`page_edit_id`),
- INDEX search_page_edits_by_username_index(`username`),
- INDEX search_page_edits_by_title_index(`current_title`)
+ INDEX search_page_edits_by_username_index(`username`, `page_version`),
+ INDEX search_page_edits_by_title_index(`current_title`, `page_version`)
 );
