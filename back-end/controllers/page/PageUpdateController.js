@@ -23,10 +23,11 @@ class PageUpdateController {
             const pageId = req.params['page_id'];
             const username = req.parsedToken.username;
             const userId = req.parsedToken.userId;
+            const role = req.parsedToken.role;
             let freezePage = (await pageReadController._readPage(pageId));
-            freezePage = (freezePage[0][0][0]['freeze_page'] === 1) ? true : false;
-            if (freezePage) {
-                throw CustomError.ForbidEditPage();
+            freezePage = (+freezePage[0][0][0]['freeze_page'] === 1) ? true : false;
+            if (freezePage && role !== 'admin') {
+                throw CustomError.PageFrozenCannotEdit();
             }
 
             let content = req.body['content'];
