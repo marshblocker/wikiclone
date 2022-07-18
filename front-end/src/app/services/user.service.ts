@@ -1,4 +1,4 @@
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { LoginCredentials, UserPublic, UserRequiredInfo } from '../interfaces/user.interface';
 
@@ -30,18 +30,28 @@ export class UserService {
   public loginUser = (credentials: LoginCredentials): Promise<string> => {
     return new Promise((resolve, reject) => {
       const url = 'http://localhost:3000/login';
+      let token = '';
       this.http.post<{token: string}>(url, { 'credentials': credentials },
         { 
           headers: { 'Authorization': document.cookie }, 
           observe: 'response', 
           responseType: 'json'
         }
-      ).subscribe((response: HttpResponse<{ token: string }>) => {
-        const token = response.body && response.body?.token;
-        if (token === null) {
-          return reject('No token was received!');
+      ).subscribe({
+        next: (response: HttpResponse<{ token: string }>) => {
+          if (response.body == null) {
+            return reject('Failed to log in user.');
+          }
+          token = response.body?.token;
+        },
+
+        error: (err: HttpErrorResponse) => {
+          return reject(err);
+        },
+
+        complete: () => {
+          return resolve(token);
         }
-        return resolve(token);
       })
     });
   }

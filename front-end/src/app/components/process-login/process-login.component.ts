@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoginCredentials, UserPublic } from 'src/app/interfaces/user.interface';
@@ -53,7 +54,14 @@ export class ProcessLoginComponent implements OnInit {
             })
             .catch(console.log);
         })
-        .catch(console.log);
+        .catch((err: HttpErrorResponse) => {
+          if (err.status === 404) {
+            this.router.navigateByUrl('/404?resource=user');
+          } else {
+            window.alert(`${err.error.message}\n\nYou will be redirected back to the main page.`);
+            this.router.navigateByUrl('/');
+          }
+        });
     })
   }
 }
