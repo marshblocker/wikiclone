@@ -57,7 +57,7 @@
 <h3>Article Preview</h3>
 <div id="article-preview" [innerHTML]="pagePreviewSafeHTML"></div>
 
-<button id="update-article-btn" (click)="updatePage()">Update Article</button>
-<button id="cancel-update-btn" (click)="cancelUpdate()">Cancel Update</button>
+<button id="update-article-btn" (click)="updatePage()">Apply Edit</button>
+<button id="cancel-update-btn" (click)="cancelUpdate()">Cancel Edit</button>
 <button *ngIf="userRole === 'admin'" id="freeze-article-btn" (click)="freezePage()">{{pageFrozen ? 'Unfreeze Article' : 'Freeze Article'}}</button>
 <button *ngIf="userRole === 'admin'" id="delete-article-btn" (click)="deletePage()">Delete Article</button>

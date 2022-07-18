@@ -258,9 +258,6 @@ export class PaginationComponent implements OnInit {
     console.log('Next pagination entries: ', this.nextPaginationEntries);
     console.log('Offset: ', this.offset);
     console.log('Limit: ', this.limit);
-    console.log('First page of pagination? ', this.isPaginationFirstPage);
-    console.log('Last page of pagination? ', this.isPaginationLastPage);
-    console.log('No result? ', this.noResult);
     console.log('');
   }
 }

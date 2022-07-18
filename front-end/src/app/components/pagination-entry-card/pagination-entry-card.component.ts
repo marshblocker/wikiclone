@@ -33,7 +33,6 @@ export class PaginationEntryCardComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
-    console.log(this.type);
     if (this.type === 'page-search-card') {
       this.pageSearchEntry = this.pageSearchEntry as PageSearchResultView;
       let blocks: OutputBlockData[] = (JSON.parse(this.pageSearchEntry.lead) as OutputData)
