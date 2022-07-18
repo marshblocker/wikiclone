@@ -128,7 +128,7 @@ BEGIN
     SELECT *
     FROM `page_edits`
     WHERE `username` = p_username
-    ORDER BY `timestamp` DESC
+    ORDER BY `page_version` DESC
     LIMIT p_offset, p_limit;
 END;
 
