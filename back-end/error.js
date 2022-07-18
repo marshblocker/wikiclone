@@ -45,18 +45,19 @@ class CustomError {
     DuplicateQueryParameter = (givenQueryParameter) => new SpecificReturnedError(400, `400 Bad Request: The ${givenQueryParameter} query parameter was already used.`, null, 1026);
     WrongPassword = () => new ReturnedError(400, '400 Bad Request: Wrong password.', 1027);
     NoJWTPassed = () => new ReturnedError(400, '400 Bad Request: No JSON Web Token passed.', 1028);
-    UserDoesNotExist = () => new ReturnedError(400, '400 Bad Request: The given user credentials does not match an existing user in the database.', 1029);
 
     // Code 403: Client has no access to the requested resource or action to a resource.
     ForbidCreatePage = () => new ReturnedError(403, '403 Forbidden: The user is not allowed to create a new page.', 2001);
     ForbidDeletePage = () => new ReturnedError(403, '403 Forbidden: The user is not allowed to delete a page.', 2002);
     ForbidFreezePage = () => new ReturnedError(403, '403 Forbidden: Only an admin or a superadmin can freeze a page.', 2003);
-    ForbidEditPage = () => new ReturnedError(403, '403 Forbidden: The user is not allowed to edit a page.', 2004);
+    ForbidEditPage = () => new ReturnedError(403, '403 Forbidden: The user is not allowed to edit a page. ', 2004);
     ChangeUserRoleRestriction = () => new ReturnedError(403, '403 Forbidden: Only a superadmin can change the role of another user.', 2005);
     SuperAdminChangeUserRoleRestriction = () => new ReturnedError(403, '403 Forbidden: A superadmin cannot change the role of another superadmin.', 2006);
+    PageFrozenCannotEdit = () => new ReturnedError(403, '403 Forbidden: The page is frozen and cannot be edited.', 2007);
 
     // Code 404: Requested resource does not exist in the database.
     ResourceDoesNotExist = (resourceName) => new ReturnedError(404, `404 Not Found: The given identifier does not correspond to an existing ${resourceName} in the database!`, 3001);
+    UserDoesNotExist = () => new ReturnedError(404, '400 Bad Request: The given user credentials does not match an existing user in the database.', 3002);
 
     // Code 405: The action to a specific resource is not allowed by the server.
     CannotDeletePage = () => new ReturnedError(405, '405 Method Not Allowed: The page is restricted from being deleted.', 4001);
