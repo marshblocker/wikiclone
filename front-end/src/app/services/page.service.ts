@@ -88,15 +88,21 @@ export class PageService {
           observe: 'response', 
           responseType: 'json' 
         }
-      ).subscribe((allPagesResponse: HttpResponse<Page[]>) => {
-        let allPageTitles: string[] = [];
-        if (allPagesResponse.body === null) {
-          return reject('Get all page id request failed!');
+      ).subscribe({
+        next: (allPagesResponse: HttpResponse<Page[]>) => {
+          let allPageTitles: string[] = [];
+          if (allPagesResponse.body === null) {
+            return reject('Get all page id request failed!');
+          }
+          allPagesResponse.body.forEach(page => {
+            allPageTitles.push(page.content.title);
+          })
+          return resolve(allPageTitles);
+        },
+
+        error: (err) => {
+          return reject(err);
         }
-        allPagesResponse.body.forEach(page => {
-          allPageTitles.push(page.content.title);
-        })
-        return resolve(allPageTitles);
       });
     });
   }

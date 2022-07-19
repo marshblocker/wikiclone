@@ -21,6 +21,11 @@ export class ResourceNotFoundComponent implements OnInit {
                           `;
           break;
 
+        case 'articles':
+          this.message = `Uh-oh! There are no articles stored in the database.
+                          `;
+          break;
+
         case 'user':
           this.message = `Uh-oh! User not found. Reasons could be: the user was deleted, its username was changed,
                           or no user with such name exists in the database.

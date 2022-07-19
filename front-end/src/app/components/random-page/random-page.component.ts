@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { PageService } from 'src/app/services/page.service';
@@ -14,6 +15,9 @@ export class RandomPageComponent implements OnInit {
   ngOnInit(): void {
     this.pageService.getAllPageTitles()
       .then((allPageTitles: string[]) => {
+        if (!allPageTitles.length) {
+          throw new HttpErrorResponse({ status: 404 });
+        }
         const pickRandomElement = (arr: any[]) => {
           return arr[Math.floor(Math.random()*arr.length)]
         };
@@ -27,7 +31,16 @@ export class RandomPageComponent implements OnInit {
           })
           .catch(console.log);
       })
-      .catch(console.log);
+      .catch(err => {
+        if (err.status === 404) {
+          this.router.navigateByUrl('/404?resource=articles');
+        } else {
+          window.alert(
+            `${err.error.message}\n\nYou will be redirected back to the main page.`
+          );
+          this.router.navigateByUrl('/');
+        }
+      });
   }
 
 }
