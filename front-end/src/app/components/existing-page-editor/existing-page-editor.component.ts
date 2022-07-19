@@ -8,6 +8,7 @@ import { PageEdit } from 'src/app/interfaces/page-edit.interface';
 import { Page, PageContent } from 'src/app/interfaces/page.interface';
 import { PageEditService } from 'src/app/services/page-edit.service';
 import { PageService } from 'src/app/services/page.service';
+import { SocketService } from 'src/app/services/socket.service';
 import { TokenService } from 'src/app/services/token.service';
 import { UserService } from 'src/app/services/user.service';
 
@@ -36,7 +37,8 @@ export class ExistingPageEditorComponent implements OnInit {
               private sanitizer: DomSanitizer,
               private tokenService: TokenService,
               private pageEditService: PageEditService,
-              private userService: UserService) {
+              private userService: UserService,
+              private socketService: SocketService) {
     if (!this.tokenService.tokenInCookie()) {
       this.router.navigateByUrl('/token_expired');
       return;
@@ -93,7 +95,11 @@ export class ExistingPageEditorComponent implements OnInit {
         const editSummary = (<HTMLInputElement>document.getElementById('edit-summary-input')).value;
         this.pageEditService.submitNewPageEdit(updatedPage, editSummary)
           .then((newPageEdit: PageEdit) => {
-            console.log(newPageEdit);
+            if (this.initialPageTitle === null || this.pageTitle === null) {
+              console.log('Error: pageTitle or initialPageTitle is null.')
+              return;
+            }          
+            this.socketService.finishedPageUpdate(this.initialPageTitle, this.pageTitle);
             this._goBackToPageView(true); 
           })
           .catch(console.log);
