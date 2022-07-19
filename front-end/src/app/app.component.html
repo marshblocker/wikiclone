@@ -1,5 +1,8 @@
 <div class="page">
-  <app-side-bar [loggedIn]="loggedIn" [canEdit]="currentUserInfo?.can_edit"></app-side-bar>
+  <app-side-bar
+    [loggedIn]="loggedIn"
+    [canEdit]="currentUserInfo?.can_edit"
+  ></app-side-bar>
   <div class="sandwiched-main-content">
     <app-nav-bar
       [pageType]="pageType"
@@ -14,7 +17,7 @@
       (onLogout)="logOut()"
     ></app-nav-bar>
     <div class="main-body">
-      <router-outlet></router-outlet>
+      <router-outlet (activate)="onActivate($event)"></router-outlet>
     </div>
     <app-footer></app-footer>
   </div>

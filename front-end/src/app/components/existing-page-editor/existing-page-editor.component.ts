@@ -123,6 +123,13 @@ export class ExistingPageEditorComponent implements OnInit {
     this.pageService.updateFreezePage(this.pageId, !this.pageFrozen)
       .then(() => {
         this.pageFrozen = !this.pageFrozen;
+
+        if (this.initialPageTitle === null) {
+          console.log('Error: initialPageTitle is null.');
+          return;
+        }
+        
+        this.socketService.finishedFreezePageUpdate(this.initialPageTitle, this.pageFrozen);
         this.router.navigateByUrl('/wiki/' + this.initialPageTitle);
       })
       .catch(console.log);

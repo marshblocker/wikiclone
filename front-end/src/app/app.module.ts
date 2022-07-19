@@ -33,6 +33,7 @@ import { UserService } from './services/user.service';
 import { TokenService } from './services/token.service';
 import { PageEditService } from './services/page-edit.service';
 import { SocketService } from './services/socket.service';
+import { FreezePageService } from './services/freeze-page.service';
 
 const config: SocketIoConfig = { url: 'http://localhost:3000', options: {} };
 
@@ -72,7 +73,8 @@ const config: SocketIoConfig = { url: 'http://localhost:3000', options: {} };
     UserService, 
     TokenService, 
     PageEditService,
-    SocketService
+    SocketService,
+    FreezePageService
   ],
   bootstrap: [AppComponent]
 })

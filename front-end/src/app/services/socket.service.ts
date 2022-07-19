@@ -17,6 +17,10 @@ export class SocketService {
     'notifyReadersAboutPageUpdate'
   );
 
+  toggleEditArticleButtonVisibility = this.socket.fromEvent<boolean>(
+    'toggleEditArticleButtonVisibility'
+  );
+
   joinPageRoom(pageTitle: string) {
     this.socket.emit('joinPageRoom', pageTitle);
   }
@@ -29,6 +33,13 @@ export class SocketService {
     this.socket.emit('finishedPageUpdate', {
       room: room,
       currentPageTitle: currentPageTitle,
+    });
+  }
+
+  finishedFreezePageUpdate(room: string, pageFrozen: boolean) {
+    this.socket.emit('finishedFreezePageUpdate', {
+      room: room,
+      pageFrozen: pageFrozen
     });
   }
 }

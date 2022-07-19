@@ -1,7 +1,9 @@
 import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { NavigationEnd, Router, RoutesRecognized } from '@angular/router';
+import { PageViewComponent } from './components/page-view/page-view.component';
 import { UserPublic } from './interfaces/user.interface';
+import { FreezePageService } from './services/freeze-page.service';
 import { PageService } from './services/page.service';
 import { TokenService } from './services/token.service';
 import { UserService } from './services/user.service';
@@ -16,7 +18,7 @@ export class AppComponent implements OnInit {
   pageType = 'Article'; // This is passed to the navBar.
   currentRoute!: string;
   currentUserInfo: UserPublic | null = null;
-  freezePage!: boolean;
+  freezePage = true;
   loggedIn = false;
   viewingArticle = false;
 
@@ -24,9 +26,19 @@ export class AppComponent implements OnInit {
               private location: Location, 
               private userService: UserService, 
               private tokenService: TokenService,
-              private pageService: PageService) {}
+              private freezePageService: FreezePageService) {}
 
   ngOnInit(): void {
+    this.freezePageService.freezePage$.subscribe({
+      next: (freezePage: boolean) => {
+        this.freezePage = freezePage;
+      },
+
+      error: (err) => {
+        console.log(err);
+      }
+    })
+    
     this.router.events.subscribe(event => {
       // From https://stackoverflow.com/a/46305085/17927002
       if (event instanceof RoutesRecognized) {
@@ -56,15 +68,6 @@ export class AppComponent implements OnInit {
           this.currentUserInfo = null;
           this.loggedIn = false;
         }
-        this.viewingArticle = this.isViewingArticle();
-        if (this.viewingArticle) {
-          const pageTitle = this.currentRoute.split('/wiki/')[1];
-          this.pageService.getPageByTitle(pageTitle)
-            .then(page => {
-              this.freezePage = page.freeze_page;
-            })
-            .catch(console.log);
-        }
       }
     })
   }
@@ -84,12 +87,11 @@ export class AppComponent implements OnInit {
       .catch(console.log);
   }
 
-  // TODO: Ban the use of 'new', 'random', and 'search' as page title.
-  isViewingArticle(): boolean {
-    const suffix = this.currentRoute.split('/wiki/')[1];
-    return this.currentRoute.startsWith('/wiki/') &&
-           !(suffix.includes('/')) &&
-           !(suffix.startsWith('search?')) &&
-           !(['new', 'random', 'search'].includes(suffix));
+  onActivate(event: any) {
+    if (event instanceof PageViewComponent) {
+      this.viewingArticle = true;
+    } else {
+      this.viewingArticle = false;
+    }
   }
 }

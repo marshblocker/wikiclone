@@ -19,6 +19,10 @@ class Sockets {
             socket.on('finishedPageUpdate', args => {
                 this.io.to(args.room).emit('notifyReadersAboutPageUpdate', args.currentPageTitle);
             });
+
+            socket.on('finishedFreezePageUpdate', args => {
+                this.io.to(args.room).emit('toggleEditArticleButtonVisibility', args.pageFrozen);
+            });
         });
     }
 }

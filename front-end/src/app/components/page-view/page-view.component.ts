@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { OutputBlockData, OutputData } from '@editorjs/editorjs';
 import { PageHTML } from 'src/app/classes/page-html.class';
 import { Page } from 'src/app/interfaces/page.interface';
+import { FreezePageService } from 'src/app/services/freeze-page.service';
 import { PageService } from 'src/app/services/page.service';
 import { SocketService } from 'src/app/services/socket.service';
 
@@ -16,23 +17,20 @@ import { SocketService } from 'src/app/services/socket.service';
 export class PageViewComponent implements OnInit, OnDestroy {
   pageSafeHTML!: SafeHtml;
   pageTitle = '';
+  freezePage = true;
 
-  constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private pageService: PageService,
-    private sanitizer: DomSanitizer,
-    private titleService: Title,
-    private socketService: SocketService
-  ) {}
-
-  ngOnInit(): void {
+  constructor( private route: ActivatedRoute,
+               private router: Router,
+               private pageService: PageService,
+               private sanitizer: DomSanitizer,
+               private titleService: Title,
+               private socketService: SocketService,
+               private freezePageService: FreezePageService) {
     this._renderPageView()
       .then(() => {
-        // Change page title.
         this.titleService.setTitle(this.pageTitle);
-
         this.socketService.joinPageRoom(this.pageTitle);
+
         this.socketService.notifyReadersAboutPageUpdate.subscribe({
           next: (currentPageTitle: string) => {
             this._loadUpdatedView(currentPageTitle);
@@ -47,6 +45,13 @@ export class PageViewComponent implements OnInit, OnDestroy {
             return;
           },
         });
+
+        this.socketService.toggleEditArticleButtonVisibility.subscribe({
+          next: (pageFrozen: boolean) => {
+            this.freezePage = pageFrozen;
+            this.freezePageService.freezePage$.next(this.freezePage);
+          }
+        })
       })
       .catch((err: HttpErrorResponse) => {
         if (err.status === 404) {
@@ -60,6 +65,9 @@ export class PageViewComponent implements OnInit, OnDestroy {
       });
   }
 
+  ngOnInit(): void {
+  }
+
   ngOnDestroy(): void {
     if (this.pageTitle) {
       this.socketService.exitPageRoom(this.pageTitle);
@@ -70,7 +78,6 @@ export class PageViewComponent implements OnInit, OnDestroy {
     return new Promise((resolve, reject) => {
       this.route.paramMap.subscribe((params) => {
         const pageTitle = params.get('title');
-        console.log(pageTitle);
         if (pageTitle == null) {
           console.log('Error: pageTitle is null.');
           return;
@@ -79,6 +86,8 @@ export class PageViewComponent implements OnInit, OnDestroy {
         this.pageService
           .getPageByTitle(pageTitle)
           .then((page: Page) => {
+            this.freezePage = page.freeze_page;
+            this.freezePageService.freezePage$.next(this.freezePage);
             // Convert pageContent to its HTML format.
             const pageImageUrl = page.content.image_url;
             const pageLeadData: OutputBlockData<string, any>[] = (
