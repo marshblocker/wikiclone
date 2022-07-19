@@ -21,6 +21,10 @@ export class SocketService {
     'toggleEditArticleButtonVisibility'
   );
 
+  notifyReadersAboutPageDelete = this.socket.fromEvent(
+    'notifyReadersAboutPageDelete'
+  );
+
   joinPageRoom(pageTitle: string) {
     this.socket.emit('joinPageRoom', pageTitle);
   }
@@ -40,6 +44,12 @@ export class SocketService {
     this.socket.emit('finishedFreezePageUpdate', {
       room: room,
       pageFrozen: pageFrozen
+    });
+  }
+
+  finishedPageDelete(room: string) {
+    this.socket.emit('finishedPageDelete', {
+      room: room
     });
   }
 }

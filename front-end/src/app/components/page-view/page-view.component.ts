@@ -38,18 +38,27 @@ export class PageViewComponent implements OnInit, OnDestroy {
 
           error: (err) => {
             console.log(err);
-            return;
-          },
-
-          complete: () => {
-            return;
-          },
+          }
         });
 
         this.socketService.toggleEditArticleButtonVisibility.subscribe({
           next: (pageFrozen: boolean) => {
             this.freezePage = pageFrozen;
             this.freezePageService.freezePage$.next(this.freezePage);
+          },
+
+          error: (err) => {
+            console.log(err);
+          }
+        })
+
+        this.socketService.notifyReadersAboutPageDelete.subscribe({
+          next: () => {
+            this._pageDeletedAction();
+          },
+
+          error: (err) => {
+            console.log(err);
           }
         })
       })
@@ -137,5 +146,17 @@ export class PageViewComponent implements OnInit, OnDestroy {
     // if (confirm) {
     //   this.router.navigateByUrl('/wiki/' + currentPageTitle);
     // }
+  }
+
+  _pageDeletedAction() {
+    this.router.navigateByUrl('/')
+      .then(navigated => {
+        if (navigated) {
+          console.log('Page has been deleted. You are redirected back to the home page.');
+        } else {
+          console.log('Error: Failed to go home.');
+        }
+      })
+      .catch(console.log);
   }
 }

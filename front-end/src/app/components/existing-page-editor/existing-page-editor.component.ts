@@ -144,6 +144,14 @@ export class ExistingPageEditorComponent implements OnInit {
       .then((deletedPage: Page) => {
         console.log(deletedPage);
         this.pageDeleted = true;
+
+        if (this.initialPageTitle === null) {
+          console.log('Error: initialPageTitle is null!');
+          return;
+        }
+
+        this.socketService.finishedPageDelete(this.initialPageTitle);
+
         this.router.navigateByUrl('/');
       })
       .catch(console.log);

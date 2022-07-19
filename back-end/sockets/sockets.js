@@ -23,6 +23,10 @@ class Sockets {
             socket.on('finishedFreezePageUpdate', args => {
                 this.io.to(args.room).emit('toggleEditArticleButtonVisibility', args.pageFrozen);
             });
+
+            socket.on('finishedPageDelete', args => {
+                this.io.to(args.room).emit('notifyReadersAboutPageDelete');
+            });
         });
     }
 }
