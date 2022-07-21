@@ -1,11 +1,11 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
-import { UserPublic } from 'src/app/interfaces/user.interface';
+import { ObservablesService } from 'src/app/services/observables.service';
 
 @Component({
   selector: 'app-nav-bar',
   templateUrl: './nav-bar.component.html',
-  styleUrls: ['./nav-bar.component.css']
+  styleUrls: ['./nav-bar.component.css'],
 })
 export class NavBarComponent implements OnInit {
   @Input() pageType = 'Article';
@@ -20,10 +20,23 @@ export class NavBarComponent implements OnInit {
   @Output() onLogout = new EventEmitter();
 
   hideArticleEditButton = true;
+  pageEditors: string[] = [];
 
-  constructor(private router: Router) { }
+  constructor(
+    private router: Router,
+    private observablesService: ObservablesService
+  ) {}
 
   ngOnInit(): void {
+    this.observablesService.pageEditor$.subscribe({
+      next: (pageEditors: string[]) => {
+        this.pageEditors = pageEditors;
+      },
+
+      error: (err) => {
+        console.log(err);
+      },
+    });
   }
 
   logOut() {
@@ -31,10 +44,9 @@ export class NavBarComponent implements OnInit {
   }
 
   performSearch() {
-    const searchString = (<HTMLInputElement>document.getElementById('search-bar')).value;
+    const searchString = (<HTMLInputElement>(
+      document.getElementById('search-bar')
+    )).value;
     this.router.navigateByUrl('/wiki/search?search-string=' + searchString);
   }
-
-  
-
 }

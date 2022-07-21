@@ -1,7 +1,9 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { UserPublic } from 'src/app/interfaces/user.interface';
+import { UserPublic, UserStatus } from 'src/app/interfaces/user.interface';
+import { ObservablesService } from 'src/app/services/observables.service';
+import { SocketService } from 'src/app/services/socket.service';
 import { TokenService } from 'src/app/services/token.service';
 import { UserService } from 'src/app/services/user.service';
 
@@ -20,22 +22,38 @@ export class UserProfileComponent implements OnInit {
   viewingOwnProfile = false;
   viewerIsAdmin = false;
   viewerIsLoggedIn = false;
+  userStatus = { status: 'offline', editing: '' };
   paginationType = 'get-all-page-edits-of-user';
 
   constructor(private router: Router,
               private route: ActivatedRoute,
               private userService: UserService,
-              private tokenService: TokenService) { }
+              private tokenService: TokenService,
+              private socketService: SocketService,
+              private observablesService: ObservablesService) { }
 
   ngOnInit(): void {
     this.viewerIsLoggedIn = this.tokenService.tokenInCookie();
-    this.route.paramMap.subscribe(params => {
+    this.route.paramMap.subscribe(async params => {
+      try {
       const username = params.get('username');
       if (username == null) {
         window.alert('Username is null!\n\nYou will be redirected back to the main page.');
         this.router.navigateByUrl('/');
         return;
       }
+        this.userStatus = await this.socketService.checkUserStatus(username);
+        this.observablesService.userStatus$.subscribe({
+          next: (userStatus: UserStatus) => {
+            console.log(userStatus);
+            this.userStatus = userStatus;
+          },
+
+          error: (err) => {
+            throw err;
+          }
+        })
+        console.log(this.userStatus);
       this.userService.readUser(username)
         .then((userInfo: UserPublic) => {
           this.userInfo = userInfo;

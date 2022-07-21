@@ -2,9 +2,9 @@ import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { NavigationEnd, Router, RoutesRecognized } from '@angular/router';
 import { PageViewComponent } from './components/page-view/page-view.component';
-import { UserPublic } from './interfaces/user.interface';
-import { FreezePageService } from './services/freeze-page.service';
-import { PageService } from './services/page.service';
+import { UserPublic, UserStatus } from './interfaces/user.interface';
+import { ObservablesService } from './services/observables.service';
+import { SocketService } from './services/socket.service';
 import { TokenService } from './services/token.service';
 import { UserService } from './services/user.service';
 
@@ -26,12 +26,24 @@ export class AppComponent implements OnInit {
               private location: Location, 
               private userService: UserService, 
               private tokenService: TokenService,
-              private freezePageService: FreezePageService) {}
+              private socketService: SocketService,
+              private observablesService: ObservablesService) {}
 
   ngOnInit(): void {
-    this.freezePageService.freezePage$.subscribe({
+    this.observablesService.freezePage$.subscribe({
       next: (freezePage: boolean) => {
         this.freezePage = freezePage;
+      },
+
+      error: (err) => {
+        console.log(err);
+      }
+    })
+
+    this.socketService.userStatusUpdated.subscribe({
+      next: (userStatus: UserStatus) => {
+        console.log(userStatus);
+        this.observablesService.userStatus$.next(userStatus);
       },
 
       error: (err) => {
@@ -73,6 +85,12 @@ export class AppComponent implements OnInit {
   }
 
   logOut() {
+    if (this.currentUserInfo === null) {
+      console.log('Error: currentUserInfo is null.')
+      return;
+    }
+
+    this.socketService.logoutUser(this.currentUserInfo.username);
     this.currentUserInfo = null;
     this.loggedIn = false;
     this.tokenService.deleteTokenInCookie();

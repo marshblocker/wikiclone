@@ -1,5 +1,24 @@
 <div *ngIf="userInfo">
-  <h1>{{ userInfo.username }}'s Profile</h1>
+  <h1>
+    {{ userInfo.username }}'s Profile (Status:
+    <span
+      [ngStyle]="{ color: userStatus.status === 'online' ? 'green' : 'gray' }"
+    >
+      {{
+        userStatus.status.charAt(0).toUpperCase() + userStatus.status.slice(1)
+      }} </span
+    >, Currently editing:
+    <div *ngIf="userStatus.editing; then anchorText; else grayText"></div>
+    <ng-template #anchorText>
+      <a routerLink="/wiki/{{ userStatus.editing }}">{{
+        userStatus.editing
+      }}</a>
+    </ng-template>
+    <ng-template #grayText>
+      <span style="color: gray"> None </span>
+    </ng-template>
+    )
+  </h1>
   <div class="multi-col">
     <div id="col1" class="col">
       <div id="user-info">

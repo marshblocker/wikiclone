@@ -6,7 +6,7 @@ import { OutputBlockData, OutputData } from '@editorjs/editorjs';
 import { PageHTML } from 'src/app/classes/page-html.class';
 import { PageEdit } from 'src/app/interfaces/page-edit.interface';
 import { Page } from 'src/app/interfaces/page.interface';
-import { FreezePageService } from 'src/app/services/freeze-page.service';
+import { ObservablesService } from 'src/app/services/observables.service';
 import { PageEditService } from 'src/app/services/page-edit.service';
 import { PageService } from 'src/app/services/page.service';
 import { SocketService } from 'src/app/services/socket.service';
@@ -41,7 +41,7 @@ export class PageVersionViewComponent implements OnInit {
     private userService: UserService,
     private tokenService: TokenService,
     private socketService: SocketService,
-    private freezePageService: FreezePageService
+    private observablesService: ObservablesService
   ) {}
 
   ngOnInit(): void {
@@ -54,7 +54,7 @@ export class PageVersionViewComponent implements OnInit {
         this.socketService.toggleEditArticleButtonVisibility.subscribe({
           next: (pageFrozen: boolean) => {
             this.freezePage = pageFrozen;
-            this.freezePageService.freezePage$.next(this.freezePage);
+            this.observablesService.freezePage$.next(this.freezePage);
           },
 
           error: (err) => {
@@ -167,11 +167,6 @@ export class PageVersionViewComponent implements OnInit {
 
   setThisVersionAsCurrentVersion() {
     const content = this.pageEdit.content;
-    const proceed = window.confirm('Restore article to this version?');
-    if (!proceed) {
-      return;
-    }
-
     this.pageService
       .updatePage(this.pageId as string, content)
       .then((updatedPage: Page) => {
@@ -191,6 +186,8 @@ export class PageVersionViewComponent implements OnInit {
       })
       .catch(console.log);
   }
+
+  
 
   _goBackToPageView() {
     this.router

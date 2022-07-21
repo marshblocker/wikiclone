@@ -26,6 +26,7 @@ export class ExistingPageEditorComponent implements OnInit {
   pagePreviewSafeHTML!: SafeHtml;
 
   userRole!: string;
+  username!: string;
   
   pageFrozen!: boolean;
   pageDeleted = false;
@@ -63,6 +64,12 @@ export class ExistingPageEditorComponent implements OnInit {
           this.userService.readCurrentUser()
             .then(userInfo => {
               this.userRole = userInfo.role;
+              this.username = userInfo.username;
+              if (this.pageTitle === null) {
+                console.log('Error: pageTitle is null.');
+                return;
+              }
+              this.socketService.editPage(this.username, this.pageTitle);
             })
             .catch(console.log);
         })
@@ -73,10 +80,6 @@ export class ExistingPageEditorComponent implements OnInit {
   }
 
   async updatePage() {
-    const proceed = window.confirm('Update article?');
-    if (!proceed) {
-      return;
-    }
     await this.pageEditor.updatePageEditorDataContainers();
     const leadData: string = JSON.stringify(this.pageEditor.pageLeadEditorData);
     const bodyData: string = JSON.stringify(this.pageEditor.pageBodyEditorData);
@@ -108,18 +111,10 @@ export class ExistingPageEditorComponent implements OnInit {
   }
 
   cancelUpdate() {
-    const proceed = window.confirm('Cancel edit?');
-    if (!proceed) {
-      return;
-    }
     this._goBackToPageView(false);
   }
 
   async freezePage() {
-    const proceed = window.confirm('Do you really want to freeze this article? This will prevent non-admin users from editing this article.');
-    if (!proceed) {
-      return;
-    }
     this.pageService.updateFreezePage(this.pageId, !this.pageFrozen)
       .then(() => {
         this.pageFrozen = !this.pageFrozen;
@@ -130,16 +125,12 @@ export class ExistingPageEditorComponent implements OnInit {
         }
         
         this.socketService.finishedFreezePageUpdate(this.initialPageTitle, this.pageFrozen);
-        this.router.navigateByUrl('/wiki/' + this.initialPageTitle);
+        this._goBackToPageView(false);
       })
       .catch(console.log);
   }
 
   async deletePage() {
-    const proceed = window.confirm('Do you really want to delete this page?');
-    if (!proceed) {
-      return;
-    }
     this.pageService.deletePage(this.pageId)
       .then((deletedPage: Page) => {
         console.log(deletedPage);
@@ -151,7 +142,7 @@ export class ExistingPageEditorComponent implements OnInit {
         }
 
         this.socketService.finishedPageDelete(this.initialPageTitle);
-
+        this.socketService.leaveEditPage(this.username, this.initialPageTitle);
         this.router.navigateByUrl('/');
       })
       .catch(console.log);
@@ -185,11 +176,16 @@ export class ExistingPageEditorComponent implements OnInit {
 
   _goBackToPageView(afterUpdate: boolean) {
     const title = afterUpdate ? this.pageTitle : this.initialPageTitle;
+    if (title == null) {
+      console.log('title is null!');
+      return;
+    }
     this.router.navigateByUrl('/wiki/' + title)
       .then(navigated => {
         if (!navigated) {
           console.log('Failed to go to the updated page.');
         }
+        this.socketService.leaveEditPage(this.username, title);
       })
       .catch(console.log);
   }

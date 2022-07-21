@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { OutputBlockData, OutputData } from '@editorjs/editorjs';
 import { PageHTML } from 'src/app/classes/page-html.class';
 import { Page } from 'src/app/interfaces/page.interface';
-import { FreezePageService } from 'src/app/services/freeze-page.service';
+import { ObservablesService } from 'src/app/services/observables.service';
 import { PageService } from 'src/app/services/page.service';
 import { SocketService } from 'src/app/services/socket.service';
 
@@ -18,6 +18,7 @@ export class PageViewComponent implements OnInit, OnDestroy {
   pageSafeHTML!: SafeHtml;
   pageTitle = '';
   freezePage = true;
+  pageEditors: string[] = [];
 
   constructor( private route: ActivatedRoute,
                private router: Router,
@@ -25,42 +26,74 @@ export class PageViewComponent implements OnInit, OnDestroy {
                private sanitizer: DomSanitizer,
                private titleService: Title,
                private socketService: SocketService,
-               private freezePageService: FreezePageService) {
+               private observablesService: ObservablesService) {
     this._renderPageView()
-      .then(() => {
-        this.titleService.setTitle(this.pageTitle);
-        this.socketService.joinPageRoom(this.pageTitle);
-
-        this.socketService.notifyReadersAboutPageUpdate.subscribe({
-          next: (currentPageTitle: string) => {
-            this._loadUpdatedView(currentPageTitle);
-          },
-
-          error: (err) => {
-            console.log(err);
+      .then(async () => {
+        try {
+          this.titleService.setTitle(this.pageTitle);
+          const pageEditors = await this.socketService.joinPageRoom(this.pageTitle);
+          if (Object.keys(pageEditors).length) {
+            this.pageEditors = Object.keys(pageEditors);
+            this.pageEditors.sort(function (a, b) {
+              return ('' + a).localeCompare(b);
+            });
           }
-        });
+          console.log(this.pageEditors);
+          this.observablesService.pageEditor$.next(this.pageEditors);
 
-        this.socketService.toggleEditArticleButtonVisibility.subscribe({
-          next: (pageFrozen: boolean) => {
-            this.freezePage = pageFrozen;
-            this.freezePageService.freezePage$.next(this.freezePage);
-          },
+          this.socketService.notifyReadersAboutPageUpdate.subscribe({
+            next: (currentPageTitle: string) => {
+              this._loadUpdatedView(currentPageTitle);
+            },
+  
+            error: (err) => {
+              console.log(err);
+            }
+          });
+  
+          this.socketService.toggleEditArticleButtonVisibility.subscribe({
+            next: (pageFrozen: boolean) => {
+              this.freezePage = pageFrozen;
+              this.observablesService.freezePage$.next(this.freezePage);
+            },
+  
+            error: (err) => {
+              console.log(err);
+            }
+          });
+  
+          this.socketService.notifyReadersAboutPageDelete.subscribe({
+            next: () => {
+              this._pageDeletedAction();
+            },
+  
+            error: (err) => {
+              throw err;
+            }
+          });
 
-          error: (err) => {
-            console.log(err);
-          }
-        })
+          this.socketService.notifyReadersAboutPageEditors.subscribe({
+            next: (pageEditors: {[username: string]: string}) => {
+              console.log('pageEditors: ' + pageEditors);
+              if (Object.keys(pageEditors).length) {
+                this.pageEditors = Object.keys(pageEditors);
+                this.pageEditors.sort(function (a, b) {
+                  return ('' + a).localeCompare(b);
+                });
+              } else {
+                this.pageEditors = [];
+              }
+              console.log(this.pageEditors);
+              this.observablesService.pageEditor$.next(this.pageEditors);
+            },
 
-        this.socketService.notifyReadersAboutPageDelete.subscribe({
-          next: () => {
-            this._pageDeletedAction();
-          },
-
-          error: (err) => {
-            console.log(err);
-          }
-        })
+            error: (err) => {
+              throw err;
+            }
+          })
+        } catch (error) {
+          throw error;
+        }
       })
       .catch((err: HttpErrorResponse) => {
         if (err.status === 404) {
@@ -96,7 +129,7 @@ export class PageViewComponent implements OnInit, OnDestroy {
           .getPageByTitle(pageTitle)
           .then((page: Page) => {
             this.freezePage = page.freeze_page;
-            this.freezePageService.freezePage$.next(this.freezePage);
+            this.observablesService.freezePage$.next(this.freezePage);
             // Convert pageContent to its HTML format.
             const pageImageUrl = page.content.image_url;
             const pageLeadData: OutputBlockData<string, any>[] = (

@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { FreezePageService } from './freeze-page.service';
+import { ObservablesService } from './observables.service';
 
-describe('FreezePageService', () => {
-  let service: FreezePageService;
+describe('ObservablesService', () => {
+  let service: ObservablesService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(FreezePageService);
+    service = TestBed.inject(ObservablesService);
   });
 
   it('should be created', () => {

@@ -23,3 +23,8 @@ export interface LoginCredentials {
     usernameOrEmail: string;
     password: string;
 }
+
+export interface UserStatus {
+    status: string;
+    editing: string;
+}

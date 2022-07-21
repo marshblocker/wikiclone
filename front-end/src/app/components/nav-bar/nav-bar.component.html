@@ -9,8 +9,7 @@
       />
     </div>
 
-    <div class="flex-right-side">
-    </div>
+    <div class="flex-right-side"></div>
   </div>
 
   <div class="nav-bar-large-screen">
@@ -70,6 +69,22 @@
         <ul class="horizontal-links-ul">
           <li class="no-bullet-li horizontal-links-li">
             <span class="small-anchor">{{ pageType }}</span>
+            <span
+              *ngIf="viewingArticle && pageEditors.length"
+              class="small-anchor"
+            >
+              (User/s currently editing this article:
+              <span *ngFor="let editor of pageEditors; index as i">
+                <a routerLink="/user/{{ editor }}/profile">{{ editor }}</a>
+                <span>{{
+                  i < pageEditors.length - 1
+                    ? i === pageEditors.length - 2
+                      ? " and "
+                      : ", "
+                    : "."
+                }}</span>
+              </span>)
+            </span>
           </li>
           <!-- <li class="no-bullet-li horizontal-links-li"> TO BE IMPLEMENTED
             <a href="#" class="small-anchor">Talk</a>
@@ -87,7 +102,15 @@
               >View Edit History</a
             >
           </li>
-          <li *ngIf="loggedIn && currentCanEdit && (currentRole === 'admin' || (currentRole === 'user' && !freezePage)) " class="no-bullet-li horizontal-links-li">
+          <li
+            *ngIf="
+              loggedIn &&
+              currentCanEdit &&
+              (currentRole === 'admin' ||
+                (currentRole === 'user' && !freezePage))
+            "
+            class="no-bullet-li horizontal-links-li"
+          >
             <a
               routerLink="{{ currentRoute }}/edit"
               ariaCurrentWhenActive="page"

@@ -2,6 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoginCredentials, UserPublic } from 'src/app/interfaces/user.interface';
+import { SocketService } from 'src/app/services/socket.service';
 import { TokenService } from 'src/app/services/token.service';
 import { UserService } from 'src/app/services/user.service';
 
@@ -15,7 +16,8 @@ export class ProcessLoginComponent implements OnInit {
   constructor(private route: ActivatedRoute, 
               private router: Router, 
               private userService: UserService,
-              private tokenService: TokenService) { }
+              private tokenService: TokenService,
+              private socketService: SocketService) { }
 
   ngOnInit(): void {
     this.route.queryParamMap.subscribe(queryParams => {
@@ -50,6 +52,9 @@ export class ProcessLoginComponent implements OnInit {
                 console.log('User not found!');
                 return;
               }
+
+              this.socketService.loginUser(user.username);
+
               this.router.navigateByUrl('/');
             })
             .catch(console.log);
