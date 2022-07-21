@@ -20,7 +20,8 @@ let constants = {
     },
     reddis: {
         // In seconds.
-        CACHE_EXPIRATION_TIME: 180
+        PAGE_CACHE_EXPIRATION_TIME: 180, // 3 minutes.
+        USER_CACHE_EXPIRATION_TIME: 14400 // 4 hours same with token expiration.
     }
 };
 

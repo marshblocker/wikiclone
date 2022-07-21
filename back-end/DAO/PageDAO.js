@@ -48,7 +48,7 @@ class PageDAO {
                         'lead', page['lead'],
                         'body', page['body']
                     )
-                    .expire(pageId, constants.reddis.CACHE_EXPIRATION_TIME)
+                    .expire(pageId, constants.reddis.PAGE_CACHE_EXPIRATION_TIME)
                     .exec((err, results) => {
                         if (err) throw err;
                     })
@@ -114,9 +114,9 @@ class PageDAO {
                         'lead', page['lead'],
                         'body', page['body']
                     )
-                    .expire(title, constants.reddis.CACHE_EXPIRATION_TIME)
+                    .expire(title, constants.reddis.PAGE_CACHE_EXPIRATION_TIME)
                     .hset(page['page_id'], 'current_title', page['current_title'])
-                    .expire(page['page_id'], constants.reddis.CACHE_EXPIRATION_TIME)
+                    .expire(page['page_id'], constants.reddis.PAGE_CACHE_EXPIRATION_TIME)
                     .exec();
                 
                 console.log('Caching page result:', cachePageResult);
