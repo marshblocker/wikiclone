@@ -16,9 +16,7 @@
     padding: 1em;
 }
 
-button
+.btns
 {
-    margin-right: 1em;
-    margin-top: 1em;
-    margin-bottom: 1em;
+    display: flex;
 }

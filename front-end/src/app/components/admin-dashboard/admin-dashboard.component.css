@@ -2,6 +2,7 @@
 {
     width: 100px;
     border: none;
+    margin: 0px;
 }
 
 .header-buttons button:hover

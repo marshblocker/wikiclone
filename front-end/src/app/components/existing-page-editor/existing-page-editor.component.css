@@ -21,6 +21,11 @@
     font-style: italic;
 }
 
+.editor-btns
+{
+    display: flex;
+}
+
 #update-article-preview-btn,
 #update-article-btn,
 #cancel-update-btn,
@@ -39,8 +44,9 @@
 #article-preview
 {
     min-height: 10em;
-    background-color: #ffffff;
     padding: 1em;
+    background-color: #ffffff;
+    border: 1px dashed gray;
 }
 
 #edit-summary-input

@@ -66,6 +66,12 @@ table
     padding-left: 10px;
 }
 
-.update-user-info div > * {
+.update-user-info div > * 
+{
     margin-right: 5px;
+}
+
+.user-info-btns
+{
+    display: flex;
 }
