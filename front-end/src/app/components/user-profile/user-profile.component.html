@@ -72,19 +72,41 @@
                 userInfo.role.charAt(0).toUpperCase() + userInfo.role.slice(1)
               }}
             </td>
-            <td *ngIf="viewerIsAdmin">
-              <button (click)="updateRole()">
-                {{userInfo.role === 'user' ? 'Promote to admin' : 'Demote to user'}}
-              </button>
+            <td *ngIf="viewerIsAdmin && !isUpdatingUserInfo">
+              <app-modal
+                [modalId]="'change-role'"
+                [message]="
+                  userInfo.role === 'user'
+                    ? 'Promote to admin?'
+                    : 'Demote to user?'
+                "
+                [buttonMessage]="
+                  userInfo.role === 'user'
+                    ? 'Promote to admin'
+                    : 'Demote to user'
+                "
+                (onYesButtonClick)="updateRole()"
+              ></app-modal>
             </td>
           </tr>
           <tr>
             <td><strong>Allowed to Edit</strong></td>
             <td>{{ userInfo.can_edit === true ? "Yes" : "No" }}</td>
-            <td *ngIf="viewerIsAdmin">
-              <button (click)="updateCanEdit()">
-                {{userInfo.can_edit === true ? 'Remove editing rights' : 'Return editing rights'}}
-              </button>
+            <td *ngIf="viewerIsAdmin && !isUpdatingUserInfo">
+              <app-modal
+                [modalId]="'change-canEdit'"
+                [message]="
+                  userInfo.can_edit
+                    ? 'Remove editing rights?'
+                    : 'Return editing rights?'
+                "
+                [buttonMessage]="
+                  userInfo.can_edit
+                    ? 'Remove editing rights'
+                    : 'Return editing rights'
+                "
+                (onYesButtonClick)="updateCanEdit()"
+              ></app-modal>
             </td>
           </tr>
         </table>
@@ -98,10 +120,15 @@
               id="new-username"
               maxlength="20"
             />
-            <button type="submit" (click)="updateUsername()">
-              Change username
-            </button>
-            <button type="submit" (click)="cancelUpdate()">Cancel</button>
+            <div class="user-info-btns">
+              <app-modal
+                [modalId]="'change-username'"
+                [message]="'Change username?'"
+                [buttonMessage]="'Change username'"
+                (onYesButtonClick)="updateUsername()"
+              ></app-modal>
+              <button type="submit" (click)="cancelUpdate()">Cancel</button>
+            </div>
           </div>
 
           <div id="update-password" *ngIf="isUpdatingPassword">
@@ -141,10 +168,15 @@
                 </td>
               </tr>
             </table>
-            <button type="submit" (click)="updatePassword()">
-              Change password
-            </button>
-            <button type="submit" (click)="cancelUpdate()">Cancel</button>
+            <div class="user-info-btns">
+              <app-modal
+                [modalId]="'change-password'"
+                [message]="'Change password?'"
+                [buttonMessage]="'Change password'"
+                (onYesButtonClick)="updatePassword()"
+              ></app-modal>
+              <button type="submit" (click)="cancelUpdate()">Cancel</button>
+            </div>
           </div>
 
           <div id="update-email" *ngIf="isUpdatingEmail">
@@ -155,18 +187,26 @@
               id="new-email"
               maxlength="320"
             />
-            <button type="submit" (click)="updateEmail()">Change email</button>
-            <button type="submit" (click)="cancelUpdate()">Cancel</button>
+            <div class="user-info-btns">
+              <app-modal
+                [modalId]="'change-email'"
+                [message]="'Change email?'"
+                [buttonMessage]="'Change email'"
+                (onYesButtonClick)="updateEmail()"
+              ></app-modal>
+              <button type="submit" (click)="cancelUpdate()">Cancel</button>
+            </div>
           </div>
         </div>
       </div>
-      <button
+
+      <app-modal
         *ngIf="viewingOwnProfile || viewerIsAdmin"
-        (click)="deleteAccount()"
-        style="color: red"
-      >
-        Delete Account
-      </button>
+        [modalId]="'delete-account'"
+        [message]="'Are you sure you want to delete this account?'"
+        [buttonMessage]="'Delete Account'"
+        (onYesButtonClick)="deleteAccount()"
+      ></app-modal>
     </div>
     <div id="col2" class="col">
       <h2 class="col-header">Page Contributions</h2>

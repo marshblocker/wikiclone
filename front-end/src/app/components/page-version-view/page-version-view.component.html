@@ -5,16 +5,22 @@
   <p id="edit-summary">
     <em>{{pageEdit.edit_summary}}</em>
   </p>
-  <button
-    *ngIf="viewerIsLoggedIn && !freezePage && canEdit"
-    (click)="setThisVersionAsCurrentVersion()"
-  >
-    Restore article to this version
-  </button>
-  <a routerLink="/wiki/{{ pageCurrentTitle }}" style="text-decoration: none">
-    <button>View current version</button>
-  </a>
-  <a routerLink="/wiki/{{ pageCurrentTitle }}/versions" style="text-decoration: none">
-    <button>View Edit History</button>
-  </a>
+
+  <div class="btns">
+    <app-modal
+      *ngIf="viewerIsLoggedIn && !freezePage && canEdit"
+      [modalId]="'restore-previous-version'"
+      [message]="'Restore article to this version?'"
+      [buttonMessage]="'Restore article to this version'"
+      (onYesButtonClick)="setThisVersionAsCurrentVersion()"
+    ></app-modal>
+
+    <a routerLink="/wiki/{{ pageCurrentTitle }}" style="text-decoration: none">
+      <button>View current version</button>
+    </a>
+    
+    <a routerLink="/wiki/{{ pageCurrentTitle }}/versions" style="text-decoration: none">
+      <button>View Edit History</button>
+    </a>
+  </div>
 </div>

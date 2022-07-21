@@ -43,9 +43,9 @@
   <small class="guide-text"></small>
 </div>
 
-<h3 class="input-header"> Short summary of changes you have made (Required) </h3>
+<h3 class="input-header">Short summary of changes you have made (Required)</h3>
 <div>
-  <input type="text" name="edit-summary-input" id="edit-summary-input"/>
+  <input type="text" name="edit-summary-input" id="edit-summary-input" />
 </div>
 
 <button id="update-article-preview-btn" (click)="updatePagePreview()">
@@ -57,7 +57,35 @@
 <h3>Article Preview</h3>
 <div id="article-preview" [innerHTML]="pagePreviewSafeHTML"></div>
 
-<button id="update-article-btn" (click)="updatePage()">Apply Edit</button>
-<button id="cancel-update-btn" (click)="cancelUpdate()">Cancel Edit</button>
-<button *ngIf="userRole === 'admin'" id="freeze-article-btn" (click)="freezePage()">{{pageFrozen ? 'Unfreeze Article' : 'Freeze Article'}}</button>
-<button *ngIf="userRole === 'admin'" id="delete-article-btn" (click)="deletePage()">Delete Article</button>
+<div class="editor-btns">
+  <app-modal
+    [modalId]="'update-article'"
+    [message]="'Update article?'"
+    [buttonMessage]="'Apply Edit'"
+    (onYesButtonClick)="updatePage()"
+  ></app-modal>
+
+  <app-modal
+    [modalId]="'cancel-update'"
+    [message]="'Cancel edit?'"
+    [buttonMessage]="'Cancel Edit'"
+    (onYesButtonClick)="cancelUpdate()"
+  ></app-modal>
+
+  <app-modal
+    *ngIf="userRole === 'admin'"
+    [modalId]="'freeze-article'"
+    [message]="'Do you really want to freeze this article? This will prevent non-admin users from editing this article.'"
+    [buttonMessage]="pageFrozen ? 'Unfreeze Article' : 'Freeze Article'"
+    (onYesButtonClick)="freezePage()"
+  ></app-modal>
+
+  <app-modal
+    *ngIf="userRole === 'admin'"
+    [modalId]="'delete-article'"
+    [message]="'Do you really want to delete this article?'"
+    [buttonMessage]="'Delete Article'"
+    (onYesButtonClick)="deletePage()"
+  ></app-modal>
+</div>
+

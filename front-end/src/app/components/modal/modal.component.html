@@ -1,0 +1,18 @@
+<div id="{{ modalId }}">
+  <button
+    class="trigger"
+    [ngStyle]="{ color: ['delete-article', 'delete-account'].includes(modalId)  ? 'red' : 'black' }"
+  >
+    {{ buttonMessage }}
+  </button>
+  <div class="modal">
+    <div class="modal-content">
+      <span class="close-button">X</span>
+      <p>{{ message }}</p>
+      <div class="choices">
+        <button id="yes-button">Yes</button>
+        <button id="no-button">No</button>
+      </div>
+    </div>
+  </div>
+</div>

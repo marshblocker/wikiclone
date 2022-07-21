@@ -99,9 +99,20 @@
   <li class="no-bullet-li">
     <div style="display: flex; justify-content: space-between">
       <div>
-        <a routerLink="/wiki/{{ page?.content?.title }}">
-          <h3 style="margin-top: 0">{{ page?.content?.title }}</h3>
-        </a>
+        <div style="display: flex; align-items: baseline">
+          <a routerLink="/wiki/{{ page?.content?.title }}">
+            <h3 style="margin-top: 0">{{ page?.content?.title }}</h3>
+          </a>
+          <a routerLink="/wiki/{{ page?.content?.title }}/edit">
+            <button>Edit page</button>
+          </a>
+          <button
+            (click)="adminDashboardDeletePageButtonClicked.emit(page?.page_id)"
+            style="color: red"
+          >
+            Delete page
+          </button>
+        </div>
         <p><strong>Page ID:</strong> {{ page?.page_id }}</p>
         <p><strong>Version:</strong> {{ page?.page_version }}</p>
         <p>
@@ -117,23 +128,6 @@
           {{ page?.freeze_page === true ? "Yes" : "No" }}
         </p>
       </div>
-      <div
-        style="
-          display: flex;
-          flex-flow: column nowrap;
-          justify-content: space-evenly;
-        "
-      >
-        <a routerLink="/wiki/{{ page?.content?.title }}/edit">
-          <button>Edit page</button>
-        </a>
-        <button
-          (click)="adminDashboardDeletePageButtonClicked.emit(page?.page_id)"
-          style="color: red"
-        >
-          Delete page
-        </button>
-      </div>
     </div>
   </li>
 </div>
@@ -142,32 +136,26 @@
   <li class="no-bullet-li">
     <div style="display: flex; justify-content: space-between">
       <div>
-        <a routerLink="/user/{{ user?.username }}/profile">
-          <h3 style="margin-top: 0">{{ user?.username }}</h3>
-        </a>
+        <div style="display: flex; align-items: baseline;">
+          <a routerLink="/user/{{ user?.username }}/profile">
+            <h3 style="margin-top: 0">{{ user?.username }}</h3>
+          </a>
+          <a routerLink="/user/{{ user?.username }}/profile">
+            <button>Edit user</button>
+          </a>
+          <button
+            (click)="adminDashboardDeleteUserButtonClicked.emit(user?.username)"
+            style="color: red"
+          >
+            Delete user
+          </button>
+        </div>
         <p><strong>User ID:</strong> {{ user?.user_id }}</p>
         <p><strong>Role:</strong> {{ user?.role }}</p>
         <p>
           <strong>Can Edit:</strong>
           {{ user?.can_edit === true ? "Yes" : "No" }}
         </p>
-      </div>
-      <div
-        style="
-          display: flex;
-          flex-flow: column nowrap;
-          justify-content: space-evenly;
-        "
-      >
-        <a routerLink="/user/{{ user?.username }}/profile">
-          <button>Edit user</button>
-        </a>
-        <button
-          (click)="adminDashboardDeleteUserButtonClicked.emit(user?.username)"
-          style="color: red"
-        >
-          Delete user
-        </button>
       </div>
     </div>
   </li>

@@ -50,9 +50,18 @@
 <h3>Article Preview</h3>
 <div id="article-preview" [innerHTML]="newPagePreviewSafeHTML"></div>
 
-<button id="submit-article-btn" (click)="submitNewPage()">
-  Submit Article
-</button>
-<a (click)="cancelSubmission()">
-  <button>Cancel Submission</button>
-</a>
+<div class="editor-btns">
+  <app-modal
+    [modalId]="'submit-article'"
+    [message]="'Post new article?'"
+    [buttonMessage]="'Submit Article'"
+    (onYesButtonClick)="submitNewPage()"
+  ></app-modal>
+  
+  <app-modal
+    [modalId]="'cancel-submission'"
+    [message]="'Are you sure you want to cancel your new article?'"
+    [buttonMessage]="'Cancel Submission'"
+    (onYesButtonClick)="cancelSubmission()"
+  ></app-modal>
+</div>

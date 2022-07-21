@@ -42,10 +42,6 @@ export class NewPageEditorComponent implements OnInit {
   }
 
   async submitNewPage() {
-    const proceed = window.confirm('Post new article?');
-    if (!proceed) {
-      return;
-    }
     await this.pageEditor.updatePageEditorDataContainers();
     const leadData: string = JSON.stringify(this.pageEditor.pageLeadEditorData);
     const bodyData: string = JSON.stringify(this.pageEditor.pageBodyEditorData);
@@ -96,10 +92,6 @@ export class NewPageEditorComponent implements OnInit {
   }
 
   cancelSubmission() {
-    const proceed = window.confirm('Are you sure you want to cancel your new article?');
-    if (!proceed) {
-      return;
-    }
     this.router.navigateByUrl('/');
   }
 

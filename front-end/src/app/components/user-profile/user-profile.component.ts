@@ -36,12 +36,12 @@ export class UserProfileComponent implements OnInit {
     this.viewerIsLoggedIn = this.tokenService.tokenInCookie();
     this.route.paramMap.subscribe(async params => {
       try {
-      const username = params.get('username');
-      if (username == null) {
-        window.alert('Username is null!\n\nYou will be redirected back to the main page.');
-        this.router.navigateByUrl('/');
-        return;
-      }
+        const username = params.get('username');
+        if (username == null) {
+          window.alert('Username is null!\n\nYou will be redirected back to the main page.');
+          this.router.navigateByUrl('/');
+          return;
+        }
         this.userStatus = await this.socketService.checkUserStatus(username);
         this.observablesService.userStatus$.subscribe({
           next: (userStatus: UserStatus) => {
@@ -54,34 +54,37 @@ export class UserProfileComponent implements OnInit {
           }
         })
         console.log(this.userStatus);
-      this.userService.readUser(username)
-        .then((userInfo: UserPublic) => {
-          this.userInfo = userInfo;
+        this.userService.readUser(username)
+          .then((userInfo: UserPublic) => {
+            this.userInfo = userInfo;
 
-          if (this.viewerIsLoggedIn) {
-            this.userService.readCurrentUser()
-              .then((currentUserInfo: UserPublic) => {
-                if (currentUserInfo.role === 'admin') {
-                  this.viewerIsAdmin = true;
-                }
-                if (currentUserInfo.username === this.userInfo.username) {
-                  this.viewingOwnProfile = true;
-                }
-              })
-              .catch(console.log);
-          } else {
-            this.viewerIsAdmin = false;
-            this.viewingOwnProfile = false;
-          }
-        })
-        .catch((err: HttpErrorResponse) => {
-          if (err.status === 404) {
-            this.router.navigateByUrl('/404?resource=user');
-          } else {
-            window.alert(`${err.error.message}\n\nYou will be redirected back to the main page.`);
-            this.router.navigateByUrl('/');
-          }
-        });
+            if (this.viewerIsLoggedIn) {
+              this.userService.readCurrentUser()
+                .then((currentUserInfo: UserPublic) => {
+                  if (currentUserInfo.role === 'admin') {
+                    this.viewerIsAdmin = true;
+                  }
+                  if (currentUserInfo.username === this.userInfo.username) {
+                    this.viewingOwnProfile = true;
+                  }
+                })
+                .catch(console.log);
+            } else {
+              this.viewerIsAdmin = false;
+              this.viewingOwnProfile = false;
+            }
+          })
+          .catch((err: HttpErrorResponse) => {
+            if (err.status === 404) {
+              this.router.navigateByUrl('/404?resource=user');
+            } else {
+              window.alert(`${err.error.message}\n\nYou will be redirected back to the main page.`);
+              this.router.navigateByUrl('/');
+            }
+          });  
+      } catch (error) {
+        console.log(error);
+      }      
     })
   }
 
@@ -108,12 +111,8 @@ export class UserProfileComponent implements OnInit {
       return;
     }
 
-    const proceed = window.confirm('Update username?');
-    if (!proceed) return;
-
     this.userService.updateUsername(this.userInfo.user_id, newUsername)
       .then(newUsername => {
-        console.log('new username: ', newUsername);
         if (this.viewingOwnProfile) {
           this.logout();
         } else {
@@ -136,11 +135,6 @@ export class UserProfileComponent implements OnInit {
       return;
     }
 
-    const proceed = window.confirm('Update password?');
-    if (!proceed) return;
-
-    console.log(newPassword);
-
     this.userService.updatePassword(this.userInfo.user_id, newPassword)
       .then(() => {
         console.log('Password has been successfully updated.');
@@ -159,9 +153,6 @@ export class UserProfileComponent implements OnInit {
       console.log('No user found!');
       return;
     }
-
-    const proceed = window.confirm('Update email?');
-    if (!proceed) return;
 
     this.userService.updateEmail(this.userInfo.user_id, newEmail)
       .then(newEmail => {
@@ -182,9 +173,6 @@ export class UserProfileComponent implements OnInit {
       return;
     }
 
-    const proceed = window.confirm('Update role?');
-    if (!proceed) return;
-
     this.userService.updateRole(this.userInfo?.user_id, newRole)
       .then(newRole => {
         console.log('new role:', newRole);
@@ -200,9 +188,6 @@ export class UserProfileComponent implements OnInit {
       return;
     }
 
-    const proceed = window.confirm('Update can_edit?');
-    if (!proceed) return;
-
     this.userService.updateCanEdit(this.userInfo?.user_id, newCanEdit)
       .then(newCanEdit => {
         console.log('new can_edit:', newCanEdit);
@@ -216,9 +201,6 @@ export class UserProfileComponent implements OnInit {
       console.log('No user found!');
       return;
     }
-
-    const proceed = window.confirm('Are you sure you want to delete your account?');
-    if (!proceed) return;
 
     this.userService.deleteUser(this.userInfo.username)
       .then(deletedUserInfo => {
