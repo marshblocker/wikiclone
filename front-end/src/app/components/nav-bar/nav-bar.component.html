@@ -120,21 +120,16 @@
           </li>
         </ul>
 
-        <div class="search">
+        <form action="/wiki/search" class="search">
           <input
             class="search-bar"
             type="search"
-            name="search-bar"
-            id="search-bar"
+            name="search-string"
+            id="search-string"
             placeholder="Search Wikipedia"
           />
-          <input
-            class="search-button"
-            type="button"
-            value="Go"
-            (click)="performSearch()"
-          />
-        </div>
+          <button type="submit">Go</button>
+        </form>
       </div>
     </div>
   </div>

@@ -27,15 +27,14 @@
     max-width: 7em;
 }
 
-.nav-bar-small-screen .flex-right-side .search
-{
-    width: 10em;
-    max-width: 10em;
-}
-
 .nav-bar-large-screen
 {
     display: none;
+}
+
+.search button[type="submit"]
+{
+    margin: 0px;
 }
 
 /* Desktop-specific rules */
