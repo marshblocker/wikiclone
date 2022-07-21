@@ -35,6 +35,20 @@ a
     color: #0645ad;
 }
 
+/* Set a style for all buttons */
+button {
+    background-color: lightgray;
+    padding: 5px 20px;
+    margin: 8px 2px;
+    border: 1px solid darkgray;
+    cursor: pointer;
+    opacity: 0.9;
+  }
+  
+button:hover {
+    opacity:1;
+}
+
 /* a:visited 
 {
     color: #0b0080;
