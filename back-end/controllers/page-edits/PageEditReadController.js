@@ -81,7 +81,6 @@ class PageEditReadController {
             if (ret) {
                 if (ret === 'latest_versions') {
                     const latestVersions = await this.readLatestVersionPerPages();
-                    console.log(latestVersions);
                     return res.status(200).json(latestVersions);
                 }
             }

@@ -59,8 +59,7 @@ export class PageHTML {
             '<h' +
             block.data.level +
             ' style="border-bottom: 1px solid #a2a9b1;">'
-            : 
-            '<h' + block.data.level + '>';
+              : '<h' + block.data.level + '>';
           const hTagEnd = '</h' + block.data.level + '>';
           html += `${hTagStart} ${block.data.text} ${hTagEnd}\n`;
           break;

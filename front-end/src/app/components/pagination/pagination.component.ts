@@ -100,7 +100,6 @@ export class PaginationComponent implements OnInit {
         this.pageEditService.getLatestVersionOfEachPage()
           .then((latestVersions: {[page_title: string]: number}) => {
             this.latestVersions = latestVersions;
-            console.log(this.latestVersions);
             const searchString = (this.paginationType === 'get-all-page-edits-of-page') ?
               params.get('title') : params.get('username');
             if (searchString == null) {
@@ -174,7 +173,7 @@ export class PaginationComponent implements OnInit {
             this.isPaginationLastPage = false;
           }
   
-          this._logComponentAttributes();
+          // this._logComponentAttributes();
         })
         .catch(console.log);
     } else {
@@ -187,7 +186,7 @@ export class PaginationComponent implements OnInit {
           this.isPaginationLastPage = false;
         }
 
-        this._logComponentAttributes();
+        // this._logComponentAttributes();
       })
       .catch(console.log);
     }
@@ -214,7 +213,7 @@ export class PaginationComponent implements OnInit {
             this.previousPaginationEntries = previousPages;
             this.isPaginationFirstPage = false;
 
-            this._logComponentAttributes();
+            // this._logComponentAttributes();
           })
           .catch(console.log);
       } else {
@@ -223,7 +222,7 @@ export class PaginationComponent implements OnInit {
             this.previousPaginationEntries = previousPages;
             this.isPaginationFirstPage = false;
 
-            this._logComponentAttributes();
+            // this._logComponentAttributes();
           })
           .catch(console.log);
       }
@@ -249,7 +248,7 @@ export class PaginationComponent implements OnInit {
       this.nextPaginationEntries = nextPaginationEntries;
     }
 
-    this._logComponentAttributes();
+    // this._logComponentAttributes();
   }
 
   _logComponentAttributes() {
