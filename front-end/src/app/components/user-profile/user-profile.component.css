@@ -71,6 +71,37 @@ table
     margin-right: 5px;
 }
 
+.update-user-info input[type=text], 
+.update-user-info input[type=password], 
+.update-user-info input[type=email] 
+{
+    width: 90%;
+    padding: 10px;
+    margin: 5px 0 22px 0;
+    display: block;
+    border: none;
+    background: #f1f1f1;
+}
+
+.update-user-info input[type=password]
+{
+    width: 500px;
+}
+
+.update-user-info input[type=text]:valid,
+.update-user-info input[type=password]:valid,
+.update-user-info input[type=email]:valid
+{
+  outline: 2px solid green;
+}
+
+.update-user-info input[type=text]:invalid,
+.update-user-info input[type=password]:invalid,
+.update-user-info input[type=email]:invalid
+{
+  outline: 2px solid red;
+}
+
 .user-info-btns
 {
     display: flex;

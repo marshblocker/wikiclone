@@ -1,1 +1,12 @@
 <div class="page-view" [innerHTML]="pageSafeHTML"></div>
+<app-modal-choice-no-btn
+    [modalId]="'update-article-choice'"
+    [message]="'This article has just been updated. Do you want to view its latest version?'"
+    [showModal]="showUpdateArticleChoiceModal"
+    (onYesButtonClick)="_loadUpdatedView()"
+></app-modal-choice-no-btn>
+<app-modal-message
+    [modalId]="'update-freeze-page'"
+    [message]="'This article has just been frozen. You cannot edit this article unless you are an admin.'"
+    [showModal]="showUpdateFreezePageMessageModal"
+></app-modal-message>

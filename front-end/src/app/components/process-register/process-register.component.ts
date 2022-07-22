@@ -1,5 +1,6 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { UserRequiredInfo } from 'src/app/interfaces/user.interface';
 import { UserService } from 'src/app/services/user.service';
 
@@ -11,7 +12,9 @@ import { UserService } from 'src/app/services/user.service';
 export class ProcessRegisterComponent implements OnInit {
   successfulRegistration = false;
 
-  constructor(private route: ActivatedRoute, private userService: UserService) { }
+  constructor(private route: ActivatedRoute,
+              private router: Router, 
+              private userService: UserService) { }
 
   ngOnInit(): void {
     this.route.queryParamMap.subscribe(queryParams => {
@@ -35,7 +38,11 @@ export class ProcessRegisterComponent implements OnInit {
           console.log(newUser);
           this.successfulRegistration = true;
         })
-        .catch(console.log);
+        .catch((err: HttpErrorResponse) => {
+          if (err.status === 409) {
+            this.router.navigateByUrl('/user/register?msg-type=credentials-already-used')
+          }
+        });
     });
   }
 

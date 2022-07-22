@@ -173,6 +173,7 @@ export class PageVersionViewComponent implements OnInit {
         updatedPage.timestamp = updatedPage.timestamp
           .replace('T', ' ')
           .split('.')[0];
+        const initialPageTitle = this.pageCurrentTitle;
         this.pageCurrentTitle = updatedPage.content.title;
         const editSummary =
           'Return article back to version ' + this.pageVersion + '.';
@@ -180,6 +181,7 @@ export class PageVersionViewComponent implements OnInit {
           .submitNewPageEdit(updatedPage, editSummary)
           .then((newPageEdit: PageEdit) => {
             console.log(newPageEdit);
+            this.socketService.finishedPageUpdate(initialPageTitle, this.pageCurrentTitle);
             this._goBackToPageView();
           })
           .catch(console.log);

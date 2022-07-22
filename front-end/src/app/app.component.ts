@@ -1,6 +1,6 @@
 import { Location } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
-import { NavigationEnd, Router, RoutesRecognized } from '@angular/router';
+import { Component, Input, OnInit } from '@angular/core';
+import { ActivatedRoute, NavigationEnd, Router, RoutesRecognized } from '@angular/router';
 import { PageViewComponent } from './components/page-view/page-view.component';
 import { UserPublic, UserStatus } from './interfaces/user.interface';
 import { ObservablesService } from './services/observables.service';
@@ -22,7 +22,10 @@ export class AppComponent implements OnInit {
   loggedIn = false;
   viewingArticle = false;
 
+  @Input() showPageDeletedModal = false;
+
   constructor(private router: Router, 
+              private route: ActivatedRoute,
               private location: Location, 
               private userService: UserService, 
               private tokenService: TokenService,
@@ -48,6 +51,20 @@ export class AppComponent implements OnInit {
 
       error: (err) => {
         console.log(err);
+      }
+    })
+
+    this.route.queryParamMap.subscribe(qparams => {
+      const msgType = qparams.get('msg-type');
+      if (qparams !== null) {
+        switch (msgType) {
+          case 'page-deleted':
+            this.showPageDeletedModal = true;
+            break;
+
+          default:
+            break;
+        }
       }
     })
     

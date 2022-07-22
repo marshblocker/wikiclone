@@ -51,3 +51,8 @@
     >Click here to sign in.</a
   >
 </p>
+<app-modal-message
+  [modalId]="'credentials-already-used'"
+  [message]="'The provided user credentials have already been used by another user.'"
+  [showModal]="credentialsAlreadyUsed"
+></app-modal-message>

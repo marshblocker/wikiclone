@@ -19,6 +19,10 @@ export class PageViewComponent implements OnInit, OnDestroy {
   pageTitle = '';
   freezePage = true;
   pageEditors: string[] = [];
+  currentPageTitle!: string;
+
+  showUpdateArticleChoiceModal = false;
+  showUpdateFreezePageMessageModal = false;
 
   constructor( private route: ActivatedRoute,
                private router: Router,
@@ -43,7 +47,8 @@ export class PageViewComponent implements OnInit, OnDestroy {
 
           this.socketService.notifyReadersAboutPageUpdate.subscribe({
             next: (currentPageTitle: string) => {
-              this._loadUpdatedView(currentPageTitle);
+              this.showUpdateArticleChoiceModal = true;
+              this.currentPageTitle = currentPageTitle
             },
   
             error: (err) => {
@@ -55,6 +60,9 @@ export class PageViewComponent implements OnInit, OnDestroy {
             next: (pageFrozen: boolean) => {
               this.freezePage = pageFrozen;
               this.observablesService.freezePage$.next(this.freezePage);
+              if (this.freezePage) {
+                this.showUpdateFreezePageMessageModal = true;
+              }
             },
   
             error: (err) => {
@@ -157,13 +165,12 @@ export class PageViewComponent implements OnInit, OnDestroy {
     });
   }
 
-  _loadUpdatedView(currentPageTitle: string) {
-    console.log('Just updated!');
-    if (currentPageTitle === this.pageTitle) {
+  _loadUpdatedView() {
+    if (this.currentPageTitle === this.pageTitle) {
       location.reload();
     } else {
       this.router
-        .navigateByUrl('/wiki/' + currentPageTitle)
+        .navigateByUrl('/wiki/' + this.currentPageTitle)
         .then((navigated) => {
           if (navigated) {
             location.reload();
@@ -173,20 +180,12 @@ export class PageViewComponent implements OnInit, OnDestroy {
         })
         .catch(console.log);
     }
-    // const confirm = window.confirm(
-    //   'This page has just been updated. Do you want to view its latest version?'
-    // );
-    // if (confirm) {
-    //   this.router.navigateByUrl('/wiki/' + currentPageTitle);
-    // }
   }
 
   _pageDeletedAction() {
-    this.router.navigateByUrl('/')
+    this.router.navigateByUrl('/?msg-type=page-deleted')
       .then(navigated => {
-        if (navigated) {
-          console.log('Page has been deleted. You are redirected back to the home page.');
-        } else {
+        if (!navigated) {
           console.log('Error: Failed to go home.');
         }
       })

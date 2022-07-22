@@ -21,4 +21,9 @@
     </div>
     <app-footer></app-footer>
   </div>
+  <app-modal-message
+    [modalId]="'article-deleted'"
+    [message]="'Article has just been deleted. You were redirected back to the home page.'"
+    [showModal]="showPageDeletedModal"
+  ></app-modal-message>
 </div>

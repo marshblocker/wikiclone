@@ -35,6 +35,8 @@ import { PageEditService } from './services/page-edit.service';
 import { SocketService } from './services/socket.service';
 import { ObservablesService } from './services/observables.service';
 import { ModalComponent } from './components/modal/modal.component';
+import { ModalMessageComponent } from './components/modal-message/modal-message.component';
+import { ModalChoiceNoBtnComponent } from './components/modal-choice-no-btn/modal-choice-no-btn.component';
 
 const config: SocketIoConfig = { url: 'http://localhost:3000', options: {} };
 
@@ -63,6 +65,8 @@ const config: SocketIoConfig = { url: 'http://localhost:3000', options: {} };
     PaginationEntryCardComponent,
     ResourceNotFoundComponent,
     ModalComponent,
+    ModalMessageComponent,
+    ModalChoiceNoBtnComponent,
   ],
   imports: [
     BrowserModule,
