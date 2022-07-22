@@ -36,6 +36,11 @@ class LoginController {
                 throw CustomError.UserDoesNotExist();
             }
 
+            const userAlreadyLoggedIn = await userDAO.checkUserAlreadyLoggedIn(userInfo['username']);
+            if (userAlreadyLoggedIn) {
+                throw CustomError.UserAlreadyLoggedIn();
+            }
+
             const passwordHash = (await this.userReadController
                 ._readUserPasswordHash(userInfo['user_id']))[0][0][0]['password_hash'];
 

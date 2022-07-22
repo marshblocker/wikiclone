@@ -69,6 +69,7 @@ class CustomError {
     ValueAlreadyUsed = (attributeName) => new SpecificReturnedError(409, `409 Conflict: ${attributeName} already used by another account.`, null, 5002);
     UnknownUserID = () => new ReturnedError(409, '409 Conflict: Specified user_id does not belong to any existing user.', 5003);
     DuplicateAttributeValue = (attributeName) => new SpecificReturnedError(409, `409 Conflict: The provided value for the ${attributeName} attribute has already been used by another user.`, null, 5004);
+    UserAlreadyLoggedIn = () => new ReturnedError(409, '409 Conflict: User is already logged in.', 5005);
 
     // Code 500: Server-caused error.
     UnhandledError = (errorMessage) => new ReturnedError(500, `500 Internal Server Error: This error was not yet caught by the server. Error Message: ${errorMessage}`, 5005);

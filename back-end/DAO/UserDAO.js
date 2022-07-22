@@ -1,4 +1,5 @@
 const knex = require('../database/knex');
+const redis = require('../database/redis');
 const CustomError = require('../error');
 
 class UserDAO {
@@ -53,6 +54,21 @@ class UserDAO {
                 'CALL read_user_password_hash(?)', 
                 [userId]
             );
+        } catch (error) {
+            throw this._handleDBError(error);
+        }
+    }
+
+    async checkUserAlreadyLoggedIn(username) {
+        try {
+            const user = await redis.hgetall(username);
+            console.log(user);
+            if (!Object.keys(user).length) {
+                return false;
+            }
+            if (user['status'] === 'online') return true;
+            if (user['status'] === 'offline') return false;
+            throw CustomError.UnhandledError('Invalid user status value.');
         } catch (error) {
             throw this._handleDBError(error);
         }
