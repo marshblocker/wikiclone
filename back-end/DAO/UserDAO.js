@@ -12,11 +12,23 @@ class UserDAO {
         }
     }
 
-    async readUserInfoWithMatchingUsernameOrEmail(usernameOrEmail) {
+    async readUserInfoWithMatchingUsername(username) {
         try {
             let res = await knex.raw(
-                'CALL read_user_info_with_matching_username_or_email(?)', 
-                [usernameOrEmail]
+                'CALL read_user_info_with_matching_username(?)', 
+                [username]
+            );
+            return res[0][0][0];
+        } catch (error) {
+            throw this._handleDBError(error);
+        }
+    }
+
+    async readUserInfoWithMatchingEmail(email) {
+        try {
+            let res = await knex.raw(
+                'CALL read_user_info_with_matching_email(?)', 
+                [email]
             );
             return res[0][0][0];
         } catch (error) {

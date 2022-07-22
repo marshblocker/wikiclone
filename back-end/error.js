@@ -45,6 +45,7 @@ class CustomError {
     DuplicateQueryParameter = (givenQueryParameter) => new SpecificReturnedError(400, `400 Bad Request: The ${givenQueryParameter} query parameter was already used.`, null, 1026);
     WrongPassword = () => new ReturnedError(400, '400 Bad Request: Wrong password.', 1027);
     NoJWTPassed = () => new ReturnedError(400, '400 Bad Request: No JSON Web Token passed.', 1028);
+    IncompleteCredentials = () => new ReturnedError(400, "400 Bad Request: Incomplete credentials. Must include the user's username or email address, and its password.", 1029);
 
     // Code 403: Client has no access to the requested resource or action to a resource.
     ForbidCreatePage = () => new ReturnedError(403, '403 Forbidden: The user is not allowed to create a new page.', 2001);

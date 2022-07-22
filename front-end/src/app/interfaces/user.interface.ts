@@ -20,7 +20,8 @@ export interface UserRequiredInfo {
 }
 
 export interface LoginCredentials {
-    usernameOrEmail: string;
+    username: string | null;
+    email: string | null;
     password: string;
 }
 

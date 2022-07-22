@@ -15,8 +15,22 @@ class LoginController {
     async loginUser(req, res) {
         try {
             const credentials = req.body.credentials;
-            let userInfo = await userDAO
-                .readUserInfoWithMatchingUsernameOrEmail(credentials['usernameOrEmail']);
+            const username = credentials['username'];
+            const email = credentials['email'];
+            const password = credentials['password'];
+
+            if ((username === null && email === null) || password === null) {
+                throw CustomError.IncompleteCredentials();
+            }
+
+            let userInfo;
+            if (username) {
+                userInfo = await userDAO
+                    .readUserInfoWithMatchingUsername(username);
+            } else {
+                userInfo = await userDAO
+                    .readUserInfoWithMatchingEmail(email);
+            }
 
             if (userInfo == undefined) {
                 throw CustomError.UserDoesNotExist();
@@ -25,7 +39,7 @@ class LoginController {
             const passwordHash = (await this.userReadController
                 ._readUserPasswordHash(userInfo['user_id']))[0][0][0]['password_hash'];
 
-            const isCorrectPassword = await bcrypt.compare(credentials['password'], passwordHash);
+            const isCorrectPassword = await bcrypt.compare(password, passwordHash);
             if (!isCorrectPassword) {
                 throw CustomError.WrongPassword();
             }

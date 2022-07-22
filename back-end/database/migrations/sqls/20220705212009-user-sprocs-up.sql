@@ -36,15 +36,24 @@ BEGIN
     SELECT `user_id`, `username`, `email`, `role`, `can_edit` FROM `users` WHERE `username` = p_username;
 END;
 
-CREATE PROCEDURE `read_user_info_with_matching_username_or_email` 
+CREATE PROCEDURE `read_user_info_with_matching_username` 
 (
-    IN username_or_email VARCHAR(320)
+    IN p_username VARCHAR(20)
 )
 BEGIN
     SELECT * 
 	FROM `users` 
-	WHERE (BINARY `username` = username_or_email) OR 
-		  (BINARY `email` = username_or_email);
+	WHERE BINARY `username` = p_username;
+END;
+
+CREATE PROCEDURE `read_user_info_with_matching_email` 
+(
+    IN p_email VARCHAR(320)
+)
+BEGIN
+    SELECT * 
+	FROM `users` 
+	WHERE BINARY `email` = p_email;
 END;
 
 CREATE PROCEDURE `read_user_password_hash` 

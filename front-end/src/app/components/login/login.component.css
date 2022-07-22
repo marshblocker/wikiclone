@@ -4,7 +4,10 @@
 }
 
 /* Full-width input fields */
-  input[type=text], input[type=password] {
+input[type=text], 
+input[type=password],
+input[type=email]
+{
   width: 50%;
   padding: 15px;
   margin: 5px 0 22px 0;
@@ -13,14 +16,16 @@
   background: #f1f1f1;
 }
 
-input[type=text]:focus, input[type=password]:focus {
+input[type=text]:focus, 
+input[type=password]:focus,
+input[type=email]:focus
+{
   background-color: #ddd;
   outline: none;
 }
 
 hr {
   border: 1px solid #bab2b5;
-  margin-bottom: 25px;
 }
 
 /* Set a style for all buttons */

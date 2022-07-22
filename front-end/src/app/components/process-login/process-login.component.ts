@@ -21,17 +21,19 @@ export class ProcessLoginComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.queryParamMap.subscribe(queryParams => {
-      const usernameOrEmail = queryParams.get('username-or-email');
+      const username = queryParams.get('username');
+      const email = queryParams.get('email');
       const password = queryParams.get('password');
 
-      if (usernameOrEmail === null || password === null) {
-        console.log(usernameOrEmail, password);
+      if ((username === null && email === null) || password === null) {
+        console.log(username, email, password);
         console.log('Invalid user info.');
         return;
       }
 
       const credentials: LoginCredentials = {
-        'usernameOrEmail': usernameOrEmail,
+        'username': username,
+        'email': email,
         'password': password
       };
 
@@ -43,13 +45,13 @@ export class ProcessLoginComponent implements OnInit {
               let user: UserPublic | null = null;
               for (let i = 0; i < allUsersInfo.length; i++) {
                 user = allUsersInfo[i];
-                if (user['username'] === credentials['usernameOrEmail'] ||
-                      user['email'] === credentials['usernameOrEmail']) {
+                if (user['username'] === credentials['username'] ||
+                      user['email'] === credentials['email']) {
                   break;
                 }
               }
               if (user === null) {
-                console.log('User not found!');
+                this.router.navigateByUrl('/user/login?msg-type=user-not-found');
                 return;
               }
 
@@ -61,7 +63,9 @@ export class ProcessLoginComponent implements OnInit {
         })
         .catch((err: HttpErrorResponse) => {
           if (err.status === 404) {
-            this.router.navigateByUrl('/404?resource=user');
+            this.router.navigateByUrl('/user/login?msg-type=user-not-found');
+          } else if (err.status === 409) {
+            this.router.navigateByUrl('/user/login?msg-type=user-already-logged-in');
           } else {
             window.alert(`${err.error.message}\n\nYou will be redirected back to the main page.`);
             this.router.navigateByUrl('/');
