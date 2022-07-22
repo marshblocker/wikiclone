@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { PageContent, Page, PageSearchResultView } from '../interfaces/page.interface';
 
 @Injectable({
@@ -19,11 +19,17 @@ export class PageService {
           observe: 'response', 
           responseType: 'json' 
         }
-      ).subscribe((pageResponse: HttpResponse<Page>) => {
-        if (pageResponse.body === null) {
-          return reject('Page is null!');
+      ).subscribe({
+        next: (pageResponse: HttpResponse<Page>) => {
+          if (pageResponse.body === null) {
+            return reject('Page is null!');
+          }
+          return resolve(pageResponse.body);
+        },
+
+        error: (err: HttpErrorResponse) => {
+          return reject(err);
         }
-        return resolve(pageResponse.body);
       });
     });
   }
@@ -69,11 +75,17 @@ export class PageService {
           observe: 'response', 
           responseType: 'json' 
         }
-      ).subscribe((allPagesResponse: HttpResponse<Page[]>) => {
-        if (allPagesResponse.body === null) {
-          return reject('Get all page id request failed!');
+      ).subscribe({
+        next: (allPagesResponse: HttpResponse<Page[]>) => {
+          if (allPagesResponse.body === null) {
+            return reject('Get all page id request failed!');
+          }
+          return resolve(allPagesResponse.body);
+        },
+
+        error: (err: HttpErrorResponse) => {
+          return reject(err);
         }
-        return resolve(allPagesResponse.body);
       });
     });
   }
@@ -117,11 +129,17 @@ export class PageService {
           observe: 'response', 
           responseType: 'json' 
         }
-      ).subscribe((matchedPagesResponse: HttpResponse<PageSearchResultView[]>) => {
-        if (matchedPagesResponse.body == null) {
-          return reject('Get all page based on search string failed!');
+      ).subscribe({
+        next: (matchedPagesResponse: HttpResponse<PageSearchResultView[]>) => {
+          if (matchedPagesResponse.body == null) {
+            return reject('Get all page based on search string failed!');
+          }
+          return resolve(matchedPagesResponse.body);
+        },
+
+        error: (err: HttpErrorResponse) => {
+          return reject(err);
         }
-        return resolve(matchedPagesResponse.body);
       });
     });
   }
@@ -135,12 +153,18 @@ export class PageService {
           observe: 'response', 
           responseType: 'json'
         }
-      ).subscribe((newPageResponse: HttpResponse<Page>) => {
+      ).subscribe({
+        next: (newPageResponse: HttpResponse<Page>) => {
           if (newPageResponse.body === null) {
             return reject('New page is null!');
           }
           return resolve(newPageResponse.body);
-        });
+        },
+
+        error: (err: HttpErrorResponse) => {
+          return reject(err);
+        }
+      });
     })
   }
 
@@ -154,11 +178,17 @@ export class PageService {
           observe: 'response', 
           responseType: 'json'
         }
-      ).subscribe((updatedPageResponse: HttpResponse<Page>) => {
-        if (updatedPageResponse.body == null) {
-          return reject('Updated page is null!');
+      ).subscribe({
+        next: (updatedPageResponse: HttpResponse<Page>) => {
+          if (updatedPageResponse.body == null) {
+            return reject('Updated page is null!');
+          }
+          return resolve(updatedPageResponse.body);
+        },
+
+        error: (err: HttpErrorResponse) => {
+          return reject(err);
         }
-        return resolve(updatedPageResponse.body);
       })
     });
   }
@@ -173,11 +203,17 @@ export class PageService {
           observe: 'response', 
           responseType: 'json'
         }
-      ).subscribe((response: HttpResponse<Page>) => {
-        if (response.body == null) {
-          return reject('Frozen page is null!');
+      ).subscribe({
+        next: (response: HttpResponse<Page>) => {
+          if (response.body == null) {
+            return reject('Frozen page is null!');
+          }
+          return resolve(response.body);
+        },
+
+        error: (err: HttpErrorResponse) => {
+          return reject(err);
         }
-        return resolve(response.body);
       })
     });
   }
@@ -191,11 +227,17 @@ export class PageService {
           observe: 'response', 
           responseType: 'json'
         }
-      ).subscribe((deletedPageResponse: HttpResponse<Page>) => {
-        if (deletedPageResponse.body === null) {
-          return reject('Updated page is null!');
+      ).subscribe({
+        next: (deletedPageResponse: HttpResponse<Page>) => {
+          if (deletedPageResponse.body === null) {
+            return reject('Updated page is null!');
+          }
+          return resolve(deletedPageResponse.body);
+        },
+
+        error: (err: HttpErrorResponse) => {
+          return reject(err);
         }
-        return resolve(deletedPageResponse.body);
       })
     });
   }

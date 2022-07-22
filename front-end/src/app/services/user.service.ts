@@ -18,12 +18,18 @@ export class UserService {
           observe: 'response', 
           responseType: 'json'
         }
-      ).subscribe((newUserResponse: HttpResponse<{ info: UserPublic }>) => {
+      ).subscribe({
+        next: (newUserResponse: HttpResponse<{ info: UserPublic }>) => {
           if (newUserResponse.body === null) {
             return reject('New user is null!');
           }
           return resolve(newUserResponse.body.info);
-        });
+        },
+
+        error: (err: HttpErrorResponse) => {
+          return reject(err);
+        }
+      });
     });
   }
 
