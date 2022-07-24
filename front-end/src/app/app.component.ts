@@ -1,6 +1,7 @@
 import { Location } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router, RoutesRecognized } from '@angular/router';
+import { filter, pairwise } from 'rxjs';
 import { PageViewComponent } from './components/page-view/page-view.component';
 import { UserPublic, UserStatus } from './interfaces/user.interface';
 import { ObservablesService } from './services/observables.service';
@@ -81,7 +82,7 @@ export class AppComponent implements OnInit {
 
       if (event instanceof NavigationEnd) {
         if (this.location.path() != ''){
-          this.currentRoute = this.location.path();
+          this.currentRoute = decodeURIComponent(this.location.path());
         } else {
           this.currentRoute = '/';
         }
@@ -97,6 +98,22 @@ export class AppComponent implements OnInit {
           this.currentUserInfo = null;
           this.loggedIn = false;
         }
+      }
+    })
+
+    this.router.events.pipe(
+      filter(e => e instanceof RoutesRecognized),
+      pairwise()
+    ).subscribe((eventPair: any[]) => {
+      const previousUrl = decodeURIComponent(eventPair[0].urlAfterRedirects);
+      const rgx = new RegExp('\/wiki\/.*\/edit');
+      if (rgx.test(previousUrl)) {
+        const pageTitle = previousUrl.split('/wiki/')[1].split('/')[0];
+        if (this.currentUserInfo?.username === undefined) {
+          console.log('username is null');
+          return;
+        }
+        this.socketService.leaveEditPage(this.currentUserInfo.username, pageTitle);
       }
     })
   }

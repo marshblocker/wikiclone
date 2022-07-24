@@ -142,7 +142,6 @@ export class ExistingPageEditorComponent implements OnInit {
         }
 
         this.socketService.finishedPageDelete(this.initialPageTitle);
-        this.socketService.leaveEditPage(this.username, this.initialPageTitle);
         this.router.navigateByUrl('/');
       })
       .catch(console.log);
@@ -185,7 +184,6 @@ export class ExistingPageEditorComponent implements OnInit {
         if (!navigated) {
           console.log('Failed to go to the updated page.');
         }
-        this.socketService.leaveEditPage(this.username, title);
       })
       .catch(console.log);
   }
