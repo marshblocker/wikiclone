@@ -10,8 +10,8 @@
     >, Currently editing:
     <div *ngIf="userStatus.editing; then anchorText; else grayText"></div>
     <ng-template #anchorText>
-      <a routerLink="/wiki/{{ userStatus.editing }}">{{
-        userStatus.editing
+      <a routerLink="/wiki/{{ userStatusEditing }}">{{
+        userStatusEditing
       }}</a>
     </ng-template>
     <ng-template #grayText>

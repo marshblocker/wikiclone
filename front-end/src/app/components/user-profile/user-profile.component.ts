@@ -23,6 +23,7 @@ export class UserProfileComponent implements OnInit {
   viewerIsAdmin = false;
   viewerIsLoggedIn = false;
   userStatus = { status: 'offline', editing: '' };
+  userStatusEditing = this.userStatus.editing.replace(/%20/g, " ");
   paginationType = 'get-all-page-edits-of-user';
 
   constructor(private router: Router,
@@ -43,10 +44,12 @@ export class UserProfileComponent implements OnInit {
           return;
         }
         this.userStatus = await this.socketService.checkUserStatus(username);
+        this.userStatusEditing = this.userStatus.editing.replace(/%20/g, " ");
         this.observablesService.userStatus$.subscribe({
           next: (userStatus: UserStatus) => {
             console.log(userStatus);
             this.userStatus = userStatus;
+            this.userStatusEditing = this.userStatus.editing.replace(/%20/g, " ");
           },
 
           error: (err) => {
