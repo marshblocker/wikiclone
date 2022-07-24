@@ -21,6 +21,7 @@ export class NavBarComponent implements OnInit {
 
   hideArticleEditButton = true;
   pageEditors: string[] = [];
+  showLogoutModal = false;
 
   constructor(
     private router: Router,

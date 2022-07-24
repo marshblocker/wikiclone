@@ -54,10 +54,9 @@
         </li>
         <li *ngIf="loggedIn" class="no-bullet-li horizontal-links-li">
           <a
-            routerLink="/"
-            ariaCurrentWhenActive="page"
-            (click)="logOut()"
+            href="#"
             class="small-anchor"
+            (click)="showLogoutModal = true"
             >Sign out</a
           >
         </li>
@@ -133,4 +132,10 @@
       </div>
     </div>
   </div>
+  <app-modal-choice-no-btn
+    [modalId]="'log-out'"
+    [message]="'Are you sure you want to log out?'"
+    [showModal]="showLogoutModal"
+    (onYesButtonClick)="logOut()"
+  ></app-modal-choice-no-btn>
 </div>
