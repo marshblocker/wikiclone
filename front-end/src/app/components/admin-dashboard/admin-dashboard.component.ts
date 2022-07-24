@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Page } from 'src/app/interfaces/page.interface';
 import { PageService } from 'src/app/services/page.service';
+import { SocketService } from 'src/app/services/socket.service';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
@@ -12,7 +13,8 @@ export class AdminDashboardComponent implements OnInit {
   displayUsers = true;
 
   constructor(private userService: UserService, 
-              private pageService: PageService) { }
+              private pageService: PageService,
+              private socketService: SocketService) { }
 
   ngOnInit(): void {
   }
@@ -39,7 +41,7 @@ export class AdminDashboardComponent implements OnInit {
   deletePage(pageId: string) {
     this.pageService.deletePage(pageId)
       .then((deletedPage: Page) => {
-        console.log(deletedPage);
+        this.socketService.finishedPageDelete(deletedPage.content.title);
         location.reload();
       })
       .catch(console.log);
