@@ -46,7 +46,6 @@ class Sockets {
                         'status', userStatus.status,
                         'editing', userStatus.editing
                     )
-                    .expire(args.username, constants.reddis.USER_CACHE_EXPIRATION_TIME)
                     .exec()
                 // Store username in list of current page editors.
                 await redis.hset(args.title + '-editors',
@@ -71,7 +70,6 @@ class Sockets {
                         'status', userStatus.status,
                         'editing', userStatus.editing
                     )
-                    .expire(args.username, constants.reddis.USER_CACHE_EXPIRATION_TIME)
                     .exec()
                 const delResult = await redis.hdel(args.title + '-editors', args.username);
                 const pageEditors = await redis.hgetall(args.title + '-editors');
