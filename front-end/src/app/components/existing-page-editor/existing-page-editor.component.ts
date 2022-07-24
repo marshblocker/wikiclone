@@ -45,12 +45,15 @@ export class ExistingPageEditorComponent implements OnInit {
       return;
     }
     this.route.paramMap.subscribe(params => {
-      this.initialPageTitle = params.get('title');
-      this.pageTitle = params.get('title');
-      if (this.pageTitle === null) {
+      const title = params.get('title');
+      if (title === null) {
         console.log('Error: pageTitle is null.');
         return;
       }
+
+      this.initialPageTitle = decodeURIComponent(title);
+      this.pageTitle = this.initialPageTitle;
+
       this.pageService.getPageByTitle(this.pageTitle)
         // Fill page editor with the initial content of the article.
         .then((page: Page) => {
