@@ -40,7 +40,17 @@ export class ProcessRegisterComponent implements OnInit {
         })
         .catch((err: HttpErrorResponse) => {
           if (err.status === 409) {
-            this.router.navigateByUrl('/user/register?msg-type=credentials-already-used')
+            const message = err.error.message as string; 
+            let invalidAttribute: string;
+            if (message.includes('username')) {
+              invalidAttribute = 'username';
+            } else if (message.includes('email')) {
+              invalidAttribute = 'email';
+            } else {
+              console.log('invalidAttribute must be username or email.');
+              return;
+            }
+            this.router.navigateByUrl('/user/register?msg-type=credentials-already-used&invalid-attr=' + invalidAttribute);
           }
         });
     });

@@ -8,6 +8,7 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class RegisterComponent implements OnInit {
   @Input() credentialsAlreadyUsed = false;
+  invalidAttribute = '';
 
   constructor(private route: ActivatedRoute) { }
 
@@ -16,6 +17,12 @@ export class RegisterComponent implements OnInit {
     this.route.queryParamMap.subscribe(qparams => {
       const msgType = qparams.get('msg-type');
       if (msgType === 'credentials-already-used') {
+        const invalidAttribute = qparams.get('invalid-attr');
+        if (invalidAttribute === null) {
+          console.log('invalidAttribute is null.');
+          return;
+        }
+        this.invalidAttribute = invalidAttribute;
         this.credentialsAlreadyUsed = true;
       }
     })
