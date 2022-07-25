@@ -7,6 +7,7 @@
     <label for="username">Username (Required)</label>
     <input
       type="text"
+      id="username"
       placeholder="Enter Username (No whitespace in between, alphanumeric characters, dash, and underscore only, maximum length of 20)"
       name="username"
       maxlength="20"
@@ -17,6 +18,7 @@
     <label for="email">Email (Required)</label>
     <input
       type="email"
+      id="email"
       placeholder="Enter Email"
       name="email"
       maxlength="320"
@@ -27,6 +29,7 @@
     <label for="password">Password (Required)</label>
     <input
       type="password"
+      id="password"
       placeholder="Enter Password (No whitespace in between, maximum length of 20)"
       name="password"
       maxlength="20"
@@ -37,6 +40,7 @@
     <label for="psw-repeat">Repeat Password (Required)</label>
     <input
       type="password"
+      id="repeat-password"
       placeholder="Repeat Password"
       name="psw-repeat"
       maxlength="20"
@@ -59,6 +63,6 @@
 </p>
 <app-modal-message
   [modalId]="'credentials-already-used'"
-  [message]="'The provided user credentials have already been used by another user.'"
+  [message]="'The provided ' + invalidAttribute + ' has already been used by another user.'"
   [showModal]="credentialsAlreadyUsed"
 ></app-modal-message>

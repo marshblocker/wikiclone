@@ -21,16 +21,16 @@ input[type=email]:focus
   outline: none;
 }
 
-input[type=text]:valid,
-input[type=password]:valid,
-input[type=email]:valid
+input[type=text].touched:valid,
+input[type=password].touched:valid,
+input[type=email].touched:valid
 {
   outline: 2px solid green;
 }
 
-input[type=text]:invalid,
-input[type=password]:invalid,
-input[type=email]:invalid
+input[type=text].touched:invalid,
+input[type=password].touched:invalid,
+input[type=email].touched:invalid
 {
   outline: 2px solid red;
 }

@@ -26,6 +26,27 @@ export class RegisterComponent implements OnInit {
         this.credentialsAlreadyUsed = true;
       }
     })
+
+    const usernameEl = document.getElementById('username') as HTMLInputElement;
+    const emailEl = document.getElementById('email') as HTMLInputElement;
+    const passwordEl = document.getElementById('password') as HTMLInputElement;
+    const repeatPasswordEl = document.getElementById('repeat-password') as HTMLInputElement;
+
+    usernameEl.addEventListener('focus', (ev) => {
+      usernameEl.classList.add('touched');
+    });
+
+    emailEl.addEventListener('focus', (ev) => {
+      emailEl.classList.add('touched');
+    });
+
+    passwordEl.addEventListener('focus', (ev) => {
+      passwordEl.classList.add('touched');
+    });
+
+    repeatPasswordEl.addEventListener('focus', (ev) => {
+      repeatPasswordEl.classList.add('touched');
+    });
   }
 
 }
