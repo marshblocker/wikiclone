@@ -18,6 +18,7 @@ services:
     command: bash start.sh db_server:3306
 
   db_server:
+    platform: linux/x86_64
     image: mysql:5.7
     ports:
       - "3306:3306"

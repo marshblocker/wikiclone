@@ -1,5 +1,5 @@
 # base image (all dockerfiles should have this)
-FROM node:12.2.0
+FROM node:20.9.0
  
 # set working directory
 WORKDIR /app
@@ -13,7 +13,7 @@ COPY package*.json ./
 RUN npm install
 
 # install dependencies for start.sh
-RUN apt-get update && apt-get install -y netcat
+RUN apt-get update && apt-get install -y netcat-traditional
  
 # copy the source code to the Docker image
 COPY . .
