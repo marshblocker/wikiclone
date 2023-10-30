@@ -1,6 +1,6 @@
 const constants = require('./constants');
 const CustomError = require('./error');
-const bcrypt = require('bcrypt');
+const bcryptjs = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 const utils = {
@@ -74,7 +74,7 @@ const utils = {
 
     async hashPassword(password) {
         const hash = await (async () => {
-            return await bcrypt.hash(password, 10);
+            return await bcryptjs.hash(password, 10);
         })();
 
         if (hash.length != constants.user.PASSWORD_HASH_FIXED_LENGTH) {

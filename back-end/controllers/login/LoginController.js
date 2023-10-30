@@ -1,4 +1,4 @@
-const bcrypt = require('bcrypt');
+const bcryptjs = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const constants = require('../../constants');
 const CustomError = require('../../error');
@@ -44,7 +44,7 @@ class LoginController {
             const passwordHash = (await this.userReadController
                 ._readUserPasswordHash(userInfo['user_id']))[0][0][0]['password_hash'];
 
-            const isCorrectPassword = await bcrypt.compare(password, passwordHash);
+            const isCorrectPassword = await bcryptjs.compare(password, passwordHash);
             if (!isCorrectPassword) {
                 throw CustomError.WrongPassword();
             }
