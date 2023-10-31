@@ -145,6 +145,14 @@ const utils = {
         }
     },
 
+    checkPageVersion(pageVersion) {},
+    
+    checkTimestamp(timeStamp) {},
+
+    checkEditSummary(editSummary) {},
+
+    checkFreezePage(freezePage) {},
+
     parseToken(req, res, next) {
         if (req.get('Authorization') == '') {
             req.parsedToken = null;
