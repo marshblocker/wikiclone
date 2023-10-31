@@ -1,4 +1,4 @@
-# Wikiclone
+# WikiClone
 
 A Wikipedia clone.
 
