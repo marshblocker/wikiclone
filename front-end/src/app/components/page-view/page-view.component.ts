@@ -42,7 +42,6 @@ export class PageViewComponent implements OnInit, OnDestroy {
               return ('' + a).localeCompare(b);
             });
           }
-          console.log(this.pageEditors);
           this.observablesService.pageEditor$.next(this.pageEditors);
 
           this.socketService.notifyReadersAboutPageUpdate.subscribe({
