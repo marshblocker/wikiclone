@@ -2,7 +2,7 @@ export interface User {
     user_id: string;
     requiredInfo: UserRequiredInfo;
     role: string;
-    can_edit: boolean
+    can_edit: boolean;
 }
 
 export interface UserPublic {
@@ -10,13 +10,13 @@ export interface UserPublic {
     username: string;
     email: string;
     role: string;
-    can_edit: boolean
+    can_edit: boolean;
 }
 
 export interface UserRequiredInfo {
     username: string;
     password: string;
-    email: string
+    email: string;
 }
 
 export interface LoginCredentials {

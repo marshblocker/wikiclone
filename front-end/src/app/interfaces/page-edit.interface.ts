@@ -8,7 +8,7 @@ export interface PageEdit {
     
     user_id: string;
     username: string;
-    role: string
+    role: string;
 
     page_id: string;
     freeze_page: string;
